@@ -907,7 +907,7 @@
 </head>
 <body>
     <header class="top-nav">
-        <div class="nav-brand">Finanzas Pro</div>
+        <div class="nav-brand">Finanzas Pro <span id="syncStatus" style="font-size: 10px; margin-left: 8px; color: #7dffb8; font-weight: normal; opacity: 0.7;">● Sincronizado</span></div>
         
         <div class="nav-center">
             <button class="menu-btn active" onclick="switchView('dashboardReal', this)">Dashboard Real</button>
@@ -1812,7 +1812,13 @@
         }
 
         async function saveState() {
+            const syncIndicator = document.getElementById('syncStatus');
             try {
+                if (syncIndicator) {
+                    syncIndicator.innerText = '● Sincronizando...';
+                    syncIndicator.style.color = '#ffd700';
+                }
+
                 const stateToSave = {
                     ...appState,
                     files: {
@@ -1837,13 +1843,21 @@
 
                 // 2. Guardar en Servidor (API)
                 try {
-                    await fetch('/api/state', {
+                    const resp = await fetch('/api/state', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: dataStr
                     });
+                    if (resp.ok && syncIndicator) {
+                        syncIndicator.innerText = '● Sincronizado';
+                        syncIndicator.style.color = '#7dffb8';
+                    }
                 } catch (apiErr) {
                     console.error('Error al sincronizar con el servidor:', apiErr);
+                    if (syncIndicator) {
+                        syncIndicator.innerText = '● Error de Sincronización';
+                        syncIndicator.style.color = '#ff5d5d';
+                    }
                 }
 
             } catch (e) {
@@ -2504,11 +2518,13 @@
             if (!file) return;
             uploadFileToServer(file);
             const reader = new FileReader();
-            reader.onload = function (ev) {
+            reader.onload = async function (ev) {
                 appState.files.transporte = { name: file.name, b64: arrayBufferToBase64(ev.target.result) };
-                saveState();
                 restoreStatusLabels();
+                // Primero procesamos para actualizar los totales
                 extractDevolucionAOrigenFromTransporteBuffer(ev.target.result);
+                // Luego guardamos los totales ya actualizados
+                await saveState();
             };
             reader.readAsArrayBuffer(file);
         });
@@ -2518,11 +2534,13 @@
             if (!file) return;
             uploadFileToServer(file);
             const reader = new FileReader();
-            reader.onload = function (ev) {
+            reader.onload = async function (ev) {
                 appState.files.effi = { name: file.name, b64: arrayBufferToBase64(ev.target.result) };
-                saveState();
                 restoreStatusLabels();
+                // Primero procesamos para actualizar los totales
                 extractCompraMercanciaFromEffiBuffer(ev.target.result);
+                // Luego guardamos
+                await saveState();
             };
             reader.readAsArrayBuffer(file);
         });
@@ -2532,11 +2550,13 @@
             if (!file) return;
             uploadFileToServer(file);
             const reader = new FileReader();
-            reader.onload = function (ev) {
+            reader.onload = async function (ev) {
                 appState.files.facebook = { name: file.name, b64: arrayBufferToBase64(ev.target.result) };
-                saveState();
                 restoreStatusLabels();
+                // Primero procesamos
                 extractFacebookSpentFromBuffer(ev.target.result);
+                // Luego guardamos
+                await saveState();
             };
             reader.readAsArrayBuffer(file);
         });
@@ -2546,11 +2566,13 @@
             if (!file) return;
             uploadFileToServer(file);
             const reader = new FileReader();
-            reader.onload = function (ev) {
+            reader.onload = async function (ev) {
                 appState.files.tiktok = { name: file.name, b64: arrayBufferToBase64(ev.target.result) };
-                saveState();
                 restoreStatusLabels();
+                // Primero procesamos
                 extractTikTokSpentFromBuffer(ev.target.result);
+                // Luego guardamos
+                await saveState();
             };
             reader.readAsArrayBuffer(file);
         });
