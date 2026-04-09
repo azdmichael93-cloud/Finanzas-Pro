@@ -1661,7 +1661,7 @@
             const cpReal = Number(appState.creditCards.cpReal || 0);
             const cmCredito = Number(appState.creditCards.cmCredito || 0);
             const cmReal = Number(appState.creditCards.cmReal || 0);
-            const totalDebt = (cgReal - cgCredito) + (cpReal - cpCredito) + (cmReal - cmCredito);
+            const totalDebt = (cgCredito - cgReal) + (cpCredito - cpReal) + (cmCredito - cmReal);
             document.getElementById('drDeudaTarjetas').innerText = formatRD(totalDebt);
 
             // 3. Gastos Egresos (Effi Commerce) = Egresos + Facebook + Tiktok
@@ -1688,7 +1688,7 @@
             const cmCredito = parseMoney(document.getElementById('cmCredito').value || 0);
             const cmReal = parseMoney(document.getElementById('cmReal').value || 0);
             
-            const totalDebt = (cgReal - cgCredito) + (cpReal - cpCredito) + (cmReal - cmCredito);
+            const totalDebt = (cgCredito - cgReal) + (cpCredito - cpReal) + (cmCredito - cmReal);
             const diff = banco - totalDebt;
 
             document.getElementById('bancoDeudaCmp').innerText = formatRD(totalDebt);
@@ -1750,19 +1750,20 @@
             appState.creditCards.cmCredito = cmCredito;
             appState.creditCards.cmReal = cmReal;
 
-            const diffGol = cgReal - cgCredito;
-            const diffPla = cpReal - cpCredito;
-            const diffMas = cmReal - cmCredito;
+            const diffGol = cgCredito - cgReal;
+            const diffPla = cpCredito - cpReal;
+            const diffMas = cmCredito - cmReal;
             const totalDebt = diffGol + diffPla + diffMas;
 
             document.getElementById('cgDiff').innerText = formatRD(diffGol);
             document.getElementById('cpDiff').innerText = formatRD(diffPla);
             document.getElementById('cmDiff').innerText = formatRD(diffMas);
             document.getElementById('creditTotalDebt').innerText = formatRD(totalDebt);
-            document.getElementById('cgDiff').style.color = diffGol >= 0 ? '#7dffb8' : '#ff8f8f';
-            document.getElementById('cpDiff').style.color = diffPla >= 0 ? '#7dffb8' : '#ff8f8f';
-            document.getElementById('cmDiff').style.color = diffMas >= 0 ? '#7dffb8' : '#ff8f8f';
-            document.getElementById('creditTotalDebt').style.color = totalDebt >= 0 ? '#7a0000' : '#0a5c2f';
+            // Si la resta es positiva, significa que se debe dinero (Rojo). Si es negativa o 0, hay excedente (Verde).
+            document.getElementById('cgDiff').style.color = diffGol > 0 ? '#ff8f8f' : '#7dffb8';
+            document.getElementById('cpDiff').style.color = diffPla > 0 ? '#ff8f8f' : '#7dffb8';
+            document.getElementById('cmDiff').style.color = diffMas > 0 ? '#ff8f8f' : '#7dffb8';
+            document.getElementById('creditTotalDebt').style.color = totalDebt > 0 ? '#ff5d5d' : '#7dffb8';
             updateManualAdsComparison();
             updateBankDiff();
             updateDashboardReal();
@@ -2207,9 +2208,9 @@
 
         function updateManualAdsComparison() {
             const manualTotal = getManualAdsTotal();
-            const debtTotal = (appState.creditCards.cgReal - appState.creditCards.cgCredito) + 
-                              (appState.creditCards.cpReal - appState.creditCards.cpCredito) + 
-                              (appState.creditCards.cmReal - appState.creditCards.cmCredito);
+            const debtTotal = (appState.creditCards.cgCredito - appState.creditCards.cgReal) + 
+                              (appState.creditCards.cpCredito - appState.creditCards.cpReal) + 
+                              (appState.creditCards.cmCredito - appState.creditCards.cmReal);
             const diff = manualTotal - debtTotal;
             
             document.getElementById('manualAdsTotalCmp').innerText = formatRD(manualTotal);
