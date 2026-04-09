@@ -1,0 +1,1458 @@
+      <table border="1" cellpadding="10" cellspacing="0" style="border-collapse:collapse;">
+         <thead>
+         <tr>
+            <th class="text-center">Tipo de movimiento</th><th class="text-center">Valor movimiento</th><th class="text-center">Contenido</th>         </tr>
+         </thead>
+         <tbody id="bodyTabla">
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2900,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-360,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-550,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * VENENO DE ABEJAS - BEE VENOM VIRAL. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-385,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-283,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-348,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-348,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-385,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-348,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-385,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-283,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-423,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-440,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2900,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-421,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-550,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-344,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-344,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Retiro de dinero de cuenta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-15540,00</td><td></td>            </tr>
+                     <tr>
+               <td>Comisión local por retiro de Wallet</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-89,97</td><td></td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TRULY MORADO 100 ML. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>2 * TRULY MORADO 100 ML. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TRULY MORADO 100 ML. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>2 * PERFUME BEAST BLACK PREMIUM. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * Perfume Dior SAUVAGE. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-283,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-348,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-409,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-920,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-344,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2900,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-421,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-550,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2900,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-421,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-550,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-344,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-920,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-344,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-920,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Retiro de dinero de cuenta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-13073,00</td><td></td>            </tr>
+                     <tr>
+               <td>Comisión local por retiro de Wallet</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-85,53</td><td></td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-920,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-409,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-920,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-386,00</td><td>1 * CREMA VIGORITY CON ESTROGENOS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-444,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-920,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-920,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2900,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-421,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-790,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>2 * TRULY MORADO 100 ML. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-409,00</td><td>2 * TRULY MORADO 100 ML. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-760,00</td><td>2 * TRULY MORADO 100 ML. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2000,00</td><td>1 * TRULY MORADO 100 ML. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-324,00</td><td>1 * TRULY MORADO 100 ML. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-380,00</td><td>1 * TRULY MORADO 100 ML. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">4600,00</td><td>2 * PERFUME BEAST BLACK PREMIUM. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-428,00</td><td>2 * PERFUME BEAST BLACK PREMIUM. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-2120,00</td><td>2 * PERFUME BEAST BLACK PREMIUM. </td>            </tr>
+                     <tr>
+               <td>Retiro de dinero de cuenta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-13500,00</td><td></td>            </tr>
+                     <tr>
+               <td>Comisión local por retiro de Wallet</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-86,30</td><td></td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-348,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-322,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-284,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-364,00</td><td>2 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-283,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-283,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-440,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2900,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-476,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-790,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-440,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-344,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Retiro de dinero de cuenta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-6700,00</td><td></td>            </tr>
+                     <tr>
+               <td>Comisión local por retiro de Wallet</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-74,06</td><td></td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-344,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-344,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-322,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-385,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-283,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-352,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * Perfume Dior SAUVAGE. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-409,00</td><td>1 * Perfume Dior SAUVAGE. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-740,00</td><td>1 * Perfume Dior SAUVAGE. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-386,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-386,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-283,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-348,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-283,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-334,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2300,00</td><td>1 * PESTAÑAS MAGNETICAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-397,00</td><td>1 * PESTAÑAS MAGNETICAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-450,00</td><td>1 * PESTAÑAS MAGNETICAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-385,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-369,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-269,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-267,00</td><td>1 * TRULY MORADO 100 ML. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-365,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-369,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-334,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-334,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-365,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-334,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-273,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-364,00</td><td>1 * VENENO DE ABEJAS - BEE VENOM VIRAL. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-330,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-269,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-344,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * PERFUME BEAST BLACK PREMIUM. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-330,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-334,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-331,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-440,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-352,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-330,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-346,00</td><td>2 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-365,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-269,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-365,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-330,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-269,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-269,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-269,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-330,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-334,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-300,00</td><td>1 * TRULY MORADO 100 ML. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-800,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-800,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-344,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-800,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Débito revertido</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">283,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-358,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2300,00</td><td>1 * PESTAÑAS MAGNETICAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-397,00</td><td>1 * PESTAÑAS MAGNETICAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-450,00</td><td>1 * PESTAÑAS MAGNETICAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-440,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-365,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-270,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-273,00</td><td>1 * NAJAH PERFUME ARABE CON FEROMONAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-800,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-440,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-800,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-344,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-800,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-920,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Retiro de dinero de cuenta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-9229,00</td><td></td>            </tr>
+                     <tr>
+               <td>Comisión local por retiro de Wallet</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-78,61</td><td></td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-344,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito sin recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-321,00</td><td>1 * BRAZO PARA MICROFONO. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-600,00</td><td>1 * BRAZO PARA MICROFONO. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2300,00</td><td>1 * PESTAÑAS MAGNETICAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-432,00</td><td>1 * PESTAÑAS MAGNETICAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-450,00</td><td>1 * PESTAÑAS MAGNETICAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-269,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-269,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-330,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-269,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-344,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Retiro de dinero de cuenta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-4500,00</td><td></td>            </tr>
+                     <tr>
+               <td>Comisión local por retiro de Wallet</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-70,10</td><td></td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-330,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-269,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-405,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-800,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-269,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-365,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-330,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-346,00</td><td>2 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-269,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Débito revertido</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">348,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-423,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-685,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * PERFUME BEAST BLACK PREMIUM. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-440,00</td><td>1 * PERFUME BEAST BLACK PREMIUM. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-1060,00</td><td>1 * PERFUME BEAST BLACK PREMIUM. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2500,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-344,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Retiro de dinero de cuenta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-3252,00</td><td></td>            </tr>
+                     <tr>
+               <td>Comisión local por retiro de Wallet</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-67,85</td><td></td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-267,00</td><td>1 * PESTAÑAS MAGNETICAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-330,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-330,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-269,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-365,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-269,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-269,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-330,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-365,00</td><td>1 * KIT TRULY + HIDRATANTE (ROSADO Y MORADO). </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-330,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Indemnización de mercancía</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2400,00</td><td>1 * CAMISILLA/BLANCA/2XL. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-750,10</td><td>1 * CAMISILLA/BLANCA/2XL. </td>            </tr>
+                     <tr>
+               <td>Indemnización de mercancía</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2900,00</td><td>1 * PERFUME BEAST BLACK PREMIUM. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-1060,00</td><td>1 * PERFUME BEAST BLACK PREMIUM. </td>            </tr>
+                     <tr>
+               <td>Flete crédito devolución</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-269,00</td><td>1 * Crema y Aceite Truly Original. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>2 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-444,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-348,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-348,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-348,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-444,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-409,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Retiro de dinero de cuenta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-7433,00</td><td></td>            </tr>
+                     <tr>
+               <td>Comisión local por retiro de Wallet</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-75,38</td><td></td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * DIABETEX X 60 CAPSULAS  (ANTIDIABÉTICO . REGULADOR DE AZUCAR). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * DIABETEX X 60 CAPSULAS  (ANTIDIABÉTICO . REGULADOR DE AZUCAR). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-348,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-444,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-348,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2700,00</td><td>1 * DIABETEX X 60 CAPSULAS  (ANTIDIABÉTICO . REGULADOR DE AZUCAR). </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-352,00</td><td>1 * DIABETEX X 60 CAPSULAS  (ANTIDIABÉTICO . REGULADOR DE AZUCAR). </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-750,00</td><td>1 * DIABETEX X 60 CAPSULAS  (ANTIDIABÉTICO . REGULADOR DE AZUCAR). </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-409,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-409,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Retiro de dinero de cuenta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-8400,00</td><td></td>            </tr>
+                     <tr>
+               <td>Comisión local por retiro de Wallet</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-77,12</td><td></td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-444,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-444,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Retiro de dinero de cuenta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-2800,00</td><td></td>            </tr>
+                     <tr>
+               <td>Comisión local por retiro de Wallet</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-67,04</td><td></td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-409,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-348,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-444,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-409,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Retiro de dinero de cuenta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-5299,00</td><td></td>            </tr>
+                     <tr>
+               <td>Comisión local por retiro de Wallet</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-71,54</td><td></td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>2 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * DIABETEX X 60 CAPSULAS  (ANTIDIABÉTICO . REGULADOR DE AZUCAR). </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>2 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Servicio de Fulfillment: Bodegaje, alistamiento, empaque y d</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-66,20</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-409,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-444,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-348,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-409,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-409,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2700,00</td><td>1 * DIABETEX X 60 CAPSULAS  (ANTIDIABÉTICO . REGULADOR DE AZUCAR). </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-413,00</td><td>1 * DIABETEX X 60 CAPSULAS  (ANTIDIABÉTICO . REGULADOR DE AZUCAR). </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-750,00</td><td>1 * DIABETEX X 60 CAPSULAS  (ANTIDIABÉTICO . REGULADOR DE AZUCAR). </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-444,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Recaudo de venta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">2600,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Flete crédito con recaudo</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-409,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Compra de mercancía dropshipping a proveedor</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-700,00</td><td>1 * TURKESTERONE ( TESTOSTERONA) X 120 CÁPSULAS. </td>            </tr>
+                     <tr>
+               <td>Retiro de dinero de cuenta</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-10304,00</td><td></td>            </tr>
+                     <tr>
+               <td>Comisión local por retiro de Wallet</td><td class="text-nowrap"
+                   style="mso-number-format:'$#,##0';">-80,55</td><td></td>            </tr>
+                  </tbody>
+      </table>
+      

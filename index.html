@@ -1,0 +1,2538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropshipping R.D</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>">
+    <script src="./node_modules/xlsx/dist/xlsx.full.min.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: #2b4c8c;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: radial-gradient(120% 100% at 50% 0%, #16305e 0%, #0d1a33 100%);
+            border-bottom: 1px solid #2f5da9;
+            padding: 14px 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-brand {
+            font-size: 18px;
+            font-weight: 800;
+            color: #ffd700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            width: 260px; /* aligns with sidebar width logic if needed, or flex */
+        }
+        .nav-center {
+            display: flex;
+            gap: 12px;
+            flex: 1;
+            justify-content: center;
+        }
+        .menu-btn {
+            background: linear-gradient(180deg, rgba(10, 26, 54, 0.8), rgba(10, 26, 54, 0.95));
+            border: 1px solid rgba(57, 215, 255, 0.4);
+            color: #9fc2ff;
+            padding: 8px 20px;
+            font-size: 11px;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        .menu-btn:hover {
+            background: linear-gradient(180deg, rgba(57, 215, 255, 0.2), rgba(57, 215, 255, 0.1));
+            border-color: #39d7ff;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(57, 215, 255, 0.3);
+            transform: translateY(-1px);
+        }
+        .menu-btn.active {
+            background: linear-gradient(180deg, #39d7ff, #00b8d4);
+            color: #06243a;
+            box-shadow: 0 0 20px rgba(57, 215, 255, 0.5), inset 0 1px 0 rgba(255,255,255,0.3);
+            border-color: #00ffff;
+            font-weight: 900;
+        }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 260px;
+            justify-content: flex-end;
+        }
+        .action-btn {
+            background: rgba(10, 26, 54, 0.7);
+            border: 1px solid #2f5da9;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .action-btn.export { color: #7dffb8; border-color: rgba(125, 255, 184, 0.4); }
+        .action-btn.export:hover { background: rgba(125, 255, 184, 0.1); }
+        .action-btn.import { color: #ffb3b3; border-color: rgba(255, 179, 179, 0.4); }
+        .action-btn.import:hover { background: rgba(255, 179, 179, 0.1); }
+        .content {
+            flex: 1;
+            padding: 30px;
+            overflow: auto;
+        }
+        .view { display: none; }
+        .view.active { display: block; }
+
+        .panel {
+            background: #1c3664;
+            border: 1px solid #2f5da9;
+            border-radius: 14px;
+            padding: 28px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        #dashboard .panel {
+            min-height: 88vh;
+        }
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(460px, 560px);
+            gap: 22px;
+            align-items: start;
+            justify-content: center;
+        }
+
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .upload-card {
+            background: rgba(10, 26, 54, 0.7);
+            border: 1px solid rgba(94, 144, 226, 0.5);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .upload-card:hover {
+            border-color: #39d7ff;
+            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.15);
+        }
+        .upload-card::after {
+            content: "";
+            position: absolute;
+            top: 0; right: 0; width: 100px; height: 100px;
+            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, rgba(255,215,0,0) 70%);
+            pointer-events: none;
+        }
+        .upload-card label {
+            display: block;
+            margin-bottom: 12px;
+            color: #ffd700;
+            font-weight: 800;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+        }
+        .upload-card input[type="file"],
+        .upload-card input[type="number"] {
+            width: 100%;
+            background: #0d1a33;
+            border: 1px dashed #3f74c9;
+            border-radius: 8px;
+            padding: 12px;
+            color: #cfe3ff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .upload-card input[type="file"]:hover,
+        .upload-card input[type="number"]:focus {
+            border-style: solid;
+            border-color: #00ffff;
+            background: #142b57;
+            outline: none;
+        }
+        .status-panel {
+            margin-top: 24px;
+            background: radial-gradient(120% 180% at 10% 0%, #2a4f8f 0%, #13284f 45%, #0b1730 100%);
+            border: 1px solid #3f74c9;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        .status-panel-title {
+            color: #00ffff;
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-panel-title::before {
+            content: "•";
+            color: #00ff66;
+            font-size: 24px;
+            line-height: 1;
+        }
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed #2f5da9;
+            font-size: 14px;
+            color: #cfe3ff;
+        }
+        .status-item:last-child { border-bottom: none; }
+        .status-item span.filename {
+            color: #7dffb8;
+            font-weight: 700;
+            background: rgba(125, 255, 184, 0.1);
+            padding: 4px 10px;
+            border-radius: 6px;
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .status-item span.empty {
+            color: #ff8f8f;
+            font-style: italic;
+        }
+        .dashboard-main-col {
+            display: flex;
+            flex-direction: column;
+        }
+        .dashboard-main-col h3 {
+            margin: 0 0 12px;
+            color: #00ffff;
+            font-size: 32px;
+            line-height: 1.2;
+        }
+        .cards-wrapper {
+            background: rgba(10, 26, 54, 0.4);
+            border: 1px solid #2f5da9;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 6px;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .card {
+            background: linear-gradient(180deg, #16305e, #10254b);
+            border: 1px solid #2f5da9;
+            border-radius: 8px;
+            padding: 10px;
+            min-width: 0;
+        }
+        .k { font-size: 11px; color: #cfe3ff; margin-bottom: 2px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px; }
+        .v { font-size: 18px; font-weight: 800; color: #00ff66; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .premium-modal-card {
+            margin-top: 12px;
+            background: linear-gradient(180deg, rgba(8, 24, 49, 0.75) 0%, rgba(8, 24, 49, 0.85) 68%, rgba(20, 50, 90, 0.9) 100%);
+            border: 2px solid #39d7ff;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 0 0 1px rgba(57, 215, 255, 0.25), 0 12px 24px rgba(0, 0, 0, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .premium-modal-card::before {
+            content: "";
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            right: -70px;
+            top: -90px;
+            background: radial-gradient(circle, rgba(57, 215, 255, 0.15) 0%, rgba(57, 215, 255, 0) 70%);
+            pointer-events: none;
+        }
+        .premium-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        .premium-title {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 800;
+            color: #d9e8ff;
+            letter-spacing: 0.2px;
+            text-transform: uppercase;
+        }
+        .premium-badge {
+            font-size: 11px;
+            font-weight: 800;
+            color: #06243a;
+            background: linear-gradient(180deg, #7ef9ff, #39d7ff);
+            padding: 4px 8px;
+            border-radius: 999px;
+            box-shadow: 0 0 10px rgba(57, 215, 255, 0.4);
+        }
+        .premium-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr 1fr;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        .premium-cell {
+            background: linear-gradient(180deg, rgba(8, 24, 49, 0.8) 0%, rgba(16, 40, 75, 0.85) 100%);
+            border: 1px solid #3f74c9;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .premium-cell .label {
+            font-size: 12px;
+            color: #cfe3ff;
+            margin-bottom: 4px;
+        }
+        .premium-cell .value {
+            font-size: 18px;
+            font-weight: 800;
+            color: #ffffff;
+            white-space: nowrap;
+        }
+        .premium-cell .value.blur-bg {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+        }
+        .premium-note {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #9fc2ff;
+            position: relative;
+            z-index: 1;
+        }
+        .result-card {
+            margin-top: 14px;
+            background: radial-gradient(130% 160% at 90% 0%, #2a4f8f 0%, #13284f 45%, #0b1730 100%);
+            border: 1px solid #3f74c9;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+        }
+        .result-card h4 {
+            margin: 0 0 10px;
+            font-size: 22px;
+            color: #ffd700;
+        }
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(47, 93, 169, 0.4);
+            font-size: 13px;
+            color: #d9e8ff;
+        }
+        .result-row span:first-child {
+            flex: 1;
+            padding-right: 15px;
+            line-height: 1.2;
+        }
+        .result-row span:last-child {
+            font-weight: 800;
+            color: #fff;
+            white-space: nowrap;
+        }
+        .result-total {
+            margin-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            background: #c1ffc1;
+            color: #003300;
+            font-weight: 900;
+            font-size: 16px;
+        }
+
+        .status-card {
+            margin-top: 14px;
+            background: #0f2142;
+            border: 1px solid #2f5da9;
+            border-radius: 14px;
+            padding: 16px;
+        }
+        .status-dual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 14px;
+        }
+        .status-card h4 {
+            margin: 0 0 10px;
+            font-size: 21px;
+            color: #ffd700;
+        }
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px dashed #2f5da9;
+            font-size: 18px;
+        }
+        .status-row:last-child {
+            border-bottom: none;
+        }
+
+        /* Ajuste solicitado: solo estos dos apartados en fuente más pequeña */
+        .status-dual .status-card h4 {
+            font-size: 16px;
+        }
+        .status-dual .status-row {
+            font-size: 14px;
+            padding: 8px 0;
+        }
+
+        .gastos-modal {
+            background: radial-gradient(130% 160% at 90% 0%, #214a89 0%, #11284f 45%, #0a1831 100%);
+            border: 1px solid #3f74c9;
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 20px;
+        }
+        .gastos-modal h4 {
+            margin: 0 0 10px;
+            color: #ffd700;
+            font-size: 16px;
+        }
+        .gastos-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #cfe3ff;
+            padding: 8px 0;
+            border-bottom: 1px dashed #2f5da9;
+        }
+        .gastos-row:last-child { border-bottom: none; }
+        .gastos-row b { color: #fff; }
+        .gastos-grid {
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .gastos-col {
+            background: rgba(8, 24, 49, 0.7);
+            border: 1px solid #2f5da9;
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+        }
+        .gastos-head {
+            font-size: 13px;
+            color: #ffd700;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .gastos-value {
+            font-size: 16px;
+            color: #ff4d4d;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+        .gastos-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+        .gastos-header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .rate-mini {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #cfe3ff;
+        }
+        .rate-mini input {
+            width: 92px;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 8px;
+            font-weight: 700;
+        }
+        .gastos-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            color: #06243a;
+            background: linear-gradient(180deg, #7ef9ff, #39d7ff);
+        }
+        .egresos-card {
+            margin-top: 10px;
+            background: rgba(8, 24, 49, 0.7);
+            border: 1px solid #2f5da9;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .egresos-title {
+            font-size: 13px;
+            color: #ffd700;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .egresos-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+            border-bottom: 1px dashed #2f5da9;
+            font-size: 12px;
+            color: #cfe3ff;
+        }
+        .egresos-row:last-child { border-bottom: none; }
+        .egresos-empty { font-size: 12px; color: #9fc2ff; }
+        .resta-card {
+            margin-top: 10px;
+            background: rgba(8, 24, 49, 0.7);
+            border: 1px solid #2f5da9;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .resta-title {
+            font-size: 13px;
+            color: #ffd700;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .resta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+            border-bottom: 1px dashed #2f5da9;
+            font-size: 12px;
+            color: #cfe3ff;
+        }
+        .resta-row:last-child { border-bottom: none; }
+        .resta-final {
+            margin-top: 8px;
+            background: #c1ffc1;
+            color: #003300;
+            border-radius: 6px;
+            padding: 8px;
+            font-weight: 800;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .split-card {
+            margin-top: 10px;
+            background: linear-gradient(180deg, rgba(8, 24, 49, 0.75) 0%, rgba(8, 24, 49, 0.85) 68%, rgba(10, 64, 36, 0.9) 100%);
+            border: 2px solid #39d98a;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 0 0 1px rgba(57, 217, 138, 0.25), 0 12px 24px rgba(0, 0, 0, 0.35);
+        }
+        .split-title {
+            font-size: 18px;
+            color: #bfffdc;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .split-row {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 6px 0;
+            border-bottom: 1px dashed #2f5da9;
+            font-size: 14px;
+            color: #dfffee;
+            font-weight: 700;
+        }
+        .split-row:last-child { border-bottom: none; }
+        .split-row .split-amount {
+            font-size: 18px;
+            color: #7dffb8;
+            font-weight: 800;
+            text-shadow: 0 0 14px rgba(125, 255, 184, 0.35);
+        }
+        .split-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .split-col {
+            background: linear-gradient(180deg, rgba(8, 24, 49, 0.8) 0%, rgba(12, 82, 46, 0.85) 100%);
+            border: 1px solid #43b67f;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .credit-card {
+            margin-top: 10px;
+            background: linear-gradient(180deg, rgba(8, 24, 49, 0.75) 0%, rgba(8, 24, 49, 0.9) 100%);
+            border: 1px solid rgba(47, 93, 169, 0.5);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02), 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        .credit-title {
+            font-size: 16px;
+            color: #ffd700;
+            font-weight: 800;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .credit-title::before {
+            content: "💳";
+            font-size: 16px;
+        }
+        .credit-head,
+        .credit-row {
+            display: grid;
+            grid-template-columns: 120px 1fr 1fr 1fr;
+            gap: 12px;
+            align-items: center;
+        }
+        .credit-head {
+            font-size: 11px;
+            color: #9fc2ff;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(47, 93, 169, 0.3);
+            padding-bottom: 8px;
+        }
+        .credit-row {
+            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 8px 12px;
+            transition: all 0.2s ease;
+        }
+        .credit-row:hover {
+            background: rgba(0, 0, 0, 0.3);
+            border-color: rgba(47, 93, 169, 0.4);
+        }
+        .credit-name {
+            font-size: 13px;
+            color: #dfffee;
+            font-weight: 800;
+        }
+        .credit-row input {
+            width: 100%;
+            border: none;
+            border-radius: 6px;
+            padding: 8px;
+            font-size: 13px;
+            background: rgba(13, 26, 51, 0.6);
+            color: #ffffff;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+        .credit-row input:focus {
+            outline: none;
+            border-color: #39d7ff;
+            background: rgba(13, 26, 51, 0.9);
+            box-shadow: 0 0 8px rgba(57, 215, 255, 0.2);
+        }
+        .credit-diff {
+            font-size: 13px;
+            color: #ffb3b3;
+            font-weight: 800;
+            text-align: right;
+            white-space: nowrap;
+        }
+        .credit-total {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px dashed rgba(47, 93, 169, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #cfe3ff;
+            font-weight: 700;
+        }
+        .credit-total span:last-child {
+            font-size: 20px;
+            font-weight: 900;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .credit-title {
+            font-size: 13px;
+            color: #ffd700;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .credit-head,
+        .credit-row {
+            display: grid;
+            grid-template-columns: 120px 1fr 1fr 1fr;
+            gap: 8px;
+            align-items: center;
+        }
+        .credit-head {
+            font-size: 12px;
+            color: #9fc2ff;
+            margin-bottom: 6px;
+        }
+        .credit-row {
+            margin-bottom: 8px;
+        }
+        .credit-name {
+            font-size: 12px;
+            color: #dfffee;
+            font-weight: 700;
+        }
+        .credit-row input {
+            width: 100%;
+            border: none;
+            border-radius: 6px;
+            padding: 8px;
+            font-size: 12px;
+        }
+        .credit-diff {
+            font-size: 12px;
+            color: #ffb3b3;
+            font-weight: 800;
+            text-align: right;
+            white-space: nowrap;
+        }
+        .credit-total {
+            margin-top: 8px;
+            background: #ffd6d6;
+            color: #7a0000;
+            border-radius: 6px;
+            padding: 8px;
+            font-weight: 800;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .overlay.active { display: flex; }
+        .modal {
+            width: min(560px, 92vw);
+            background: radial-gradient(130% 160% at 90% 0%, #214a89 0%, #11284f 45%, #0a1831 100%);
+            border: 1px solid #3f74c9;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.35);
+        }
+        .modal h4 {
+            margin: 0 0 10px;
+            color: #ffd700;
+            font-size: 18px;
+        }
+        .modal-grid {
+            display: grid;
+            grid-template-columns: 1fr 160px auto;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .modal-grid input {
+            border: none;
+            border-radius: 6px;
+            padding: 10px;
+        }
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .btn {
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+        .btn.primary { background: #39d7ff; color: #06243a; }
+        .btn.danger { background: #ff5d5d; color: white; }
+
+        .personal-wrap {
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .personal-card {
+            background: rgba(8, 24, 49, 0.7);
+            border: 1px solid #2f5da9;
+            border-radius: 10px;
+            padding: 12px;
+        }
+        .personal-card h4 {
+            margin: 0 0 8px;
+            color: #ffd700;
+            font-size: 15px;
+        }
+        .personal-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: #7dffb8;
+        }
+        .personal-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+            border-bottom: 1px dashed #2f5da9;
+            font-size: 13px;
+            color: #cfe3ff;
+        }
+        .personal-row:last-child { border-bottom: none; }
+        .personal-exp-card {
+            margin-top: 10px;
+            background: rgba(8, 24, 49, 0.7);
+            border: 1px solid #2f5da9;
+            border-radius: 10px;
+            padding: 12px;
+        }
+        .personal-exp-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .personal-exp-head h4 {
+            margin: 0;
+            color: #ffd700;
+            font-size: 15px;
+        }
+        .manual-ads-card {
+            margin-top: 10px;
+            background: rgba(8, 24, 49, 0.7);
+            border: 1px solid #2f5da9;
+            border-radius: 10px;
+            padding: 12px;
+        }
+        .manual-ads-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .manual-ads-head h4 {
+            margin: 0;
+            color: #ffd700;
+            font-size: 15px;
+        }
+        .manual-ads-total {
+            color: #ffb3b3;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        @media (max-width: 1500px) {
+            .cards { grid-template-columns: 1fr 1fr; }
+            .premium-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 1100px) {
+            .cards { grid-template-columns: 1fr; }
+            .dashboard-layout { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 960px) {
+            .grid { grid-template-columns: 1fr; }
+            .status-dual { grid-template-columns: 1fr; }
+            .gastos-modal { position: static; }
+            .personal-wrap { grid-template-columns: 1fr; }
+            .top-nav { flex-direction: column; gap: 16px; padding: 16px; position: static; }
+            .nav-brand { width: auto; text-align: center; }
+            .nav-center { flex-wrap: wrap; }
+            .nav-actions { width: auto; justify-content: center; flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+    <header class="top-nav">
+        <div class="nav-brand">Finanzas Pro</div>
+        
+        <div class="nav-center">
+            <button class="menu-btn active" onclick="switchView('dashboardReal', this)">Dashboard Real</button>
+            <button class="menu-btn" onclick="switchView('dashboard', this)">Panel Effi Commerce</button>
+            <button class="menu-btn" onclick="switchView('uploads', this)">Gargar Archivio</button>
+            <button class="menu-btn" onclick="switchView('cardPersonal', this)">Gastos personales</button>
+            <button class="menu-btn" onclick="switchView('deudores', this)">Deudores & Gracias</button>
+        </div>
+
+        <div class="nav-actions">
+            <span class="nav-actions-label">Respaldos:</span>
+            <button class="action-btn export" onclick="exportData()">↓ Exportar</button>
+            <button class="action-btn import" onclick="document.getElementById('importDataInput').click()">↑ Importar</button>
+            <input type="file" id="importDataInput" style="display: none;" accept=".json" onchange="importData(event)">
+        </div>
+    </header>
+
+    <main class="content">
+        <section id="dashboardReal" class="view active">
+            <div class="panel" style="max-width: 1200px;">
+                <div class="dashboard-main-col">
+                    <h3>Resumen Global (Dashboard Real)</h3>
+                    <p style="margin-top:0;color:#cfe3ff; margin-bottom: 24px;">Visión central del patrimonio: Liquidez vs Deudas y Gastos.</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                        <!-- Liquidez -->
+                        <div class="split-card" style="margin-top:0; border-color: #00ffff; box-shadow: 0 0 15px rgba(0,255,255,0.2);">
+                            <div class="split-title" style="color: #00ffff;">DINERO EN BANCO</div>
+                            <div style="font-size:32px; font-weight:900; color:#fff; margin-top:8px; text-shadow: 0 0 10px rgba(0,255,255,0.3);" id="drBanco">RD$ 0,00</div>
+                        </div>
+
+                        <!-- Deuda Total Tarjetas -->
+                        <div class="split-card" style="margin-top:0; border-color: #ff5d5d; background: linear-gradient(180deg, rgba(49, 8, 8, 0.75) 0%, rgba(90, 20, 20, 0.9) 100%);">
+                            <div class="split-title" style="color: #ffb3b3;">Total Deuda Tarjetas</div>
+                            <div style="font-size:32px; font-weight:900; color:#ff8f8f; margin-top:8px; text-shadow: 0 0 10px rgba(255,93,93,0.3);" id="drDeudaTarjetas">RD$ 0,00</div>
+                        </div>
+
+                        <!-- Gastos Acumulados -->
+                        <div class="split-card" style="margin-top:0; border-color: #ffd700; background: linear-gradient(180deg, rgba(49, 40, 8, 0.75) 0%, rgba(90, 75, 20, 0.9) 100%);">
+                            <div class="split-title" style="color: #ffeb80;">GASTOS EGRESOS (EFFI COMMERCE)</div>
+                            <div style="font-size:32px; font-weight:900; color:#ffd700; margin-top:8px; text-shadow: 0 0 10px rgba(255,215,0,0.3);" id="drGastosTotales">RD$ 0,00</div>
+                        </div>
+                    </div>
+
+                    <!-- Resultado Real -->
+                    <div class="premium-modal-card" style="padding: 30px; text-align: center; border-width: 3px;">
+                        <h4 style="margin: 0; font-size: 24px; color: #cfe3ff; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Resultado Real (Patrimonio EFFI COMMERCE)</h4>
+                        <div style="margin-top: 10px; font-size: 14px; color: #9fc2ff;">Lo que hay en el banco menos todas los Egresos y Publicidad Ads</div>
+                        <div id="drResultadoReal" style="margin-top: 20px; font-size: 56px; font-weight: 900; text-shadow: 0 0 20px rgba(255,255,255,0.3);">RD$ 0,00</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="dashboard" class="view">
+            <div class="panel">
+                <div class="dashboard-layout">
+                    <div class="dashboard-main-col">
+                        <h3>Dropshipping R.D - Dashboard</h3>
+                        <p style="margin-top:0;color:#cfe3ff;"></p>
+
+                    <div class="cards-wrapper">
+                        <div class="cards">
+                            <div class="card"><div class="k">Ingresos</div><div class="v" id="dIngresos">RD$ 0.00</div></div>
+                            <div class="card"><div class="k">Egresos</div><div class="v" id="dEgresos">RD$ 0.00</div></div>
+                            <div class="card"><div class="k">Publicidad</div><div class="v" id="dPublicidad">RD$ 0.00</div></div>
+                            <div class="card"><div class="k">Ganancia</div><div class="v" id="dGanancia">RD$ 0.00</div></div>
+                        </div>
+                    </div>
+
+                    <div class="premium-modal-card">
+                        <div class="premium-header">
+                            <h4 class="premium-title">Resumen ejecutivo premium</h4>
+                            <span class="premium-badge">Live</span>
+                        </div>
+                        <div class="premium-grid">
+                        <div class="premium-cell">
+                            <div class="label">Porcentaje de entrega</div>
+                            <div class="value blur-bg" id="pEstado">0.00%</div>
+                        </div>
+                        <div class="premium-cell">
+                            <div class="label">Porcentaje de devolución</div>
+                            <div class="value blur-bg" id="pMargen">0.00%</div>
+                        </div>
+                        <div class="premium-cell">
+                            <div class="label">Riesgo operativo</div>
+                            <div class="value blur-bg" id="pRiesgo">Desconocido</div>
+                        </div>
+                        </div>
+                        <div class="premium-note">Indicadores clave de rendimiento (KPIs) basados en reportes cargados.</div>
+                    </div>
+
+                <div class="status-dual">
+                    <div class="status-card">
+                        <h4>Estados de guías</h4>
+                        <div class="status-row"><span>Devolución a origen</span><span id="stDevolucionOrigen" style="color: #ff8f8f;">--</span></div>
+                        <div class="status-row"><span>En transito</span><span id="stEnTransito" style="color: #ffd700;">--</span></div>
+                        <div class="status-row"><span>Entregada a destino</span><span id="stEntregadaDestino" style="color: #7dffb8;">--</span></div>
+                        <div class="status-row"><span>En reparto</span><span id="stEnReparto" style="color: #39d7ff;">--</span></div>
+                        <div class="status-row"><span>Novedad</span><span id="stNovedad" style="color: #ffb3b3;">--</span></div>
+                        <div class="status-row" style="border-top: 1px solid #2f5da9; margin-top: 8px; padding-top: 12px; border-bottom: none;"><span style="font-weight: 800; color: #fff;">Total de ordenes</span><span id="stTotalOrdenes" style="font-weight: 800; color: #ffffff;">--</span></div>
+                    </div>
+
+                    <div class="status-card">
+                        <h4>Movimientos financieros</h4>
+                        <div class="status-row"><span>Comisión retiro Wallet</span><span id="mvComision" style="color: #ffb3b3;">--</span></div>
+                        <div class="status-row"><span>Compra mercancía</span><span id="mvCompra" style="color: #ffb3b3;">--</span></div>
+                        <div class="status-row"><span>Débito revertido</span><span id="mvDebito" style="color: #7dffb8;">--</span></div>
+                        <div class="status-row"><span>Flete c/ recaudo</span><span id="mvFleteCon" style="color: #ffb3b3;">--</span></div>
+                        <div class="status-row"><span>Flete devolución</span><span id="mvFleteDev" style="color: #ff5d5d;">--</span></div>
+                        <div class="status-row"><span>Flete s/ recaudo</span><span id="mvFleteSin" style="color: #ffb3b3;">--</span></div>
+                        <div class="status-row"><span>Indemnización</span><span id="mvIndemnizacion" style="color: #7dffb8;">--</span></div>
+                        <div class="status-row"><span>Recaudo de venta</span><span id="mvRecaudo" style="color: #7dffb8; font-weight: 800;">--</span></div>
+                        <div class="status-row"><span>Retiro de dinero</span><span id="mvRetiro" style="color: #7dffb8;">--</span></div>
+                        <div class="status-row"><span>Fulfillment</span><span id="mvFulfillment" style="color: #ffb3b3;">--</span></div>
+                    </div>
+                </div>
+
+                    <div class="result-card" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div style="background: rgba(10, 26, 54, 0.5); border-radius: 12px; padding: 15px; border: 1px solid rgba(47, 93, 169, 0.3);">
+                            <h4 style="margin: 0 0 10px; color: #ffd700;">Resultado operativo (premium)</h4>
+                            <div class="result-row"><span>Recaudo de venta</span><span id="rsRecaudo">RD$ 0,00</span></div>
+                            <div class="result-row"><span>Débito revertido + Indemnización</span><span id="rsOtrosIngresos">RD$ 0,00</span></div>
+                            <div class="result-row"><span>Total costos (Compra + Fletes + Fulfillment)</span><span id="rsCostos">RD$ 0,00</span></div>
+                            <div class="result-total"><span>Resultado neto</span><span id="rsNeto">RD$ 0,00</span></div>
+                        </div>
+                        <div style="background: rgba(10, 26, 54, 0.5); border-radius: 12px; padding: 15px; border: 1px solid rgba(47, 93, 169, 0.3);">
+                            <h4 style="margin: 0 0 10px; color: #39d7ff;">Pendiente por depositar</h4>
+                            <div class="result-row"><span>Retiro de dinero cuenta</span><span id="rsRetiro">RD$ 0,00</span></div>
+                            <div class="result-row"><span>Resultado neto</span><span id="rsNetoDep">RD$ 0,00</span></div>
+                            <div class="result-total" style="background: #39d7ff; color: #06243a;"><span>Diferencia</span><span id="rsDiffDep">RD$ 0,00</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="gastos-modal">
+                    <div class="gastos-header">
+                        <h4>Egresos manuales</h4>
+                        <button class="gastos-btn" style="background: linear-gradient(180deg, #7ef9ff, #39d7ff); box-shadow: 0 0 12px rgba(57, 215, 255, 0.5); font-size: 13px; padding: 10px 20px;" onclick="openEgresosModal()">+ Agregar egreso</button>
+                    </div>
+                    <div class="result-card" style="margin-top: 12px; padding: 14px;">
+                        <div class="gastos-grid">
+                            <div class="gastos-col">
+                                <div class="gastos-head">Egresos</div>
+                                <div class="gastos-value" id="gEgresos">RD$ 0,00</div>
+                            </div>
+                            <div class="gastos-col">
+                                <div class="gastos-head">Facebook</div>
+                                <div class="gastos-value" id="gFacebook">RD$ 0,00</div>
+                            </div>
+                            <div class="gastos-col">
+                                <div class="gastos-head">Tiktok</div>
+                                <div class="gastos-value" id="gTiktok">RD$ 0,00</div>
+                            </div>
+                        </div>
+                        <div class="egresos-card">
+                            <div class="egresos-title">Detalle de egresos manuales</div>
+                            <div id="egresosList" class="egresos-empty">Sin egresos registrados.</div>
+                        </div>
+
+                        <div class="resta-card">
+                            <div class="resta-title">Descuento sobre resultado neto</div>
+                            <div class="resta-row"><span>Resultado neto</span><span id="rtNetoBase">RD$ 0,00</span></div>
+                            <div class="resta-row"><span>Menos Egresos</span><span id="rtEgresos">RD$ 0,00</span></div>
+                            <div class="resta-row"><span>Menos Facebook</span><span id="rtFacebook">RD$ 0,00</span></div>
+                            <div class="resta-row"><span>Menos Tiktok</span><span id="rtTiktok">RD$ 0,00</span></div>
+                            <div class="resta-final"><span>Resultado final</span><span id="rtFinal">RD$ 0,00</span></div>
+                        </div>
+
+                        <div class="split-card">
+                            <div class="split-title">Ganancias a repartir</div>
+                            <div class="split-grid">
+                                <div class="split-col">
+                                    <div class="split-row" style="border-bottom:none; padding:0;"><span>Alcedo</span><span class="split-amount" id="spPersona1">RD$ 0,00</span></div>
+                                </div>
+                                <div class="split-col">
+                                    <div class="split-row" style="border-bottom:none; padding:0;"><span>Henry</span><span class="split-amount" id="spPersona2">RD$ 0,00</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </aside>
+                </div>
+            </div>
+        </section>
+
+        <section id="uploads" class="view">
+            <div class="panel" style="max-width: 1000px;">
+                <h3>Carga de archivos</h3>
+                <p style="margin-top:0;color:#cfe3ff;">Sube los cuatro archivos. Desde aquí comenzamos los nuevos filtros por bloque.</p>
+
+                <div class="upload-grid">
+                    <div class="upload-card">
+                        <label>Reporte guías de transporte</label>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="file" id="fileTransporte" accept=".xlsx,.xls,.csv">
+                            <button class="gastos-btn" style="padding: 4px 12px; font-size: 11px;" onclick="autoLoadFile('transporte', ['Reporte de Guías'])">Auto</button>
+                        </div>
+                    </div>
+                    <div class="upload-card">
+                        <label>Reporte movimientos Effi</label>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="file" id="fileEffi" accept=".xlsx,.xls,.csv">
+                            <button class="gastos-btn" style="padding: 4px 12px; font-size: 11px;" onclick="autoLoadFile('effi', ['Reporte de movimientos de dinero Effi'])">Auto</button>
+                        </div>
+                    </div>
+                    <div class="upload-card">
+                        <label>Reporte Facebook Ads</label>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="file" id="fileFacebook" accept=".xlsx,.xls,.csv">
+                            <button class="gastos-btn" style="padding: 4px 12px; font-size: 11px;" onclick="autoLoadFile('facebook', ['AVA-TECH-2-Campañas', 'facebook', 'Facebook'])">Auto</button>
+                        </div>
+                    </div>
+                    <div class="upload-card">
+                        <label>Reporte TikTok Ads</label>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="file" id="fileTiktok" accept=".xlsx,.xls,.csv">
+                            <button class="gastos-btn" style="padding: 4px 12px; font-size: 11px;" onclick="autoLoadFile('tiktok', ['AvaShop', 'TikTok', 'tiktok'])">Auto</button>
+                        </div>
+                    </div>
+                    <div class="upload-card" style="grid-column: 1 / -1; max-width: 300px;">
+                        <label>Tasa de cambio (USD -> DOP)</label>
+                        <input type="number" id="exchangeRate" value="58.00" step="0.01">
+                    </div>
+                </div>
+
+                <div class="status-panel">
+                    <div class="status-panel-title">Estado de archivos cargados</div>
+                    <div class="status-item">
+                        <span>Guías</span>
+                        <span id="stTransporte" class="empty">Ningún archivo seleccionado</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Effi</span>
+                        <span id="stEffi" class="empty">Ningún archivo seleccionado</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Facebook</span>
+                        <span id="stFacebook" class="empty">Ningún archivo seleccionado</span>
+                    </div>
+                    <div class="status-item">
+                        <span>TikTok</span>
+                        <span id="stTiktok" class="empty">Ningún archivo seleccionado</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cardPersonal" class="view">
+            <div class="panel">
+                <h3>Gasto personales de tarjetas</h3>
+
+                <div class="personal-wrap">
+                    <div class="personal-card">
+                        <h4>Ganancias de Alcedo</h4>
+                        <div class="personal-value" id="ppAlcedoGain">RD$ 0,00</div>
+                    </div>
+                    <div class="personal-card">
+                        <h4>Total gastos personales</h4>
+                        <div class="personal-value" id="ppTotalGastos">RD$ 0,00</div>
+                    </div>
+                    <div class="personal-card">
+                        <h4>Ganancia neta personal</h4>
+                        <div class="personal-value" id="ppNeta">RD$ 0,00</div>
+                    </div>
+                </div>
+
+                <div class="personal-wrap" style="margin-top: 12px;">
+                    <div class="personal-exp-card" style="margin-top:0;">
+                        <div class="personal-exp-head">
+                            <h4>Detalle de gastos personales</h4>
+                            <button class="gastos-btn" onclick="openPersonalModal()">+ Agregar gasto personal</button>
+                        </div>
+                        <div id="personalList" class="egresos-empty">Sin gastos personales registrados.</div>
+                    </div>
+
+                    <div class="personal-column" style="display: flex; flex-direction: column; gap: 12px;">
+                        <div class="credit-card" style="margin-top:0;">
+                            <div class="credit-title">Tarjetas de crédito</div>
+                            <div class="credit-head">
+                                <span></span>
+                                <span>Crédito</span>
+                                <span>Monto real</span>
+                                <span>Resta</span>
+                            </div>
+                            <div class="credit-row">
+                                <span class="credit-name">Visa Gol</span>
+                                <input id="cgCredito" type="number" step="0.01" placeholder="0.00">
+                                <input id="cgReal" type="number" step="0.01" placeholder="0.00">
+                                <span class="credit-diff" id="cgDiff">RD$ 0,00</span>
+                            </div>
+                            <div class="credit-row">
+                                <span class="credit-name">Visa Plástica</span>
+                                <input id="cpCredito" type="number" step="0.01" placeholder="0.00">
+                                <input id="cpReal" type="number" step="0.01" placeholder="0.00">
+                                <span class="credit-diff" id="cpDiff">RD$ 0,00</span>
+                            </div>
+                            <div class="credit-row">
+                                <span class="credit-name">Mastercard</span>
+                                <input id="cmCredito" type="number" step="0.01" placeholder="0.00">
+                                <input id="cmReal" type="number" step="0.01" placeholder="0.00">
+                                <span class="credit-diff" id="cmDiff">RD$ 0,00</span>
+                            </div>
+                            <div class="credit-total">
+                                <span>Total de deuda</span>
+                                <span id="creditTotalDebt">RD$ 0,00</span>
+                            </div>
+                        </div>
+
+                        <div class="split-card" style="margin-top:0; padding:16px;">
+                            <div class="split-title" style="font-size:14px;">Liquidez Bancaria</div>
+                            <div style="font-size:11px; color:#9fc2ff; margin-bottom:10px;">Saldo en banco vs Total de deuda</div>
+                            
+                            <div style="display:grid; grid-template-columns:120px 1fr; gap:8px; align-items:center; margin-bottom:12px;">
+                                <span class="credit-name" style="color:#dfffee;">Cuenta Banco</span>
+                                <button class="gastos-btn" onclick="openBancoModal()" style="width:100%;" id="btnBanco">RD$ 0,00</button>
+                            </div>
+                            
+                            <div class="personal-row" style="border-color: rgba(57, 217, 138, 0.3);">
+                                <span>Total de deuda</span>
+                                <span id="bancoDeudaCmp" style="color:#ffb3b3; font-weight:bold;">RD$ 0,00</span>
+                            </div>
+                            <div class="personal-row" style="border:none; padding-top:10px;">
+                                <span>Disponible real</span>
+                                <span id="bancoDiffCmp" style="font-size:20px; font-weight:900; text-shadow: 0 0 10px rgba(255,255,255,0.2);">RD$ 0,00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="manual-ads-card" style="margin-top:0;">
+                        <div class="manual-ads-head">
+                            <h4>Gasto publicitario manual</h4>
+                            <span class="manual-ads-total" id="manualAdsTotalLabel">RD$ 0,00</span>
+                        </div>
+                        <div id="manualAdsList" class="egresos-empty" style="margin-bottom: 12px;">Sin gastos publicitarios manuales.</div>
+                        
+                        <div class="split-card" style="margin-top:0;">
+                            <div class="split-title" style="font-size:14px;">Comparación de deuda</div>
+                            <div style="font-size:11px; color:#9fc2ff; margin-bottom:8px;">Total manual vs Total de deuda tarjeta</div>
+                            <div class="personal-row" style="border-color: rgba(57, 217, 138, 0.3);"><span>Total manual</span><span id="manualAdsTotalCmp" style="color:#ffffff; font-weight:bold;">RD$ 0,00</span></div>
+                            <div class="personal-row" style="border-color: rgba(57, 217, 138, 0.3);"><span>Total deuda tarjeta</span><span id="manualAdsDebtCmp" style="color:#ffffff; font-weight:bold;">RD$ 0,00</span></div>
+                            <div class="personal-row" style="border:none; padding-top:10px;"><span>Diferencia</span><span id="manualAdsDiffCmp" style="font-size:18px; font-weight:800; text-shadow: 0 0 10px rgba(255,255,255,0.2);">RD$ 0,00</span></div>
+                        </div>
+
+                        <div style="text-align:right; margin-top:12px;">
+                            <button class="gastos-btn" onclick="openManualAdsModal()">+ Registrar gasto publicitario</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="deudores" class="view">
+            <div class="panel" style="max-width: 700px; margin: 0 auto;">
+                <h3 style="text-align: center; margin-bottom: 20px;">Deudores & Gracias</h3>
+                
+                <div class="credit-card" style="margin-bottom: 16px;">
+                    <div class="credit-title">Agregar Deudor</div>
+                    <div style="display: grid; grid-template-columns: 1fr 2fr 1fr auto; gap: 8px; align-items: center;">
+                        <input id="deudorNombre" type="text" placeholder="Nombre" style="padding: 8px; font-size: 12px;">
+                        <input id="deudorDesc" type="text" placeholder="Descripción" style="padding: 8px; font-size: 12px;">
+                        <input id="deudorMonto" type="number" step="0.01" placeholder="Monto" style="padding: 8px; font-size: 12px;">
+                        <button class="gastos-btn" onclick="addDeudor()" style="padding: 8px 16px; font-size: 12px;">+</button>
+                    </div>
+                </div>
+
+                <div class="credit-card">
+                    <div class="credit-title">Lista de Deudores</div>
+                    <div class="credit-head" style="font-size: 10px;">
+                        <span>Nombre</span>
+                        <span>Descripción</span>
+                        <span>Monto</span>
+                        <span>Acción</span>
+                    </div>
+                    <div id="deudoresList">
+                        <div class="egresos-empty">Sin deudores registrados.</div>
+                    </div>
+                    <div class="credit-total" style="margin-top: 10px;">
+                        <span style="font-size: 12px;">Total pendiente</span>
+                        <span id="deudoresTotal" style="font-size: 14px;">RD$ 0,00</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+        <div id="egresosOverlay" class="overlay">
+            <div class="modal">
+                <h4>Registrar nuevo egreso</h4>
+                <div class="modal-grid" style="grid-template-columns: 1fr 1fr 120px auto;">
+                    <select id="egresoTipo" style="border:none; border-radius:6px; padding:10px; background:#fff; color:#000;">
+                        <option value="Egresos">Egresos</option>
+                        <option value="Facebook ads">Facebook ads</option>
+                        <option value="Tik Tok ads">Tik Tok ads</option>
+                    </select>
+                    <input id="egresoDesc" type="text" placeholder="Descripción">
+                    <input id="egresoMonto" type="number" step="0.01" placeholder="Monto">
+                    <button class="btn primary" onclick="addEgresoManual()">+</button>
+                </div>
+                <div id="egresosModalList" style="max-height: 300px; overflow-y: auto;"></div>
+                <div class="modal-actions">
+                    <button class="btn" onclick="closeEgresosModal()">Cerrar</button>
+                </div>
+            </div>
+        </div>
+
+    <div id="personalOverlay" class="overlay">
+        <div class="modal">
+            <h4>Gastos personales (Formulario premium)</h4>
+            <div class="modal-grid">
+                <input id="personalDesc" type="text" placeholder="Descripción">
+                <input id="personalMonto" type="number" step="0.01" placeholder="Monto">
+                <button class="btn primary" onclick="addPersonalGasto()">Agregar</button>
+            </div>
+            <div id="personalModalList" class="egresos-empty">Sin gastos personales registrados.</div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closePersonalModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="manualAdsOverlay" class="overlay">
+        <div class="modal">
+            <h4>Gastos publicitarios manuales</h4>
+            <div class="modal-grid">
+                <input id="manualAdsDesc" type="text" placeholder="Descripción">
+                <input id="manualAdsMonto" type="number" step="0.01" placeholder="Monto">
+                <button class="btn primary" onclick="addManualAdsGasto()">Agregar</button>
+            </div>
+            <div id="manualAdsModalList" class="egresos-empty">Sin gastos publicitarios manuales.</div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeManualAdsModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="bancoOverlay" class="overlay">
+        <div class="modal">
+            <h4>Cuenta de Banco</h4>
+            <div class="modal-grid" style="grid-template-columns: 1fr auto;">
+                <input id="bancoMontoInput" type="number" step="0.01" placeholder="Monto actual en banco">
+                <button class="btn primary" onclick="setBancoMonto()">Actualizar</button>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeBancoModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openBancoModal() {
+            document.getElementById('bancoOverlay').classList.add('active');
+            document.getElementById('bancoMontoInput').value = appState.bancoMonto || 0;
+        }
+        function closeBancoModal() {
+            document.getElementById('bancoOverlay').classList.remove('active');
+        }
+        function setBancoMonto() {
+            appState.bancoMonto = parseMoney(document.getElementById('bancoMontoInput').value || 0);
+            document.getElementById('btnBanco').innerText = formatRD(appState.bancoMonto);
+            saveState();
+            updateBankDiff();
+            closeBancoModal();
+        }
+        const effiTotals = {
+            compra: 0,
+            fleteCon: 0,
+            fleteDev: 0,
+            fleteSin: 0,
+            recaudo: 0,
+            fulfillment: 0,
+            retiro: 0
+        };
+        const dashboardTotals = {
+            netoOperativo: 0,
+            resultadoFinal: 0,
+            alcedoShare: 0
+        };
+
+        function updateResumenPremium() {
+            // Porcentaje de Entrega
+            const entregadas = Number(document.getElementById('stEntregadaDestino').innerText) || 0;
+            const devoluciones = Number(document.getElementById('stDevolucionOrigen').innerText) || 0;
+            const total = Number(document.getElementById('stTotalOrdenes').innerText) || 0;
+            
+            if (total > 0) {
+                const pctEntrega = (entregadas / total) * 100;
+                const elEntrega = document.getElementById('pEstado');
+                elEntrega.innerText = pctEntrega.toFixed(2) + '%';
+                elEntrega.className = 'value blur-bg';
+                // Color verde si entrega > 60%, amarillo si > 40%, rojo si menor
+                if(pctEntrega >= 60) elEntrega.style.color = '#7dffb8';
+                else if(pctEntrega >= 40) elEntrega.style.color = '#ffd700';
+                else elEntrega.style.color = '#ff8f8f';
+                
+                const pctDevolucion = (devoluciones / total) * 100;
+                const elDevol = document.getElementById('pMargen');
+                elDevol.innerText = pctDevolucion.toFixed(2) + '%';
+                elDevol.className = 'value blur-bg';
+                // Color rojo si devoluciÃ³n > 20%, amarillo si > 10%, verde si menor
+                if(pctDevolucion >= 20) elDevol.style.color = '#ff8f8f';
+                else if(pctDevolucion >= 10) elDevol.style.color = '#ffd700';
+                else elDevol.style.color = '#7dffb8';
+            } else {
+                const elEntrega = document.getElementById('pEstado');
+                elEntrega.innerText = '0.00%';
+                elEntrega.className = 'value blur-bg';
+                elEntrega.style.color = '#ffffff';
+
+                const elDevol = document.getElementById('pMargen');
+                elDevol.innerText = '0.00%';
+                elDevol.className = 'value blur-bg';
+                elDevol.style.color = '#ffffff';
+            }
+
+            // Riesgo Operativo (basado en Ganancia vs Ingresos)
+            const gananciaFinal = dashboardTotals.resultadoFinal || 0;
+            const ingresos = effiTotals.recaudo || 0;
+            let riesgo = "Desconocido";
+            let color = "#ffffff";
+            let bgRgba = "rgba(255,255,255,0.1)";
+
+            if (ingresos > 0) {
+                const margenGanancia = (gananciaFinal / ingresos) * 100;
+                if (margenGanancia < 0) {
+                    riesgo = "Crítico";
+                    color = "#ff5d5d"; // Rojo
+                    bgRgba = "rgba(255,93,93,0.15)";
+                } else if (margenGanancia >= 0 && margenGanancia < 10) {
+                    riesgo = "Alto";
+                    color = "#ffb3b3"; // Rojo claro
+                    bgRgba = "rgba(255,179,179,0.15)";
+                } else if (margenGanancia >= 10 && margenGanancia < 20) {
+                    riesgo = "Medio";
+                    color = "#ffd700"; // Amarillo
+                    bgRgba = "rgba(255,215,0,0.15)";
+                } else {
+                    riesgo = "Bajo";
+                    color = "#7dffb8"; // Verde
+                    bgRgba = "rgba(125,255,184,0.15)";
+                }
+            } else if (gananciaFinal < 0) {
+                riesgo = "Crítico";
+                color = "#ff5d5d";
+                bgRgba = "rgba(255,93,93,0.15)";
+            }
+            
+            const elRiesgo = document.getElementById('pRiesgo');
+            elRiesgo.innerText = riesgo;
+            elRiesgo.className = 'value blur-bg';
+            elRiesgo.style.color = color;
+            elRiesgo.style.background = bgRgba;
+        }
+
+        function updateRestaCard() {
+            const base = Number(dashboardTotals.netoOperativo || 0);
+            const egresosEgresos = getEgresosManualTotal('Egresos');
+            const egresosFacebook = getEgresosManualTotal('Facebook ads');
+            const egresosTiktok = getEgresosManualTotal('Tik Tok ads');
+            const facebook = egresosFacebook;
+            const tiktok = egresosTiktok;
+            const final = base - egresosEgresos - facebook - tiktok;
+            dashboardTotals.resultadoFinal = final;
+
+            const costosOperativos = Number(effiTotals.compra || 0) + Number(effiTotals.fleteCon || 0) + Number(effiTotals.fleteDev || 0) + Number(effiTotals.fleteSin || 0) + Number(effiTotals.fulfillment || 0);
+            const totalEgresos = costosOperativos + egresosEgresos;
+
+            document.getElementById('dIngresos').innerText = formatRD(effiTotals.recaudo);
+            document.getElementById('dEgresos').innerText = formatRD(totalEgresos);
+            document.getElementById('dPublicidad').innerText = formatRD(facebook + tiktok);
+            const topGanancia = Number(effiTotals.recaudo || 0) - totalEgresos - (facebook + tiktok);
+            document.getElementById('dGanancia').innerText = formatRDSigned(topGanancia);
+
+            document.getElementById('rtNetoBase').innerText = formatRD(base);
+            document.getElementById('rtEgresos').innerText = formatRD(egresosEgresos);
+            document.getElementById('rtFacebook').innerText = formatRD(facebook);
+            document.getElementById('rtTiktok').innerText = formatRD(tiktok);
+            document.getElementById('rtFinal').innerText = formatRD(final);
+            document.getElementById('rtFinal').style.color = final >= 0 ? '#003300' : '#8b0000';
+
+            const mitad = final / 2;
+            dashboardTotals.alcedoShare = mitad;
+            document.getElementById('spPersona1').innerText = formatRD(mitad);
+            document.getElementById('spPersona2').innerText = formatRD(mitad);
+            updatePersonalSummary();
+            updateResumenPremium();
+        }
+
+        function formatRDSigned(value) {
+            const n = Number(value || 0);
+            return n < 0 ? ('-' + formatRD(Math.abs(n))) : formatRD(n);
+        }
+
+        function getPersonalGastosTotal() {
+            return (appState.personalGastos || []).reduce((acc, x) => acc + Number(x.monto || 0), 0);
+        }
+
+        function updatePersonalSummary() {
+            const alcedo = Number(dashboardTotals.alcedoShare || 0);
+            const total = getPersonalGastosTotal();
+            const neta = alcedo - total;
+            const totalGastosEl = document.getElementById('ppTotalGastos');
+            document.getElementById('ppAlcedoGain').innerText = formatRD(alcedo);
+            totalGastosEl.innerText = formatRDSigned(-total);
+            totalGastosEl.style.color = total > 0 ? '#ff8f8f' : '#cfe3ff';
+            document.getElementById('ppNeta').innerText = formatRDSigned(neta);
+            document.getElementById('ppNeta').style.color = neta >= 0 ? '#7dffb8' : '#ff8f8f';
+        }
+
+        function updateDashboardReal() {
+            // 1. Banco
+            const banco = Number(appState.bancoMonto || 0);
+            document.getElementById('drBanco').innerText = formatRD(banco);
+
+            // 2. Deuda Tarjetas
+            const cgCredito = Number(appState.creditCards.cgCredito || 0);
+            const cgReal = Number(appState.creditCards.cgReal || 0);
+            const cpCredito = Number(appState.creditCards.cpCredito || 0);
+            const cpReal = Number(appState.creditCards.cpReal || 0);
+            const cmCredito = Number(appState.creditCards.cmCredito || 0);
+            const cmReal = Number(appState.creditCards.cmReal || 0);
+            const totalDebt = (cgReal - cgCredito) + (cpReal - cpCredito) + (cmReal - cmCredito);
+            document.getElementById('drDeudaTarjetas').innerText = formatRD(totalDebt);
+
+            // 3. Gastos Egresos (Effi Commerce) = Egresos + Facebook + Tiktok
+            const egresosEgresos = getEgresosManualTotal('Egresos');
+            const egresosFacebook = getEgresosManualTotal('Facebook ads');
+            const egresosTiktok = getEgresosManualTotal('Tik Tok ads');
+            const totalGastos = egresosEgresos + egresosFacebook + egresosTiktok;
+            document.getElementById('drGastosTotales').innerText = formatRD(totalGastos);
+
+            // 4. Resultado Real (Patrimonio EFFI COMMERCE) = Banco - Egresos - Publicidad Ads
+            const egresosTotal = totalGastos;
+            const resultadoReal = banco - egresosTotal;
+            const elResultado = document.getElementById('drResultadoReal');
+            elResultado.innerText = formatRDSigned(resultadoReal);
+            elResultado.style.color = resultadoReal >= 0 ? '#7dffb8' : '#ff5d5d';
+        }
+        function updateBankDiff() {
+            const banco = Number(appState.bancoMonto || 0);
+
+            const cgCredito = parseMoney(document.getElementById('cgCredito').value || 0);
+            const cgReal = parseMoney(document.getElementById('cgReal').value || 0);
+            const cpCredito = parseMoney(document.getElementById('cpCredito').value || 0);
+            const cpReal = parseMoney(document.getElementById('cpReal').value || 0);
+            const cmCredito = parseMoney(document.getElementById('cmCredito').value || 0);
+            const cmReal = parseMoney(document.getElementById('cmReal').value || 0);
+            
+            const totalDebt = (cgReal - cgCredito) + (cpReal - cpCredito) + (cmReal - cmCredito);
+            const diff = banco - totalDebt;
+
+            document.getElementById('bancoDeudaCmp').innerText = formatRD(totalDebt);
+            document.getElementById('bancoDiffCmp').innerText = formatRDSigned(diff);
+            
+            // Colores: Si el disponible es negativo, rojo. Si es positivo, verde.
+            document.getElementById('bancoDiffCmp').style.color = diff >= 0 ? '#7dffb8' : '#ff8f8f';
+            updateDashboardReal();
+        }
+
+        function bindFileStatus(inputId, statusId) {
+            const input = document.getElementById(inputId);
+            input.addEventListener('change', function () {
+                const f = input.files && input.files[0];
+                const st = document.getElementById(statusId);
+                if (f) {
+                    st.innerText = f.name;
+                    st.className = 'filename';
+                } else {
+                    st.innerText = 'Ningún archivo seleccionado';
+                    st.className = 'empty';
+                }
+            });
+        }
+
+        function switchView(id, btn) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        function openEgresosModal() {
+            document.getElementById('egresosOverlay').classList.add('active');
+            renderEgresosLists();
+        }
+
+        function closeEgresosModal() {
+            document.getElementById('egresosOverlay').classList.remove('active');
+        }
+
+        bindFileStatus('fileTransporte', 'stTransporte');
+        bindFileStatus('fileEffi', 'stEffi');
+        bindFileStatus('fileFacebook', 'stFacebook');
+        bindFileStatus('fileTiktok', 'stTiktok');
+
+        function updateCreditCardDiffs() {
+            const cgCredito = parseMoney(document.getElementById('cgCredito').value || 0);
+            const cgReal = parseMoney(document.getElementById('cgReal').value || 0);
+            const cpCredito = parseMoney(document.getElementById('cpCredito').value || 0);
+            const cpReal = parseMoney(document.getElementById('cpReal').value || 0);
+            const cmCredito = parseMoney(document.getElementById('cmCredito').value || 0);
+            const cmReal = parseMoney(document.getElementById('cmReal').value || 0);
+
+            appState.creditCards.cgCredito = cgCredito;
+            appState.creditCards.cgReal = cgReal;
+            appState.creditCards.cpCredito = cpCredito;
+            appState.creditCards.cpReal = cpReal;
+            appState.creditCards.cmCredito = cmCredito;
+            appState.creditCards.cmReal = cmReal;
+
+            const diffGol = cgReal - cgCredito;
+            const diffPla = cpReal - cpCredito;
+            const diffMas = cmReal - cmCredito;
+            const totalDebt = diffGol + diffPla + diffMas;
+
+            document.getElementById('cgDiff').innerText = formatRD(diffGol);
+            document.getElementById('cpDiff').innerText = formatRD(diffPla);
+            document.getElementById('cmDiff').innerText = formatRD(diffMas);
+            document.getElementById('creditTotalDebt').innerText = formatRD(totalDebt);
+            document.getElementById('cgDiff').style.color = diffGol >= 0 ? '#7dffb8' : '#ff8f8f';
+            document.getElementById('cpDiff').style.color = diffPla >= 0 ? '#7dffb8' : '#ff8f8f';
+            document.getElementById('cmDiff').style.color = diffMas >= 0 ? '#7dffb8' : '#ff8f8f';
+            document.getElementById('creditTotalDebt').style.color = totalDebt >= 0 ? '#7a0000' : '#0a5c2f';
+            updateManualAdsComparison();
+            updateBankDiff();
+            updateDashboardReal();
+        }
+
+        function updateResultadoOperativoCard() {
+            // Costos operativos: Compra + Fletes(3) + Fulfillment + ComisionRetiro
+            const costos = effiTotals.compra + effiTotals.fleteCon + effiTotals.fleteDev + effiTotals.fleteSin + effiTotals.fulfillment + effiTotals.comisionRetiro;
+            
+            // Otros ingresos: Indemnización + Débito revertido
+            const otrosIngresos = effiTotals.indemnizacion + effiTotals.debitoRevertido;
+            
+            // Resultado neto = (Recaudo + Débito revertido + Indemnización) - (Compra + Fletes + Fulfillment + ComisionRetiro)
+            const neto = (effiTotals.recaudo + otrosIngresos) - costos;
+            
+            dashboardTotals.netoOperativo = neto;
+            document.getElementById('rsRecaudo').innerText = formatRD(effiTotals.recaudo);
+            document.getElementById('rsOtrosIngresos').innerText = formatRD(otrosIngresos);
+            document.getElementById('rsCostos').innerText = formatRD(costos);
+            document.getElementById('rsNeto').innerText = formatRD(neto);
+            document.getElementById('rsNeto').style.color = neto >= 0 ? '#003300' : '#8b0000';
+
+            // Pendiente por depositar
+            const retiro = effiTotals.retiro;
+            const netoOperativo = dashboardTotals.netoOperativo || 0; // Resultado neto
+            const diffDep = netoOperativo - retiro; // Resultado neto - Retiro
+            document.getElementById('rsRetiro').innerText = formatRD(retiro);
+            document.getElementById('rsNetoDep').innerText = formatRD(netoOperativo);
+            document.getElementById('rsDiffDep').innerText = formatRDSigned(diffDep);
+            document.getElementById('rsDiffDep').style.color = diffDep >= 0 ? '#003300' : '#8b0000';
+            document.getElementById('rsDiffDep').parentElement.style.background = diffDep >= 0 ? '#c1ffc1' : '#ffb3b3';
+            
+            updateRestaCard();
+        }
+
+        const APP_KEY = 'dropshipping_upload_cache_v1';
+        const appState = {
+            exchangeRate: 58,
+            bancoMonto: 0,
+            egresosManuales: [],
+            personalGastos: [],
+            manualAdsGastos: [],
+            deudores: [],
+            creditCards: {
+                cgCredito: 0,
+                cgReal: 0,
+                cpCredito: 0,
+                cpReal: 0,
+                cmCredito: 0,
+                cmReal: 0
+            },
+            ads: {
+                facebookUSD: 0,
+                tiktokUSD: 0
+            },
+            files: {
+                transporte: null,
+                effi: null,
+                facebook: null,
+                tiktok: null
+            }
+        };
+
+        function loadState() {
+            try {
+                const saved = localStorage.getItem(APP_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    Object.assign(appState, parsed);
+                    
+                    document.getElementById('exchangeRate').value = appState.exchangeRate || 58;
+                    document.getElementById('btnBanco').innerText = formatRD(appState.bancoMonto || 0);
+                    
+                    if (document.getElementById('cgCredito')) document.getElementById('cgCredito').value = appState.creditCards?.cgCredito || 0;
+                    if (document.getElementById('cgReal')) document.getElementById('cgReal').value = appState.creditCards?.cgReal || 0;
+                    if (document.getElementById('cpCredito')) document.getElementById('cpCredito').value = appState.creditCards?.cpCredito || 0;
+                    if (document.getElementById('cpReal')) document.getElementById('cpReal').value = appState.creditCards?.cpReal || 0;
+                    if (document.getElementById('cmCredito')) document.getElementById('cmCredito').value = appState.creditCards?.cmCredito || 0;
+                    if (document.getElementById('cmReal')) document.getElementById('cmReal').value = appState.creditCards?.cmReal || 0;
+                    
+                    appState.ads = appState.ads || { facebookUSD: 0, tiktokUSD: 0 };
+                    appState.exchangeRate = appState.exchangeRate || 58;
+                    
+                    renderEgresosLists();
+                    renderDeudoresList();
+                    renderPersonalLists();
+                    renderManualAdsLists();
+                    updatePublicidadBoxes();
+                    
+                    if (appState.files.effi?.b64) {
+                        extractCompraMercanciaFromEffiBuffer(base64ToArrayBuffer(appState.files.effi.b64));
+                    }
+                    if (appState.files.facebook?.b64) {
+                        extractFacebookSpentFromBuffer(base64ToArrayBuffer(appState.files.facebook.b64));
+                    }
+                    if (appState.files.tiktok?.b64) {
+                        extractTikTokSpentFromBuffer(base64ToArrayBuffer(appState.files.tiktok.b64));
+                    }
+                    
+                    restoreStatusLabels();
+                }
+            } catch (e) { console.error('loadState error', e); }
+        }
+
+        function saveState() {
+            try {
+                const data = JSON.stringify(appState);
+                localStorage.setItem(APP_KEY, data);
+            } catch (e) {
+                console.error('Error guardando en localStorage:', e);
+                alert('Error al guardar datos. Verifica que localStorage esté habilitado.');
+            }
+        }
+
+        function addEgresoManual() {
+            const tipo = document.getElementById('egresoTipo').value;
+            const desc = document.getElementById('egresoDesc').value;
+            const monto = parseMoney(document.getElementById('egresoMonto').value || 0);
+            if (!desc || monto <= 0) return;
+            
+            const egreso = { tipo, desc, monto, fecha: new Date().toISOString() };
+            appState.egresosManuales = appState.egresosManuales || [];
+            appState.egresosManuales.push(egreso);
+            
+            if (tipo === 'Facebook ads') {
+                appState.ads.facebookUSD = (appState.ads.facebookUSD || 0) + monto;
+            } else if (tipo === 'Tik Tok ads') {
+                appState.ads.tiktokUSD = (appState.ads.tiktokUSD || 0) + monto;
+            }
+            
+            saveState();
+            
+            document.getElementById('egresoDesc').value = '';
+            document.getElementById('egresoMonto').value = '';
+            renderEgresosLists();
+            updateRestaCard();
+        }
+
+        function getEgresosManualTotal(tipo) {
+            const lista = appState.egresosManuales || [];
+            if (!tipo) return lista.reduce((acc, x) => acc + Number(x.monto || 0), 0);
+            return lista.filter(x => x.tipo === tipo).reduce((acc, x) => acc + Number(x.monto || 0), 0);
+        }
+
+        function renderEgresosLists() {
+            const list = document.getElementById('egresosList');
+            const modalList = document.getElementById('egresosModalList');
+            const egresos = appState.egresosManuales || [];
+            
+            if (egresos.length === 0) {
+                const empty = '<div class="egresos-empty">Sin egresos registrados.</div>';
+                if (list) list.innerHTML = empty;
+                if (modalList) modalList.innerHTML = empty;
+                return;
+            }
+            
+            let html = '';
+            egresos.forEach((e, i) => {
+                html += `<div class="egresos-row" style="justify-content: space-between;">
+                    <span>${e.desc}</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span>${formatRD(e.monto)}</span>
+                        <button onclick="deleteEgreso(${i})" style="background: #ff5d5d; border: none; border-radius: 4px; color: white; cursor: pointer; padding: 2px 8px; font-size: 12px;">×</button>
+                    </div>
+                </div>`;
+            });
+            
+            if (list) list.innerHTML = html;
+            if (modalList) modalList.innerHTML = html;
+            
+            document.getElementById('gEgresos').innerText = formatRD(getEgresosManualTotal('Egresos'));
+            document.getElementById('gFacebook').innerText = formatRD(getEgresosManualTotal('Facebook ads'));
+            document.getElementById('gTiktok').innerText = formatRD(getEgresosManualTotal('Tik Tok ads'));
+        }
+
+        function deleteEgreso(index) {
+            appState.egresosManuales.splice(index, 1);
+            
+            appState.ads.facebookUSD = getEgresosManualTotal('Facebook ads');
+            appState.ads.tiktokUSD = getEgresosManualTotal('Tik Tok ads');
+            
+            saveState();
+            renderEgresosLists();
+            updateRestaCard();
+            updateDashboardReal();
+        }
+
+        function addPersonalGasto() {
+            const desc = document.getElementById('personalDesc').value;
+            const monto = parseMoney(document.getElementById('personalMonto').value || 0);
+            if (!desc || monto <= 0) return;
+            
+            const gasto = { desc, monto, fecha: new Date().toISOString() };
+            appState.personalGastos = appState.personalGastos || [];
+            appState.personalGastos.push(gasto);
+            saveState();
+            
+            document.getElementById('personalDesc').value = '';
+            document.getElementById('personalMonto').value = '';
+            renderPersonalLists();
+            updatePersonalSummary();
+            updateDashboardReal();
+            closePersonalModal();
+        }
+
+        function renderPersonalLists() {
+            const list = document.getElementById('personalList');
+            const modalList = document.getElementById('personalModalList');
+            const gastos = appState.personalGastos || [];
+            
+            if (gastos.length === 0) {
+                const empty = '<div class="egresos-empty">Sin gastos personales registrados.</div>';
+                if (list) list.innerHTML = empty;
+                if (modalList) modalList.innerHTML = empty;
+                return;
+            }
+            
+            let html = '';
+            gastos.forEach((g, i) => {
+                html += `<div class="egresos-row" style="justify-content: space-between;">
+                    <span>${g.desc || 'Sin descripción'}</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span>${formatRD(g.monto)}</span>
+                        <button onclick="deletePersonalGasto(${i})" style="background: #ff5d5d; border: none; border-radius: 4px; color: white; cursor: pointer; padding: 2px 8px; font-size: 12px;">×</button>
+                    </div>
+                </div>`;
+            });
+            
+            if (list) list.innerHTML = html;
+            if (modalList) modalList.innerHTML = html;
+        }
+
+        function deletePersonalGasto(index) {
+            appState.personalGastos.splice(index, 1);
+            saveState();
+            renderPersonalLists();
+            updatePersonalSummary();
+            updateDashboardReal();
+        }
+
+        function openPersonalModal() {
+            document.getElementById('personalOverlay').classList.add('active');
+            renderPersonalLists();
+        }
+
+        function closePersonalModal() {
+            document.getElementById('personalOverlay').classList.remove('active');
+        }
+
+        function addManualAdsGasto() {
+            const desc = document.getElementById('manualAdsDesc').value;
+            const monto = parseMoney(document.getElementById('manualAdsMonto').value || 0);
+            if (!desc || monto <= 0) return;
+            
+            const gasto = { desc, monto, fecha: new Date().toISOString() };
+            appState.manualAdsGastos = appState.manualAdsGastos || [];
+            appState.manualAdsGastos.push(gasto);
+            saveState();
+            
+            document.getElementById('manualAdsDesc').value = '';
+            document.getElementById('manualAdsMonto').value = '';
+            renderManualAdsLists();
+            updateDashboardReal();
+            closeManualAdsModal();
+        }
+
+        function getManualAdsTotal() {
+            return (appState.manualAdsGastos || []).reduce((acc, x) => acc + Number(x.monto || 0), 0);
+        }
+
+        function renderManualAdsLists() {
+            const list = document.getElementById('manualAdsList');
+            const modalList = document.getElementById('manualAdsModalList');
+            const gastos = appState.manualAdsGastos || [];
+            
+            if (gastos.length === 0) {
+                const empty = '<div class="egresos-empty">Sin gastos publicitarios manuales.</div>';
+                if (list) list.innerHTML = empty;
+                if (modalList) modalList.innerHTML = empty;
+                return;
+            }
+            
+            let html = '';
+            gastos.forEach((g, i) => {
+                html += `<div class="egresos-row" style="justify-content: space-between;">
+                    <span>${g.desc || 'Sin descripción'}</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span>${formatRD(g.monto)}</span>
+                        <button onclick="deleteManualAdsGasto(${i})" style="background: #ff5d5d; border: none; border-radius: 4px; color: white; cursor: pointer; padding: 2px 8px; font-size: 12px;">×</button>
+                    </div>
+                </div>`;
+            });
+            
+            if (list) list.innerHTML = html;
+            if (modalList) modalList.innerHTML = html;
+            
+            const total = getManualAdsTotal();
+            document.getElementById('manualAdsTotalLabel').innerText = formatRD(total);
+        }
+
+        function deleteManualAdsGasto(index) {
+            appState.manualAdsGastos.splice(index, 1);
+            saveState();
+            renderManualAdsLists();
+            updateDashboardReal();
+        }
+
+        function addDeudor() {
+            const nombre = document.getElementById('deudorNombre').value;
+            const desc = document.getElementById('deudorDesc').value;
+            const monto = parseMoney(document.getElementById('deudorMonto').value || 0);
+            if (!nombre || monto <= 0) return;
+            
+            const deudor = { nombre, desc, monto, fecha: new Date().toISOString() };
+            appState.deudores = appState.deudores || [];
+            appState.deudores.push(deudor);
+            saveState();
+            
+            document.getElementById('deudorNombre').value = '';
+            document.getElementById('deudorDesc').value = '';
+            document.getElementById('deudorMonto').value = '';
+            renderDeudoresList();
+        }
+
+        function renderDeudoresList() {
+            const list = document.getElementById('deudoresList');
+            const deudores = appState.deudores || [];
+            
+            if (deudores.length === 0) {
+                list.innerHTML = '<div class="egresos-empty">Sin deudores registrados.</div>';
+                document.getElementById('deudoresTotal').innerText = formatRD(0);
+                return;
+            }
+            
+            let html = '';
+            let total = 0;
+            deudores.forEach((d, i) => {
+                total += Number(d.monto);
+                html += `<div class="credit-row" style="padding: 6px 8px; font-size: 11px;">
+                    <span class="credit-name" style="font-size: 11px;">${d.nombre}</span>
+                    <span style="color:#cfe3ff;font-size:10px;">${d.desc}</span>
+                    <span style="color:#ffb3b3;font-weight:800;font-size:11px;">${formatRD(d.monto)}</span>
+                    <button onclick="deleteDeudor(${i})" style="background: #7dffb8; border: none; border-radius: 4px; color: #003300; cursor: pointer; padding: 2px 8px; font-size: 10px; font-weight: 700;">✓</button>
+                </div>`;
+            });
+            
+            list.innerHTML = html;
+            document.getElementById('deudoresTotal').innerText = formatRD(total);
+        }
+
+        function deleteDeudor(index) {
+            appState.deudores.splice(index, 1);
+            saveState();
+            renderDeudoresList();
+        }
+
+        function openManualAdsModal() {
+            document.getElementById('manualAdsOverlay').classList.add('active');
+            renderManualAdsLists();
+        }
+
+        function closeManualAdsModal() {
+            document.getElementById('manualAdsOverlay').classList.remove('active');
+        }
+
+        function updateManualAdsComparison() {
+            const manualTotal = getManualAdsTotal();
+            const debtTotal = (appState.creditCards.cgReal - appState.creditCards.cgCredito) + 
+                              (appState.creditCards.cpReal - appState.creditCards.cpCredito) + 
+                              (appState.creditCards.cmReal - appState.creditCards.cmCredito);
+            const diff = manualTotal - debtTotal;
+            
+            document.getElementById('manualAdsTotalCmp').innerText = formatRD(manualTotal);
+            document.getElementById('manualAdsDebtCmp').innerText = formatRD(debtTotal);
+            document.getElementById('manualAdsDiffCmp').innerText = formatRD(diff);
+            document.getElementById('manualAdsDiffCmp').style.color = diff >= 0 ? '#7dffb8' : '#ff8f8f';
+        }
+
+        function arrayBufferToBase64(buffer) {
+            let binary = '';
+            const bytes = new Uint8Array(buffer);
+            for (let i = 0; i < bytes.byteLength; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return btoa(binary);
+        }
+
+        function base64ToArrayBuffer(base64) {
+            const binary = atob(base64);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        function restoreStatusLabels() {
+            const files = appState.files;
+            if (files.transporte) {
+                document.getElementById('stTransporte').innerText = files.transporte.name;
+                document.getElementById('stTransporte').className = 'filename';
+            }
+            if (files.effi) {
+                document.getElementById('stEffi').innerText = files.effi.name;
+                document.getElementById('stEffi').className = 'filename';
+            }
+            if (files.facebook) {
+                document.getElementById('stFacebook').innerText = files.facebook.name;
+                document.getElementById('stFacebook').className = 'filename';
+            }
+            if (files.tiktok) {
+                document.getElementById('stTiktok').innerText = files.tiktok.name;
+                document.getElementById('stTiktok').className = 'filename';
+            }
+        }
+
+        function exportData() {
+            const data = JSON.stringify(appState, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dropshipping_backup_' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importData(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    Object.assign(appState, parsed);
+                    saveState();
+                    location.reload();
+                } catch(err) {
+                    alert('Error al importar: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        document.getElementById('exchangeRate').addEventListener('input', function () {
+            saveState();
+        });
+
+        ['cgCredito','cgReal','cpCredito','cpReal','cmCredito','cmReal'].forEach((id) => {
+            document.getElementById(id).addEventListener('input', function () {
+                updateCreditCardDiffs();
+                saveState();
+            });
+        });
+        
+        function normalizeText(s) {
+            return String(s || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+        }
+
+        function formatRD(value) {
+            const n = Math.abs(Number(value || 0));
+            const fixed = n.toFixed(2);
+            const parts = fixed.split('.');
+            const intPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            return 'RD$ ' + intPart + ',' + parts[1];
+        }
+
+        function parseMoney(value) {
+            if (typeof value === 'number') return value;
+            if (value === null || value === undefined) return 0;
+
+            let s = String(value).trim();
+            if (!s) return 0;
+            s = s.replace(/RD\$|US\$|\$/gi, '').replace(/\s/g, '');
+            s = s.replace(/[^0-9,.-]/g, '');
+
+            const hasComma = s.includes(',');
+            const hasDot = s.includes('.');
+
+            if (hasComma && hasDot) {
+                // El último separador se toma como decimal
+                const lastComma = s.lastIndexOf(',');
+                const lastDot = s.lastIndexOf('.');
+                if (lastDot > lastComma) {
+                    // 388,832.10
+                    s = s.replace(/,/g, '');
+                } else {
+                    // 388.832,10
+                    s = s.replace(/\./g, '').replace(',', '.');
+                }
+            } else if (hasComma && !hasDot) {
+                // Si termina en ,xx lo tratamos como decimal, si no como miles
+                if (/,-?\d{2}$/.test(s) || /\d,\d{2}$/.test(s)) {
+                    s = s.replace(',', '.');
+                } else {
+                    s = s.replace(/,/g, '');
+                }
+            }
+
+            const n = parseFloat(s);
+            return Number.isFinite(n) ? n : 0;
+        }
+
+        function extractDevolucionAOrigenFromTransporteBuffer(arrayBuffer) {
+            try {
+                const data = new Uint8Array(arrayBuffer);
+                const wb = XLSX.read(data, { type: 'array' });
+                const ws = wb.Sheets[wb.SheetNames[0]];
+                const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+
+                let count = 0;
+                let countTransito = 0;
+                let countEntregada = 0;
+                let countReparto = 0;
+                let countNovedad = 0;
+                let totalOrdenes = 0;
+                rows.forEach((row) => {
+                    const estado = normalizeText(row['Estado global guía inicial'] || '');
+                    if (estado) totalOrdenes += 1;
+                    if (estado.includes('devolucion a origen')) count += 1;
+                    if (estado.includes('en transito') || estado.includes('transito')) countTransito += 1;
+                    if (estado.includes('entregada a destino') || estado.includes('entregad')) countEntregada += 1;
+                    if (estado.includes('en reparto') || estado.includes('reparto')) countReparto += 1;
+                    if (estado.includes('novedad')) countNovedad += 1;
+                });
+
+                document.getElementById('stDevolucionOrigen').innerText = String(count);
+                document.getElementById('stEnTransito').innerText = String(countTransito);
+                document.getElementById('stEntregadaDestino').innerText = String(countEntregada);
+                document.getElementById('stEnReparto').innerText = String(countReparto);
+                document.getElementById('stNovedad').innerText = String(countNovedad);
+                document.getElementById('stTotalOrdenes').innerText = String(totalOrdenes);
+                updateResumenPremium();
+            } catch (_) {
+                document.getElementById('stDevolucionOrigen').innerText = 'error';
+                document.getElementById('stEnTransito').innerText = 'error';
+                document.getElementById('stEntregadaDestino').innerText = 'error';
+                document.getElementById('stEnReparto').innerText = 'error';
+                document.getElementById('stNovedad').innerText = 'error';
+                document.getElementById('stTotalOrdenes').innerText = 'error';
+            }
+        }
+
+        function extractDevolucionAOrigenFromTransporte(file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const buf = e.target.result;
+                appState.files.transporte = { name: file.name, b64: arrayBufferToBase64(buf) };
+                saveState();
+                extractDevolucionAOrigenFromTransporteBuffer(buf);
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function extractCompraMercanciaFromEffiBuffer(arrayBuffer) {
+            try {
+                // El archivo Effi viene como HTML .xls, lo leemos en latin1 para no perder acentos
+                const rawText = new TextDecoder('iso-8859-1').decode(new Uint8Array(arrayBuffer));
+                const normalizedText = rawText.replace(/>([-]?\d+),(\d{2})<\/td>/g, '>$1.$2</td>');
+
+                const wb = XLSX.read(normalizedText, { type: 'string' });
+                
+                // Intentar con Sheet1 primero, luego Sheet2 si está vacío
+                let ws = wb.Sheets[wb.SheetNames[0]];
+                let rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+                
+                // Si Sheet1 está vacío, probar Sheet2
+                if (rows.length === 0 && wb.SheetNames.length > 1) {
+                    ws = wb.Sheets[wb.SheetNames[1]];
+                    rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+                }
+                
+                console.log('Total filas:', rows.length);
+                console.log('Primer fila (keys):', Object.keys(rows[0] || {}));
+                
+                if (rows.length > 0) {
+                    console.log('Primera fila ejemplo:', rows[0]);
+                }
+
+                let totalCompra = 0;
+                let totalFleteCon = 0;
+                let totalFleteDev = 0;
+                let totalFleteSin = 0;
+                let totalRecaudo = 0;
+                let totalFulfillment = 0;
+                let totalRetiro = 0;
+                let totalComisionRetiro = 0;
+                let totalIndemnizacion = 0;
+                let totalDebitoRevertido = 0;
+                
+                rows.forEach((row) => {
+                    const tipo = normalizeText(row['Tipo de movimiento'] || '');
+                    const valor = parseMoney(row['Valor movimiento']);
+
+                    if (tipo.includes('compra de')) {
+                        totalCompra += valor;
+                    } else if (tipo.includes('flete credito con recaudo')) {
+                        totalFleteCon += valor;
+                    } else if (tipo.includes('flete credito devoluci')) {
+                        totalFleteDev += valor;
+                    } else if (tipo.includes('flete credito sin recaudo')) {
+                        totalFleteSin += valor;
+                    } else if (tipo.includes('recaudo de venta')) {
+                        totalRecaudo += valor;
+                    } else if (tipo.includes('fulfillment')) {
+                        totalFulfillment += valor;
+                    } else if (tipo.includes('retiro de dinero de cuenta')) {
+                        totalRetiro += valor;
+                    } else if (tipo.includes('comision local por retiro')) {
+                        totalComisionRetiro += valor;
+                    } else if (tipo.includes('indemnizacion')) {
+                        totalIndemnizacion += valor;
+                    } else if (tipo.includes('debito revertido')) {
+                        totalDebitoRevertido += valor;
+                    }
+                });
+
+                document.getElementById('mvCompra').innerText = formatRD(totalCompra);
+                document.getElementById('mvFleteCon').innerText = formatRD(totalFleteCon);
+                document.getElementById('mvFleteDev').innerText = formatRD(totalFleteDev);
+                document.getElementById('mvFleteSin').innerText = formatRD(totalFleteSin);
+                document.getElementById('mvRecaudo').innerText = formatRD(totalRecaudo);
+                document.getElementById('mvFulfillment').innerText = formatRD(totalFulfillment);
+                document.getElementById('mvRetiro').innerText = formatRD(totalRetiro);
+                document.getElementById('mvComision').innerText = formatRD(totalComisionRetiro);
+                document.getElementById('mvIndemnizacion').innerText = formatRD(totalIndemnizacion);
+                document.getElementById('mvDebito').innerText = formatRD(totalDebitoRevertido);
+
+                effiTotals.compra = Math.abs(totalCompra);
+                effiTotals.fleteCon = Math.abs(totalFleteCon);
+                effiTotals.fleteDev = Math.abs(totalFleteDev);
+                effiTotals.fleteSin = Math.abs(totalFleteSin);
+                effiTotals.recaudo = Math.abs(totalRecaudo);
+                effiTotals.fulfillment = Math.abs(totalFulfillment);
+                effiTotals.retiro = Math.abs(totalRetiro);
+                effiTotals.comisionRetiro = Math.abs(totalComisionRetiro);
+                effiTotals.indemnizacion = Math.abs(totalIndemnizacion);
+                effiTotals.debitoRevertido = Math.abs(totalDebitoRevertido);
+
+                updateResultadoOperativoCard();
+            } catch (_) {
+                document.getElementById('mvCompra').innerText = 'error';
+                document.getElementById('mvFleteCon').innerText = 'error';
+                document.getElementById('mvFleteDev').innerText = 'error';
+                document.getElementById('mvFleteSin').innerText = 'error';
+                document.getElementById('mvRecaudo').innerText = 'error';
+                document.getElementById('mvFulfillment').innerText = 'error';
+                document.getElementById('mvRetiro').innerText = 'error';
+
+                effiTotals.compra = 0;
+                effiTotals.fleteCon = 0;
+                effiTotals.fleteDev = 0;
+                effiTotals.fleteSin = 0;
+                effiTotals.recaudo = 0;
+                effiTotals.fulfillment = 0;
+                effiTotals.retiro = 0;
+                updateResultadoOperativoCard();
+            }
+        }
+
+        function findKeyByAliases(keys, aliases) {
+            for (const key of keys) {
+                const k = normalizeText(key);
+                if (aliases.some(a => k === a || k.includes(a))) return key;
+            }
+            return null;
+        }
+
+        function extractFacebookSpentFromBuffer(arrayBuffer) {
+            try {
+                const data = new Uint8Array(arrayBuffer);
+                const wb = XLSX.read(data, { type: 'array' });
+                const ws = wb.Sheets[wb.SheetNames[0]];
+                const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+
+                let totalUSD = 0;
+                rows.forEach((row) => {
+                    const keys = Object.keys(row);
+                    if (keys.length === 0) return;
+
+                    const campaignKey = findKeyByAliases(keys, ['nombre de la campana', 'campaign name']);
+                    const spentKey = findKeyByAliases(keys, ['importe gastado usd', 'importe gastado', 'amount spent usd', 'amount spent']);
+                    if (!spentKey) return;
+
+                    if (campaignKey) {
+                        const c = normalizeText(row[campaignKey]);
+                        if (c.startsWith('total') || c.startsWith('totales') || c.startsWith('total de')) return;
+                    }
+
+                    const v = parseMoney(row[spentKey]);
+                    if (Number.isFinite(v)) totalUSD += Math.abs(v);
+                });
+
+                appState.ads.facebookUSD = totalUSD;
+                saveState();
+            } catch (_) {
+                // no-op
+            }
+        }
+
+        function extractTikTokSpentFromBuffer(arrayBuffer) {
+            try {
+                const data = new Uint8Array(arrayBuffer);
+                const wb = XLSX.read(data, { type: 'array' });
+                const ws = wb.Sheets[wb.SheetNames[0]];
+                const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+
+                let totalUSD = 0;
+                let foundTotalRow = false;
+                rows.forEach((row) => {
+                    const keys = Object.keys(row);
+                    if (keys.length === 0) return;
+
+                    const campaignKey = findKeyByAliases(keys, ['campaign name']);
+                    const costKey = findKeyByAliases(keys, ['cost']);
+                    if (!costKey) return;
+
+                    if (campaignKey) {
+                        const campaign = normalizeText(row[campaignKey]);
+                        // Regla solicitada: usar SOLO la fila "Total of X results"
+                        if (campaign.startsWith('total of') && campaign.includes('results')) {
+                            const vTotal = parseMoney(row[costKey]);
+                            if (Number.isFinite(vTotal)) {
+                                totalUSD = Math.abs(vTotal);
+                                foundTotalRow = true;
+                            }
+                        }
+                    }
+                });
+
+                // Si no aparece la fila Total of X results, dejar en 0 para evitar sumar líneas individuales.
+                if (!foundTotalRow) totalUSD = 0;
+
+                appState.ads.tiktokUSD = totalUSD;
+                saveState();
+            } catch (_) {
+                // no-op
+            }
+        }
+
+        bindFileStatus('fileTiktok', 'stTiktok');
+
+        loadState();
+
+        document.getElementById('fileTransporte').addEventListener('change', function (e) {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                appState.files.transporte = { name: file.name, b64: arrayBufferToBase64(ev.target.result) };
+                saveState();
+                restoreStatusLabels();
+                extractDevolucionAOrigenFromTransporteBuffer(ev.target.result);
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        document.getElementById('fileEffi').addEventListener('change', function (e) {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                appState.files.effi = { name: file.name, b64: arrayBufferToBase64(ev.target.result) };
+                saveState();
+                restoreStatusLabels();
+                extractCompraMercanciaFromEffiBuffer(ev.target.result);
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        document.getElementById('fileFacebook').addEventListener('change', function (e) {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                appState.files.facebook = { name: file.name, b64: arrayBufferToBase64(ev.target.result) };
+                saveState();
+                restoreStatusLabels();
+                extractFacebookSpentFromBuffer(ev.target.result);
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        document.getElementById('fileTiktok').addEventListener('change', function (e) {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                appState.files.tiktok = { name: file.name, b64: arrayBufferToBase64(ev.target.result) };
+                saveState();
+                restoreStatusLabels();
+                extractTikTokSpentFromBuffer(ev.target.result);
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        ['cgCredito','cgReal','cpCredito','cpReal','cmCredito','cmReal'].forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('input', function () {
+                updateCreditCardDiffs();
+                saveState();
+            });
+        });
+
+        // Función para auto-cargar archivos desde el servidor
+        async function autoLoadFile(type, keywords) {
+            try {
+                // Intentar cargar el archivo más reciente que coincida con los keywords
+                // Como no tenemos lista de archivos, intentamos los más probables
+                const commonNames = {
+                    'transporte': ['Reporte de Guías de transporte', 'guias', 'guia'],
+                    'effi': ['Reporte de movimientos de dinero Effi', 'Reporte de movimientos Effi', 'movimientos'],
+                    'facebook': ['AVA-TECH-2-Campañas', 'Facebook', 'facebook'],
+                    'tiktok': ['AvaShop', 'TikTok', 'tiktok']
+                };
+                
+                const names = commonNames[type] || keywords;
+                let foundFile = null;
+                let latestDate = null;
+                
+                // Probar cada extension
+                for (const name of names) {
+                    for (const ext of ['.xlsx', '.xls']) {
+                        const possibleNames = [
+                            name + ext,
+                            name.replace(/ /g, '_') + ext
+                        ];
+                        
+                        for (const fileName of possibleNames) {
+                            try {
+                                const response = await fetch('./' + fileName, { method: 'HEAD' });
+                                if (response.ok) {
+                                    const dateMatch = fileName.match(/(\d{4}-\d{2}-\d{2})/);
+                                    const fileDate = dateMatch ? new Date(dateMatch[1]) : new Date(0);
+                                    
+                                    if (!latestDate || fileDate > latestDate) {
+                                        latestDate = fileDate;
+                                        foundFile = fileName;
+                                    }
+                                }
+                            } catch(e) {
+                                // Archivo no existe, continuar
+                            }
+                        }
+                    }
+                }
+                
+                if (foundFile) {
+                    console.log('Cargando archivo:', foundFile);
+                    const fileResponse = await fetch('./' + foundFile);
+                    const arrayBuffer = await fileResponse.arrayBuffer();
+                    
+                    if (type === 'transporte') {
+                        appState.files.transporte = { name: foundFile, b64: arrayBufferToBase64(arrayBuffer) };
+                        saveState();
+                        restoreStatusLabels();
+                        extractDevolucionAOrigenFromTransporteBuffer(arrayBuffer);
+                    } else if (type === 'effi') {
+                        appState.files.effi = { name: foundFile, b64: arrayBufferToBase64(arrayBuffer) };
+                        saveState();
+                        restoreStatusLabels();
+                        extractCompraMercanciaFromEffiBuffer(arrayBuffer);
+                    } else if (type === 'facebook') {
+                        appState.files.facebook = { name: foundFile, b64: arrayBufferToBase64(arrayBuffer) };
+                        saveState();
+                        restoreStatusLabels();
+                        extractFacebookSpentFromBuffer(arrayBuffer);
+                    } else if (type === 'tiktok') {
+                        appState.files.tiktok = { name: foundFile, b64: arrayBufferToBase64(arrayBuffer) };
+                        saveState();
+                        restoreStatusLabels();
+                        extractTikTokSpentFromBuffer(arrayBuffer);
+                    }
+                    
+                    return foundFile;
+                }
+                return null;
+            } catch (e) {
+                console.error('Error auto-cargando:', e);
+                return null;
+            }
+        }
+
+        // Auto-cargar todos los archivos al iniciar
+        async function autoLoadAllFiles() {
+            const results = [];
+            results.push(await autoLoadFile('transporte'));
+            results.push(await autoLoadFile('effi'));
+            results.push(await autoLoadFile('facebook'));
+            results.push(await autoLoadFile('tiktok'));
+            
+            const loaded = results.filter(r => r !== null);
+            if (loaded.length > 0) {
+                console.log('Archivos auto-cargados:', loaded);
+            }
+        }
+
+        updateCreditCardDiffs();
+    </script>
+</body>
+</html>
