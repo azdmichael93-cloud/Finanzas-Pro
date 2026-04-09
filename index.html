@@ -1434,7 +1434,18 @@
             fleteSin: 0,
             recaudo: 0,
             fulfillment: 0,
-            retiro: 0
+            retiro: 0,
+            comisionRetiro: 0,
+            indemnizacion: 0,
+            debitoRevertido: 0
+        };
+        const transporteTotals = {
+            devolucion: 0,
+            transito: 0,
+            entregada: 0,
+            reparto: 0,
+            novedad: 0,
+            totalOrdenes: 0
         };
         const dashboardTotals = {
             netoOperativo: 0,
@@ -1801,7 +1812,20 @@
                         document.getElementById('mvComision').innerText = formatRD(effiTotals.comisionRetiro);
                         document.getElementById('mvIndemnizacion').innerText = formatRD(effiTotals.indemnizacion);
                         document.getElementById('mvDebito').innerText = formatRD(effiTotals.debitoRevertido);
+
+                        // Restaurar los datos de Transporte
+                        if (saved.processedTotals.transporteTotals) {
+                            Object.assign(transporteTotals, saved.processedTotals.transporteTotals);
+                            document.getElementById('stDevolucionOrigen').innerText = String(transporteTotals.devolucion);
+                            document.getElementById('stEnTransito').innerText = String(transporteTotals.transito);
+                            document.getElementById('stEntregadaDestino').innerText = String(transporteTotals.entregada);
+                            document.getElementById('stEnReparto').innerText = String(transporteTotals.reparto);
+                            document.getElementById('stNovedad').innerText = String(transporteTotals.novedad);
+                            document.getElementById('stTotalOrdenes').innerText = String(transporteTotals.totalOrdenes);
+                        }
+
                         updateResultadoOperativoCard();
+                        updateResumenPremium();
                     }
                     
                     restoreStatusLabels();
@@ -1829,6 +1853,7 @@
                 
                 stateToSave.processedTotals = {
                     effiTotals: { ...effiTotals },
+                    transporteTotals: { ...transporteTotals },
                     dashboardTotals: { ...dashboardTotals },
                     facebookUSD: appState.ads?.facebookUSD || 0,
                     tiktokUSD: appState.ads?.tiktokUSD || 0
@@ -2284,6 +2309,14 @@
                 document.getElementById('stEnReparto').innerText = String(countReparto);
                 document.getElementById('stNovedad').innerText = String(countNovedad);
                 document.getElementById('stTotalOrdenes').innerText = String(totalOrdenes);
+
+                transporteTotals.devolucion = count;
+                transporteTotals.transito = countTransito;
+                transporteTotals.entregada = countEntregada;
+                transporteTotals.reparto = countReparto;
+                transporteTotals.novedad = countNovedad;
+                transporteTotals.totalOrdenes = totalOrdenes;
+
                 updateResumenPremium();
             } catch (_) {
                 document.getElementById('stDevolucionOrigen').innerText = 'error';
@@ -2408,6 +2441,9 @@
                 effiTotals.recaudo = 0;
                 effiTotals.fulfillment = 0;
                 effiTotals.retiro = 0;
+                effiTotals.comisionRetiro = 0;
+                effiTotals.indemnizacion = 0;
+                effiTotals.debitoRevertido = 0;
                 updateResultadoOperativoCard();
             }
         }
