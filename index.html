@@ -1105,28 +1105,28 @@
                         <label>Reporte guías de transporte</label>
                         <div style="display: flex; gap: 8px;">
                             <input type="file" id="fileTransporte" accept=".xlsx,.xls,.csv">
-                            <button class="gastos-btn" style="padding: 4px 12px; font-size: 11px;" onclick="autoLoadFile('transporte', ['Reporte de Guías'])">Auto</button>
+                            <button class="gastos-btn" style="padding: 4px 12px; font-size: 11px;" onclick="handleAutoLoad('transporte', ['Reporte de Guías'])">Auto</button>
                         </div>
                     </div>
                     <div class="upload-card">
                         <label>Reporte movimientos Effi</label>
                         <div style="display: flex; gap: 8px;">
                             <input type="file" id="fileEffi" accept=".xlsx,.xls,.csv">
-                            <button class="gastos-btn" style="padding: 4px 12px; font-size: 11px;" onclick="autoLoadFile('effi', ['Reporte de movimientos de dinero Effi'])">Auto</button>
+                            <button class="gastos-btn" style="padding: 4px 12px; font-size: 11px;" onclick="handleAutoLoad('effi', ['Reporte de movimientos de dinero Effi'])">Auto</button>
                         </div>
                     </div>
                     <div class="upload-card">
                         <label>Reporte Facebook Ads</label>
                         <div style="display: flex; gap: 8px;">
                             <input type="file" id="fileFacebook" accept=".xlsx,.xls,.csv">
-                            <button class="gastos-btn" style="padding: 4px 12px; font-size: 11px;" onclick="autoLoadFile('facebook', ['AVA-TECH-2-Campañas', 'facebook', 'Facebook'])">Auto</button>
+                            <button class="gastos-btn" style="padding: 4px 12px; font-size: 11px;" onclick="handleAutoLoad('facebook', ['AVA-TECH-2-Campañas', 'facebook', 'Facebook'])">Auto</button>
                         </div>
                     </div>
                     <div class="upload-card">
                         <label>Reporte TikTok Ads</label>
                         <div style="display: flex; gap: 8px;">
                             <input type="file" id="fileTiktok" accept=".xlsx,.xls,.csv">
-                            <button class="gastos-btn" style="padding: 4px 12px; font-size: 11px;" onclick="autoLoadFile('tiktok', ['AvaShop', 'TikTok', 'tiktok'])">Auto</button>
+                            <button class="gastos-btn" style="padding: 4px 12px; font-size: 11px;" onclick="handleAutoLoad('tiktok', ['AvaShop', 'TikTok', 'tiktok'])">Auto</button>
                         </div>
                     </div>
                     <div class="upload-card" style="grid-column: 1 / -1; max-width: 300px;">
@@ -1358,7 +1358,61 @@
         </div>
     </div>
 
+    <div id="alertOverlay" class="overlay" style="z-index: 9999;">
+        <div class="modal" style="max-width: 400px; text-align: center;">
+            <div id="alertIcon" style="font-size: 48px; margin-bottom: 10px;">⚠️</div>
+            <h4 id="alertTitle" style="margin-top: 0;">Alerta</h4>
+            <p id="alertMessage" style="color: #9fc2ff; margin-bottom: 20px; font-size: 14px;"></p>
+            <div class="modal-actions" style="justify-content: center;">
+                <button class="btn primary" style="padding: 10px 30px; border-radius: 99px;" onclick="document.getElementById('alertOverlay').classList.remove('active')">Entendido</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        function showAlert(message, type = 'warning') {
+            const overlay = document.getElementById('alertOverlay');
+            const icon = document.getElementById('alertIcon');
+            const title = document.getElementById('alertTitle');
+            
+            document.getElementById('alertMessage').innerText = message;
+            
+            if (type === 'error') {
+                icon.innerText = '❌';
+                title.innerText = 'Error';
+                icon.style.color = '#ff5d5d';
+            } else if (type === 'success') {
+                icon.innerText = '✅';
+                title.innerText = 'Éxito';
+                icon.style.color = '#7dffb8';
+            } else {
+                icon.innerText = '⚠️';
+                title.innerText = 'Advertencia';
+                icon.style.color = '#ffd700';
+            }
+            
+            overlay.classList.add('active');
+        }
+
+        // Utilidad para la Zona Horaria de República Dominicana
+        function getDominicanTime() {
+            const date = new Date();
+            const formatter = new Intl.DateTimeFormat('en-CA', {
+                timeZone: 'America/Santo_Domingo',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            const parts = formatter.formatToParts(date);
+            const p = {};
+            parts.forEach(part => p[part.type] = part.value);
+            return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}-04:00`; // UTC-4 for DR
+        }
+
         function openBancoModal() {
             document.getElementById('bancoOverlay').classList.add('active');
             document.getElementById('bancoMontoInput').value = appState.bancoMonto || 0;
@@ -1695,12 +1749,22 @@
             }
         };
 
-        function loadState() {
+        async function loadState() {
             try {
-                const saved = localStorage.getItem(APP_KEY);
+                // 1. Intentar cargar desde el Servidor (API)
+                let savedData = null;
+                try {
+                    const response = await fetch('/api/state');
+                    if (response.ok) savedData = await response.json();
+                } catch (apiErr) {
+                    console.warn('Servidor no disponible, usando localStorage como respaldo');
+                }
+
+                // 2. Si el servidor no tiene nada, usar localStorage
+                const saved = savedData || JSON.parse(localStorage.getItem(APP_KEY));
+                
                 if (saved) {
-                    const parsed = JSON.parse(saved);
-                    Object.assign(appState, parsed);
+                    Object.assign(appState, saved);
                     
                     document.getElementById('exchangeRate').value = appState.exchangeRate || 58;
                     document.getElementById('btnBanco').innerText = formatRD(appState.bancoMonto || 0);
@@ -1721,14 +1785,25 @@
                     renderManualAdsLists();
                     updatePublicidadBoxes();
                     
-                    if (appState.files.effi?.b64) {
-                        extractCompraMercanciaFromEffiBuffer(base64ToArrayBuffer(appState.files.effi.b64));
-                    }
-                    if (appState.files.facebook?.b64) {
-                        extractFacebookSpentFromBuffer(base64ToArrayBuffer(appState.files.facebook.b64));
-                    }
-                    if (appState.files.tiktok?.b64) {
-                        extractTikTokSpentFromBuffer(base64ToArrayBuffer(appState.files.tiktok.b64));
+                    // Restaurar los datos procesados
+                    if (saved.processedTotals) {
+                        if (saved.processedTotals.effiTotals) Object.assign(effiTotals, saved.processedTotals.effiTotals);
+                        if (saved.processedTotals.dashboardTotals) Object.assign(dashboardTotals, saved.processedTotals.dashboardTotals);
+                        appState.ads.facebookUSD = saved.processedTotals.facebookUSD || 0;
+                        appState.ads.tiktokUSD = saved.processedTotals.tiktokUSD || 0;
+                        
+                        document.getElementById('mvCompra').innerText = formatRD(effiTotals.compra);
+                        document.getElementById('mvFleteCon').innerText = formatRD(effiTotals.fleteCon);
+                        document.getElementById('mvFleteDev').innerText = formatRD(effiTotals.fleteDev);
+                        document.getElementById('mvFleteSin').innerText = formatRD(effiTotals.fleteSin);
+                        document.getElementById('mvRecaudo').innerText = formatRD(effiTotals.recaudo);
+                        document.getElementById('mvFulfillment').innerText = formatRD(effiTotals.fulfillment);
+                        document.getElementById('mvRetiro').innerText = formatRD(effiTotals.retiro);
+                        document.getElementById('mvComision').innerText = formatRD(effiTotals.comisionRetiro);
+                        document.getElementById('mvIndemnizacion').innerText = formatRD(effiTotals.indemnizacion);
+                        document.getElementById('mvDebito').innerText = formatRD(effiTotals.debitoRevertido);
+                        updateResultadoOperativoCard();
+                        updatePublicidadBoxes();
                     }
                     
                     restoreStatusLabels();
@@ -1736,13 +1811,43 @@
             } catch (e) { console.error('loadState error', e); }
         }
 
-        function saveState() {
+        async function saveState() {
             try {
-                const data = JSON.stringify(appState);
-                localStorage.setItem(APP_KEY, data);
+                const stateToSave = {
+                    ...appState,
+                    files: {
+                        transporte: appState.files.transporte ? { name: appState.files.transporte.name } : null,
+                        effi: appState.files.effi ? { name: appState.files.effi.name } : null,
+                        facebook: appState.files.facebook ? { name: appState.files.facebook.name } : null,
+                        tiktok: appState.files.tiktok ? { name: appState.files.tiktok.name } : null
+                    }
+                };
+                
+                stateToSave.processedTotals = {
+                    effiTotals: { ...effiTotals },
+                    dashboardTotals: { ...dashboardTotals },
+                    facebookUSD: appState.ads?.facebookUSD || 0,
+                    tiktokUSD: appState.ads?.tiktokUSD || 0
+                };
+                
+                const dataStr = JSON.stringify(stateToSave);
+                
+                // 1. Guardar en localStorage (Local)
+                localStorage.setItem(APP_KEY, dataStr);
+
+                // 2. Guardar en Servidor (API)
+                try {
+                    await fetch('/api/state', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: dataStr
+                    });
+                } catch (apiErr) {
+                    console.error('Error al sincronizar con el servidor:', apiErr);
+                }
+
             } catch (e) {
-                console.error('Error guardando en localStorage:', e);
-                alert('Error al guardar datos. Verifica que localStorage esté habilitado.');
+                console.error('Error guardando datos:', e);
             }
         }
 
@@ -1752,7 +1857,7 @@
             const monto = parseMoney(document.getElementById('egresoMonto').value || 0);
             if (!desc || monto <= 0) return;
             
-            const egreso = { tipo, desc, monto, fecha: new Date().toISOString() };
+            const egreso = { tipo, desc, monto, fecha: getDominicanTime() };
             appState.egresosManuales = appState.egresosManuales || [];
             appState.egresosManuales.push(egreso);
             
@@ -1824,7 +1929,7 @@
             const monto = parseMoney(document.getElementById('personalMonto').value || 0);
             if (!desc || monto <= 0) return;
             
-            const gasto = { desc, monto, fecha: new Date().toISOString() };
+            const gasto = { desc, monto, fecha: getDominicanTime() };
             appState.personalGastos = appState.personalGastos || [];
             appState.personalGastos.push(gasto);
             saveState();
@@ -1886,7 +1991,7 @@
             const monto = parseMoney(document.getElementById('manualAdsMonto').value || 0);
             if (!desc || monto <= 0) return;
             
-            const gasto = { desc, monto, fecha: new Date().toISOString() };
+            const gasto = { desc, monto, fecha: getDominicanTime() };
             appState.manualAdsGastos = appState.manualAdsGastos || [];
             appState.manualAdsGastos.push(gasto);
             saveState();
@@ -1945,7 +2050,7 @@
             const monto = parseMoney(document.getElementById('deudorMonto').value || 0);
             if (!nombre || monto <= 0) return;
             
-            const deudor = { nombre, desc, monto, fecha: new Date().toISOString() };
+            const deudor = { nombre, desc, monto, fecha: getDominicanTime() };
             appState.deudores = appState.deudores || [];
             appState.deudores.push(deudor);
             saveState();
@@ -2054,7 +2159,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'dropshipping_backup_' + new Date().toISOString().split('T')[0] + '.json';
+            a.download = 'dropshipping_backup_' + getDominicanTime().split('T')[0] + '.json';
             a.click();
             URL.revokeObjectURL(url);
         }
@@ -2070,7 +2175,7 @@
                     saveState();
                     location.reload();
                 } catch(err) {
-                    alert('Error al importar: ' + err.message);
+                    showAlert('Error al importar: ' + err.message, 'error');
                 }
             };
             reader.readAsText(file);
@@ -2379,9 +2484,25 @@
 
         loadState();
 
-        document.getElementById('fileTransporte').addEventListener('change', function (e) {
+        async function uploadFileToServer(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            try {
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                return response.ok;
+            } catch (err) {
+                console.error('Error al subir archivo al servidor:', err);
+                return false;
+            }
+        }
+
+        document.getElementById('fileTransporte').addEventListener('change', async function (e) {
             const file = e.target.files && e.target.files[0];
             if (!file) return;
+            uploadFileToServer(file);
             const reader = new FileReader();
             reader.onload = function (ev) {
                 appState.files.transporte = { name: file.name, b64: arrayBufferToBase64(ev.target.result) };
@@ -2392,9 +2513,10 @@
             reader.readAsArrayBuffer(file);
         });
 
-        document.getElementById('fileEffi').addEventListener('change', function (e) {
+        document.getElementById('fileEffi').addEventListener('change', async function (e) {
             const file = e.target.files && e.target.files[0];
             if (!file) return;
+            uploadFileToServer(file);
             const reader = new FileReader();
             reader.onload = function (ev) {
                 appState.files.effi = { name: file.name, b64: arrayBufferToBase64(ev.target.result) };
@@ -2405,9 +2527,10 @@
             reader.readAsArrayBuffer(file);
         });
 
-        document.getElementById('fileFacebook').addEventListener('change', function (e) {
+        document.getElementById('fileFacebook').addEventListener('change', async function (e) {
             const file = e.target.files && e.target.files[0];
             if (!file) return;
+            uploadFileToServer(file);
             const reader = new FileReader();
             reader.onload = function (ev) {
                 appState.files.facebook = { name: file.name, b64: arrayBufferToBase64(ev.target.result) };
@@ -2418,9 +2541,10 @@
             reader.readAsArrayBuffer(file);
         });
 
-        document.getElementById('fileTiktok').addEventListener('change', function (e) {
+        document.getElementById('fileTiktok').addEventListener('change', async function (e) {
             const file = e.target.files && e.target.files[0];
             if (!file) return;
+            uploadFileToServer(file);
             const reader = new FileReader();
             reader.onload = function (ev) {
                 appState.files.tiktok = { name: file.name, b64: arrayBufferToBase64(ev.target.result) };
@@ -2439,6 +2563,15 @@
             });
         });
 
+        async function handleAutoLoad(type, keywords) {
+            const fileName = await autoLoadFile(type, keywords);
+            if (fileName) {
+                showAlert(`Archivo "${fileName}" cargado correctamente.`, 'success');
+            } else {
+                showAlert('No se encontró archivo automático o hubo un error al cargar.', 'error');
+            }
+        }
+
         // Función para auto-cargar archivos desde el servidor
         async function autoLoadFile(type, keywords) {
             try {
@@ -2455,29 +2588,38 @@
                 let foundFile = null;
                 let latestDate = null;
                 
-                // Probar cada extension
+                // Crear promesas para verificar todos los archivos posibles en paralelo
+                // para evitar mostrar cientos de errores 404 en la consola secuencialmente.
+                const checkFile = async (fileName) => {
+                    try {
+                        const response = await fetch('./' + fileName, { method: 'HEAD' });
+                        if (response.ok) {
+                            return fileName;
+                        }
+                    } catch (e) {
+                        // Silenciar error esperado
+                    }
+                    return null;
+                };
+
+                let promises = [];
                 for (const name of names) {
                     for (const ext of ['.xlsx', '.xls']) {
-                        const possibleNames = [
-                            name + ext,
-                            name.replace(/ /g, '_') + ext
-                        ];
+                        promises.push(checkFile(name + ext));
+                        promises.push(checkFile(name.replace(/ /g, '_') + ext));
+                    }
+                }
+                
+                // Extraer el archivo válido con la fecha más reciente
+                const results = await Promise.all(promises);
+                for (const fileName of results) {
+                    if (fileName) {
+                        const dateMatch = fileName.match(/(\d{4}-\d{2}-\d{2})/);
+                        const fileDate = dateMatch ? new Date(dateMatch[1]) : new Date(0);
                         
-                        for (const fileName of possibleNames) {
-                            try {
-                                const response = await fetch('./' + fileName, { method: 'HEAD' });
-                                if (response.ok) {
-                                    const dateMatch = fileName.match(/(\d{4}-\d{2}-\d{2})/);
-                                    const fileDate = dateMatch ? new Date(dateMatch[1]) : new Date(0);
-                                    
-                                    if (!latestDate || fileDate > latestDate) {
-                                        latestDate = fileDate;
-                                        foundFile = fileName;
-                                    }
-                                }
-                            } catch(e) {
-                                // Archivo no existe, continuar
-                            }
+                        if (!latestDate || fileDate > latestDate) {
+                            latestDate = fileDate;
+                            foundFile = fileName;
                         }
                     }
                 }
