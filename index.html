@@ -1783,7 +1783,6 @@
                     renderDeudoresList();
                     renderPersonalLists();
                     renderManualAdsLists();
-                    updatePublicidadBoxes();
                     
                     // Restaurar los datos procesados
                     if (saved.processedTotals) {
@@ -1803,7 +1802,6 @@
                         document.getElementById('mvIndemnizacion').innerText = formatRD(effiTotals.indemnizacion);
                         document.getElementById('mvDebito').innerText = formatRD(effiTotals.debitoRevertido);
                         updateResultadoOperativoCard();
-                        updatePublicidadBoxes();
                     }
                     
                     restoreStatusLabels();
