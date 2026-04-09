@@ -27,6 +27,21 @@ app.use(express.json({ limit: '50mb' })); // Permitir estados grandes
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static(__dirname)); // Servir index.html
 
+// --- SEGURIDAD: LOGIN ---
+const USERS = {
+    "azdelmicha@gmail.com": "SuperAdmin2026!"
+};
+
+app.post('/api/login', (req, res) => {
+    const { email, password } = req.body;
+    if (USERS[email] && USERS[email] === password) {
+        // En una app real usaríamos JWT, aquí usaremos un token simple para persistencia local
+        res.json({ success: true, token: 'session_token_pro_2026' });
+    } else {
+        res.status(401).json({ success: false, message: 'Credenciales incorrectas' });
+    }
+});
+
 // --- BASE DE DATOS ---
 const db = new sqlite3.Database(DB_PATH, (err) => {
     if (err) console.error('❌ Error al abrir SQLite:', err);

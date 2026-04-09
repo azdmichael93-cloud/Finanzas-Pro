@@ -906,6 +906,28 @@
     </style>
 </head>
 <body>
+    <div id="loginOverlay" class="overlay active" style="z-index: 10000; background: rgba(6, 18, 38, 0.98); backdrop-filter: blur(10px);">
+        <div class="modal" style="max-width: 400px; padding: 40px; border: 2px solid rgba(0, 255, 255, 0.3); box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <div style="font-size: 40px; margin-bottom: 10px;">🔐</div>
+                <h3 style="margin: 0; color: #fff; text-transform: uppercase; letter-spacing: 2px;">Finanzas Pro</h3>
+                <p style="color: #9fc2ff; font-size: 13px; margin-top: 8px;">Acceso restringido al sistema</p>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div>
+                    <label style="display: block; color: #9fc2ff; font-size: 11px; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px;">Correo Electrónico</label>
+                    <input id="loginEmail" type="email" placeholder="ejemplo@correo.com" style="width: 100%; box-sizing: border-box; background: rgba(10, 26, 54, 0.8); border: 1px solid rgba(159, 194, 255, 0.2); color: #fff; padding: 12px; border-radius: 8px; outline: none;">
+                </div>
+                <div>
+                    <label style="display: block; color: #9fc2ff; font-size: 11px; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px;">Contraseña</label>
+                    <input id="loginPass" type="password" placeholder="••••••••" style="width: 100%; box-sizing: border-box; background: rgba(10, 26, 54, 0.8); border: 1px solid rgba(159, 194, 255, 0.2); color: #fff; padding: 12px; border-radius: 8px; outline: none;">
+                </div>
+                <button class="btn primary" style="width: 100%; padding: 14px; border-radius: 8px; font-weight: 800; margin-top: 10px;" onclick="handleLogin()">Entrar al Sistema</button>
+                <p id="loginError" style="color: #ff5d5d; font-size: 12px; text-align: center; margin: 0; display: none;">Credenciales inválidas, intente de nuevo.</p>
+            </div>
+        </div>
+    </div>
+
     <header class="top-nav">
         <div class="nav-brand">Finanzas Pro <span id="syncStatus" style="font-size: 10px; margin-left: 8px; color: #7dffb8; font-weight: normal; opacity: 0.7;">● Sincronizado</span></div>
         
@@ -1392,6 +1414,50 @@
             }
             
             overlay.classList.add('active');
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPass').value;
+            const errorEl = document.getElementById('loginError');
+
+            if (!email || !password) {
+                errorEl.innerText = "Por favor complete todos los campos";
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            try {
+                const resp = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (resp.ok) {
+                    const data = await resp.json();
+                    sessionStorage.setItem('auth_token', data.token);
+                    document.getElementById('loginOverlay').classList.remove('active');
+                    loadState(); // Cargar datos tras login
+                } else {
+                    errorEl.innerText = "Credenciales incorrectas";
+                    errorEl.style.display = 'block';
+                }
+            } catch (err) {
+                console.error('Login error:', err);
+                errorEl.innerText = "Error de conexión con el servidor";
+                errorEl.style.display = 'block';
+            }
+        }
+
+        function checkAuth() {
+            const token = sessionStorage.getItem('auth_token');
+            if (!token) {
+                document.getElementById('loginOverlay').classList.add('active');
+                return false;
+            }
+            document.getElementById('loginOverlay').classList.remove('active');
+            return true;
         }
 
         // Utilidad para la Zona Horaria de República Dominicana
@@ -2530,7 +2596,9 @@
 
         bindFileStatus('fileTiktok', 'stTiktok');
 
-        loadState();
+        if (checkAuth()) {
+            loadState();
+        }
 
         async function uploadFileToServer(file) {
             const formData = new FormData();
