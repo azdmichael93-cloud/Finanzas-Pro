@@ -6,28 +6,61 @@
     <title>Dropshipping R.D</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>">
     <script src="./node_modules/xlsx/dist/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
-        * { box-sizing: border-box; }
         body {
+            background-color: #061226;
+            color: #dfffee;
+            font-family: 'Inter', sans-serif;
             margin: 0;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            background: #2b4c8c;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            padding: 0;
         }
         .top-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: radial-gradient(120% 100% at 50% 0%, #16305e 0%, #0d1a33 100%);
-            border-bottom: 1px solid #2f5da9;
-            padding: 14px 30px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            padding: 10px 30px;
+            background: rgba(10, 26, 54, 0.6);
+            border-bottom: 1px solid rgba(47, 93, 169, 0.4);
+            backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
             z-index: 1000;
+        }
+        .nav-brand {
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+        }
+        .nav-center {
+            display: flex;
+            gap: 6px;
+        }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-actions-label {
+            font-size: 11px;
+            color: #9fc2ff;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .action-btn {
+            background: rgba(10, 26, 54, 0.7);
+            border: 1px solid #2f5da9;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .nav-brand {
             font-size: 18px;
@@ -44,32 +77,42 @@
             justify-content: center;
         }
         .menu-btn {
-            background: linear-gradient(180deg, rgba(10, 26, 54, 0.8), rgba(10, 26, 54, 0.95));
-            border: 1px solid rgba(57, 215, 255, 0.4);
+            background: transparent;
+            border: 1px solid transparent;
             color: #9fc2ff;
-            padding: 8px 20px;
-            font-size: 11px;
-            font-weight: 800;
+            padding: 10px 16px;
+            font-size: 13px;
+            font-weight: 700;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .menu-btn:hover {
-            background: linear-gradient(180deg, rgba(57, 215, 255, 0.2), rgba(57, 215, 255, 0.1));
-            border-color: #39d7ff;
+            background: rgba(57, 215, 255, 0.1);
             color: #fff;
-            box-shadow: 0 0 15px rgba(57, 215, 255, 0.3);
-            transform: translateY(-1px);
         }
         .menu-btn.active {
-            background: linear-gradient(180deg, #39d7ff, #00b8d4);
-            color: #06243a;
-            box-shadow: 0 0 20px rgba(57, 215, 255, 0.5), inset 0 1px 0 rgba(255,255,255,0.3);
-            border-color: #00ffff;
-            font-weight: 900;
+            background: linear-gradient(180deg, rgba(57, 215, 255, 0.15) 0%, rgba(0, 184, 212, 0.2) 100%);
+            color: #fff;
+            border-color: rgba(57, 215, 255, 0.4);
+            font-weight: 800;
+            box-shadow: 0 0 10px rgba(57, 215, 255, 0.1);
+        }
+        .menu-btn.active i {
+            color: #7dffb8; /* Verde menta para el icono activo */
+        }
+        .menu-btn i {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+            color: #9fc2ff; /* Color azulado por defecto */
+            transition: color 0.3s ease;
+        }
+        .menu-btn:hover i {
+            color: #fff;
         }
         .nav-actions {
             display: flex;
@@ -981,17 +1024,17 @@
         <div class="nav-brand">Finanzas Pro <span id="syncStatus" style="font-size: 10px; margin-left: 8px; color: #7dffb8; font-weight: normal; opacity: 0.7;">● Sincronizado</span></div>
         
         <div class="nav-center">
-            <button class="menu-btn active" onclick="switchView('dashboardReal', this)">Dashboard Real</button>
-            <button class="menu-btn" onclick="switchView('dashboard', this)">Panel Effi Commerce</button>
-            <button class="menu-btn" onclick="switchView('uploads', this)">Gargar Archivio</button>
-            <button class="menu-btn" onclick="switchView('cardPersonal', this)">Gastos personales</button>
-            <button class="menu-btn" onclick="switchView('deudores', this)">Deudores & Gracias</button>
+            <button class="menu-btn active" onclick="switchView('dashboardReal', this)"><i class="fa-solid fa-house-chimney"></i> Dashboard Real</button>
+            <button class="menu-btn" onclick="switchView('dashboard', this)"><i class="fa-solid fa-chart-line"></i> Panel Effi Commerce</button>
+            <button class="menu-btn" onclick="switchView('uploads', this)"><i class="fa-solid fa-cloud-arrow-up"></i> Cargar Archivio</button>
+            <button class="menu-btn" onclick="switchView('cardPersonal', this)"><i class="fa-solid fa-credit-card"></i> Gastos personales</button>
+            <button class="menu-btn" onclick="switchView('deudores', this)"><i class="fa-solid fa-hand-holding-dollar"></i> Deudores & Gracias</button>
         </div>
 
         <div class="nav-actions">
             <span class="nav-actions-label">Respaldos:</span>
-            <button class="action-btn export" onclick="exportData()">↓ Exportar</button>
-            <button class="action-btn import" onclick="document.getElementById('importDataInput').click()">↑ Importar</button>
+            <button class="action-btn export" onclick="exportData()"><i class="fa-solid fa-download"></i> Exportar</button>
+            <button class="action-btn import" onclick="document.getElementById('importDataInput').click()"><i class="fa-solid fa-upload"></i> Importar</button>
             <input type="file" id="importDataInput" style="display: none;" accept=".json" onchange="importData(event)">
         </div>
     </header>
@@ -2343,18 +2386,28 @@
             URL.revokeObjectURL(url);
         }
 
-        function importData(event) {
+        async function importData(event) {
             const file = event.target.files && event.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = async function(e) {
                 try {
                     const parsed = JSON.parse(e.target.result);
+                    // Actualizar el estado local en RAM
                     Object.assign(appState, parsed);
-                    saveState();
-                    location.reload();
+                    
+                    // Forzar el guardado del estado importado en el servidor
+                    const syncSuccess = await saveState();
+                    
+                    if (syncSuccess) {
+                        showAlert('Respaldo importado y sincronizado con éxito.', 'success');
+                        // Recargar para reflejar el estado desde el servidor
+                        setTimeout(() => location.reload(), 1500);
+                    } else {
+                        showAlert('El respaldo se cargó, pero no se pudo sincronizar con la nube.', 'error');
+                    }
                 } catch(err) {
-                    showAlert('Error al importar: ' + err.message, 'error');
+                    showAlert('Error al importar el respaldo: ' + err.message, 'error');
                 }
             };
             reader.readAsText(file);
