@@ -2160,48 +2160,32 @@
 
                 <!-- 4. Ahorro Anual -->
                 <div id="vAnnual" class="personal-view view-annual">
-                    <div class="panel" style="background: rgba(0,0,0,0.2); border: 1px dashed #ffd700;">
-                        <h4 style="color: #ffd700; margin-top: 0;"><i class="fa-solid fa-brain"></i> Área Inteligente: Proyección</h4>
-                <p>Basado en tu ahorro disponible mensual actual de <strong id="pCurrentSavingsRate">RD$ 0,00</strong>:</p>
-                <p style="font-size:12px; color:#a8c9ff; margin: 6px 0 0;">Notas: los valores se basan en ingresos mensuales y gastos fijos constantes; cambios en flujos futuros actualizarán estas proyecciones al guardar.</p>
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0;">
-                            <div class="split-card" style="background: rgba(255, 215, 0, 0.05);">
-                                <div class="value-label">En 6 Meses</div>
-                                <div id="pProjection6" style="font-size: 20px; font-weight: 800;">RD$ 0,00</div>
+                    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px;">
+                        <div class="panel" style="background: rgba(0,0,0,0.2); border: 1px dashed #ffd700; padding: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h4 style="color: #ffd700; margin: 0; font-size: 16px;"><i class="fa-solid fa-brain"></i> Proyecciones de Ahorro</h4>
                             </div>
-                            <div class="split-card" style="background: rgba(255, 215, 0, 0.1);">
-                                <div class="value-label">En 1 Año</div>
-                                <div id="pProjection12" style="font-size: 20px; font-weight: 800;">RD$ 0,00</div>
-                            </div>
-                            <div class="split-card" style="background: rgba(255, 215, 0, 0.2);">
-                                <div class="value-label">En 5 Años</div>
-                                <div id="pProjection60" style="font-size: 20px; font-weight: 800;">RD$ 0,00</div>
+                            <p style="font-size:12px; color:#a8c9ff; margin: 0 0 20px;">Calcula el total acumulado considerando el saldo actual más las proyecciones a final de año, 2 años y 5 años.</p>
+                            
+                            <div id="pAnnualProjectionsList" style="display: flex; flex-direction: column; gap: 15px;">
+                                <!-- Dynamic Projection Cards will be rendered here -->
                             </div>
                         </div>
-                        <!-- Proyección con Crecimiento -->
-                        <div style="display: flex; align-items: center; gap: 12px; margin: 6px 0 8px;">
-                            <label style="font-size:12px; color:#cfe3ff;">Tasa crecimiento anual (%)</label>
-                            <input id="growthRateInput" type="number" step="0.01" value="0" style="width: 110px; height:28px; border-radius:6px; border:1px solid #2b4d9f; background:#0d1a33; color:#fff;">
-                            <label style="font-size:12px; color:#cfe3ff; display:flex; align-items:center; gap:6px;">Mostrar crecimiento</label>
-                            <input id="toggleGrowth" type="checkbox" checked onclick="toggleGrowthProjection()" style="transform: scale(1.2);">
-                        </div>
-                        <div id="growthProjection" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 12px 0 0;">
-                            <div class="split-card" style="border-color: #7dffb8;">
-                                <div class="value-label">En 6 Meses (crecimiento)</div>
-                                <div id="pProjection6Growth" style="font-size: 20px; font-weight: 800;">RD$ 0,00</div>
+
+                        <div class="premium-modal-card" style="border-color: #39d7ff; padding: 24px; display: flex; flex-direction: column;">
+                            <div class="premium-header" style="margin-bottom: 20px;">
+                                <h4 class="premium-title" style="color: #39d7ff; font-size: 16px;"><i class="fa-solid fa-gift"></i> Entrada Fin de Año</h4>
+                                <button class="gastos-btn" onclick="openModal('mEndYear')">+ Añadir</button>
                             </div>
-                            <div class="split-card" style="border-color: #7dffb8;">
-                                <div class="value-label">En 1 Año (crecimiento)</div>
-                                <div id="pProjection12Growth" style="font-size: 20px; font-weight: 800;">RD$ 0,00</div>
+                            
+                            <div style="background: linear-gradient(180deg, rgba(57,215,255,0.1) 0%, rgba(57,215,255,0.02) 100%); border: 1px solid rgba(57,215,255,0.3); border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+                                <div style="font-size: 11px; color: #9fc2ff; text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">Total Proyectado (Fin de Año)</div>
+                                <div id="pTotalEndYear" style="font-size: 28px; font-weight: 900; color: #fff;">RD$ 0,00</div>
                             </div>
-                            <div class="split-card" style="border-color: #7dffb8;">
-                                <div class="value-label">En 5 Años (crecimiento)</div>
-                                <div id="pProjection60Growth" style="font-size: 20px; font-weight: 800;">RD$ 0,00</div>
+                            
+                            <div id="pEndYearList" style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
+                                <!-- End of year items -->
                             </div>
-                        </div>
-                        <div class="strategy-card">
-                            <h5 style="margin: 0 0 10px; color: #7dffb8;">Recomendación del Sistema</h5>
-                            <p id="pSavingsAdvice" style="font-size: 13px; color: #9fc2ff;">Analizando tus flujos...</p>
                         </div>
                     </div>
                 </div>
@@ -2374,6 +2358,37 @@
         </div>
 
         <!-- MODALES FINANZAS PERSONALES PRO -->
+        <div id="mEndYear" class="overlay over-mPremium">
+            <div class="modal" style="border-top: 5px solid #39d7ff; background: radial-gradient(circle at 0% 0%, rgba(57, 215, 255, 0.18), rgba(6, 18, 38, 0.95));">
+                <h4 style="color: #39d7ff;"><i class="fa-solid fa-gift"></i> Añadir Entrada Fin de Año</h4>
+                <div class="modal-grid" style="grid-template-columns: 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label class="value-label">Tipo de Entrada</label>
+                        <select id="eyType" class="value-input" style="width:100%; height:38px;">
+                            <option value="Pago del mes">Pago del mes</option>
+                            <option value="Regalia">Regalía (Doble Sueldo)</option>
+                            <option value="Sueldo 14">Sueldo 14</option>
+                            <option value="Otros">Otros</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="value-label">Concepto</label>
+                        <input id="eyDesc" type="text" placeholder="Ej. Regalía Empresa X" class="value-input" style="width:100%;">
+                    </div>
+                    <div class="form-group">
+                        <label class="value-label">Monto (RD$)</label>
+                        <input id="eyMonto" type="number" step="0.01" class="value-input" style="width:100%; font-size: 18px; font-weight: 800;">
+                    </div>
+                </div>
+                <!-- Campo oculto para index de edición -->
+                <input type="hidden" id="eyEditIndex" value="-1">
+                <div class="modal-actions">
+                    <button class="btn" onclick="closeModal('mEndYear')">Cancelar</button>
+                    <button class="btn primary" onclick="addPersonalEndYear()">Guardar Entrada</button>
+                </div>
+            </div>
+        </div>
+
         <div id="mSalary" class="overlay over-mPremium">
             <div class="modal modal-salary">
                 <h4><i class="fa-solid fa-money-bill-trend-up"></i> Registrar Ingreso</h4>
@@ -3771,17 +3786,17 @@
 
         function addPersonalInformal() {
             const name = document.getElementById('infName').value;
-            const desc = document.getElementById('infDesc').value;
+            const desc = document.getElementById('infDesc').value || 'Deuda Informal';
             const monto = parseMoney(document.getElementById('infMonto').value || 0);
             
             if (!name || monto <= 0) {
-                showAlert('Por favor ingresa el nombre y el monto adeudado.', 'error');
+                showAlert('Nombre y monto son requeridos.', 'error');
                 return;
             }
             
-            const debt = { name, desc, monto, id: Date.now() };
+            const inf = { name, desc, monto, id: Date.now() };
             appState.finanzasPersonales.deudasInformales = appState.finanzasPersonales.deudasInformales || [];
-            appState.finanzasPersonales.deudasInformales.push(debt);
+            appState.finanzasPersonales.deudasInformales.push(inf);
             saveState();
             
             document.getElementById('infName').value = '';
@@ -3791,8 +3806,60 @@
             showAlert('Deuda informal registrada.', 'success');
         }
 
+        function addPersonalEndYear() {
+            const type = document.getElementById('eyType').value;
+            const desc = document.getElementById('eyDesc').value || type;
+            const monto = parseMoney(document.getElementById('eyMonto').value || 0);
+            const editIndex = Number(document.getElementById('eyEditIndex').value);
+            
+            if (monto <= 0) {
+                showAlert('El monto debe ser mayor a cero.', 'error');
+                return;
+            }
+            
+            appState.finanzasPersonales.entradasFinAno = appState.finanzasPersonales.entradasFinAno || [];
+            
+            if (editIndex >= 0 && editIndex < appState.finanzasPersonales.entradasFinAno.length) {
+                // Modo Edición
+                appState.finanzasPersonales.entradasFinAno[editIndex] = { type, desc, monto, id: appState.finanzasPersonales.entradasFinAno[editIndex].id || Date.now() };
+                showAlert('Entrada actualizada.', 'success');
+            } else {
+                // Modo Creación
+                appState.finanzasPersonales.entradasFinAno.push({ type, desc, monto, id: Date.now() });
+                showAlert('Entrada fin de año registrada.', 'success');
+            }
+            
+            saveState();
+            
+            document.getElementById('eyDesc').value = '';
+            document.getElementById('eyMonto').value = '';
+            document.getElementById('eyEditIndex').value = '-1';
+            
+            renderPersonalPro();
+            closeModal('mEndYear');
+        }
+
+        function editPersonalEndYear(index) {
+            const item = appState.finanzasPersonales.entradasFinAno[index];
+            if (!item) return;
+            
+            document.getElementById('eyType').value = item.type;
+            document.getElementById('eyDesc').value = item.desc;
+            document.getElementById('eyMonto').value = item.monto;
+            document.getElementById('eyEditIndex').value = index;
+            
+            openModal('mEndYear');
+        }
+
         function deletePersonalProItem(category, index) {
             appState.finanzasPersonales[category].splice(index, 1);
+            saveState();
+            renderPersonalPro();
+        }
+
+        function updateAhorroCurrentBalance(index, value) {
+            if (!appState.finanzasPersonales.ahorros[index]) return;
+            appState.finanzasPersonales.ahorros[index].currentBalance = Number(value) || 0;
             saveState();
             renderPersonalPro();
         }
@@ -3930,46 +3997,90 @@
                 }
             }
 
-            // 4. Proyección Anual
-            const totalExp = (fp.gastosFijos || []).reduce((acc, x) => acc + x.monto, 0);
-            const disposable = totalSal - totalExp;
-            
-            const elResDis = document.getElementById('resumenDisponible');
-            if (elResDis) {
-                elResDis.innerText = formatRD(disposable);
-                elResDis.style.color = disposable >= 0 ? '#7dffb8' : '#ff5d5d';
+            // 4. Proyección Anual (Nueva Estructura: Una tarjeta por ahorro activo)
+            const annualList = document.getElementById('pAnnualProjectionsList');
+            if (annualList) {
+                let annualHtml = '';
+                const ahorrosActivos = fp.ahorros || [];
+                
+                if (ahorrosActivos.length === 0) {
+                    annualHtml = '<div class="egresos-empty" style="text-align:center; padding: 30px;">No tienes ahorros registrados. Ve a la pestaña "Ahorros" para crear fondos y ver sus proyecciones.</div>';
+                } else {
+                    const now = new Date();
+                    const yearEnd = new Date(now.getFullYear(), 11, 31); // 31 de diciembre
+                    const msPerMonth = 1000 * 60 * 60 * 24 * 30.44;
+                    const monthsLeftThisYear = Math.max(0, (yearEnd - now) / msPerMonth);
+                    
+                    ahorrosActivos.forEach((ahorro, index) => {
+                        // El usuario aportará su ahorro mensual
+                        const contribucionMensual = Number(ahorro.monto || 0);
+                        // currentBalance debe ser guardado/leído; si no existe, 0.
+                        const balanceActual = Number(ahorro.currentBalance || 0);
+                        
+                        // Proyecciones (balance actual + lo que aportará en los meses indicados)
+                        const projThisYear = balanceActual + (contribucionMensual * monthsLeftThisYear);
+                        const proj2Years = balanceActual + (contribucionMensual * 24);
+                        const proj5Years = balanceActual + (contribucionMensual * 60);
+
+                        annualHtml += `<div class="premium-modal-card" style="border-color: #ffd700; background: linear-gradient(165deg, rgba(255,215,0,0.1), rgba(6,18,38,0.95)); padding: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,215,0,0.3); padding-bottom: 15px; margin-bottom: 15px;">
+                                <h4 style="margin: 0; color: #ffd700; font-size: 18px;"><i class="fa-solid fa-piggy-bank"></i> ${ahorro.desc}</h4>
+                                <span style="font-size: 13px; color: #cfe3ff; background: rgba(0,0,0,0.4); padding: 4px 10px; border-radius: 99px;">Aporte mensual: <strong>${formatRD(contribucionMensual)}</strong></span>
+                            </div>
+                            
+                            <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 15px;">
+                                <label style="color: #9fc2ff; font-size: 13px; font-weight: 700;">Monto actual ahorrado:</label>
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <input type="number" id="ahorroCurrent_${index}" value="${balanceActual}" onchange="updateAhorroCurrentBalance(${index}, this.value)" style="width: 140px; background: rgba(6,18,38,0.8); border: 1px solid rgba(255,215,0,0.4); color: #fff; padding: 8px 12px; border-radius: 8px; font-weight: 800; font-size: 14px;" placeholder="Ej: 5000">
+                                </div>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                                <div class="split-card" style="margin:0; border-color: rgba(255,215,0,0.3); background: rgba(255,215,0,0.05);">
+                                    <div class="value-label" style="color: #ffd700; font-size:11px;">Resto del Año</div>
+                                    <div style="font-size: 18px; font-weight: 800; color: #fff; margin-top: 4px;">${formatRD(projThisYear)}</div>
+                                </div>
+                                <div class="split-card" style="margin:0; border-color: rgba(255,215,0,0.5); background: rgba(255,215,0,0.1);">
+                                    <div class="value-label" style="color: #ffd700; font-size:11px;">En 2 Años</div>
+                                    <div style="font-size: 18px; font-weight: 800; color: #fff; margin-top: 4px;">${formatRD(proj2Years)}</div>
+                                </div>
+                                <div class="split-card" style="margin:0; border-color: #ffd700; background: rgba(255,215,0,0.15);">
+                                    <div class="value-label" style="color: #ffd700; font-size:11px;">En 5 Años</div>
+                                    <div style="font-size: 18px; font-weight: 800; color: #fff; margin-top: 4px;">${formatRD(proj5Years)}</div>
+                                </div>
+                            </div>
+                        </div>`;
+                    });
+                }
+                annualList.innerHTML = annualHtml;
             }
-            
-            // Proyección con crecimiento (opcional)
-            const grEl = document.getElementById('growthRateInput');
-            const toggleGrowth = document.getElementById('toggleGrowth');
-            const gpDiv = document.getElementById('growthProjection');
-            if (gpDiv && toggleGrowth) {
-                gpDiv.style.display = toggleGrowth.checked ? 'grid' : 'none';
+
+            // Entradas Fin de Año
+            const eyList = document.getElementById('pEndYearList');
+            if (eyList) {
+                let eyHtml = '';
+                let totalEy = 0;
+                (fp.entradasFinAno || []).forEach((e, i) => {
+                    totalEy += e.monto;
+                    eyHtml += `<div class="item-card" style="background: rgba(57,215,255,0.05); border-color: rgba(57,215,255,0.2);">
+                        <div>
+                            <div class="item-card-title">${e.type}</div>
+                            <div class="item-tags">
+                                <span class="tag tag-blue">${e.desc}</span>
+                            </div>
+                        </div>
+                        <div class="value-group">
+                            <span style="font-weight: 900; color: #39d7ff; font-size: 16px;">${formatRD(e.monto)}</span>
+                            <button onclick="editPersonalEndYear(${i})" style="background: transparent; border: 1px solid rgba(57,215,255,0.3); color: #39d7ff; border-radius: 6px; padding: 6px 10px; cursor: pointer; transition: all 0.2s; font-size: 12px;"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deletePersonalProItem('entradasFinAno', ${i})" class="icon-btn-danger"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>`;
+                });
+                eyList.innerHTML = eyHtml || '<div class="egresos-empty" style="text-align: center; padding: 20px;">No hay entradas registradas</div>';
+                
+                const totalEyEl = document.getElementById('pTotalEndYear');
+                if (totalEyEl) totalEyEl.innerText = formatRD(totalEy);
             }
-            let baseGrowth = 0;
-            if (grEl) baseGrowth = parseFloat(grEl.value || '0');
-            const g = (baseGrowth) / 100;
-            const factor6 = Math.pow(1 + g, 0.5);
-            const factor12 = Math.pow(1 + g, 1);
-            const factor60 = Math.pow(1 + g, 5);
-            const v6g = disposable * factor6;
-            const v12g = disposable * factor12;
-            const v60g = disposable * factor60;
-            const el6g = document.getElementById('pProjection6Growth');
-            const el12g = document.getElementById('pProjection12Growth');
-            const el60g = document.getElementById('pProjection60Growth');
-            if (el6g) el6g.innerText = formatRD(v6g);
-            if (el12g) el12g.innerText = formatRD(v12g);
-            if (el60g) el60g.innerText = formatRD(v60g);
-            const elCurSav = document.getElementById('pCurrentSavingsRate');
-            if (elCurSav) elCurSav.innerText = formatRD(disposable);
-            const elProj6 = document.getElementById('pProjection6');
-            if (elProj6) elProj6.innerText = formatRD(disposable * 6);
-            const elProj12 = document.getElementById('pProjection12');
-            if (elProj12) elProj12.innerText = formatRD(disposable * 12);
-            const elProj60 = document.getElementById('pProjection60');
-            if (elProj60) elProj60.innerText = formatRD(disposable * 60);
 
             // 5. Cuentas
             const bankList = document.getElementById('pBanksList');
@@ -4807,6 +4918,7 @@
             const totalLoans = (fp.prestamos || []).reduce((acc, l) => acc + Number(l.owed || 0), 0);
             const totalInformal = (fp.deudasInformales || []).reduce((acc, d) => acc + Number(d.monto || 0), 0);
             const resta = totalSal - totalExp;
+            const disponible = totalSal - totalExp - totalSav;
 
             // Dashboard principal
             const elIngresos = document.getElementById('pDashboardSfpIngresos');
@@ -4820,17 +4932,37 @@
             const elPatrimonio = document.getElementById('pDashboardSfpPatrimonio');
             const elAdvice = document.getElementById('pDashboardSfpAdvice');
 
-            if (elIngresos) elIngresos.innerText = formatRD(totalSal);
-            if (elEgresos) elEgresos.innerText = formatRD(totalExp);
-            if (elAhorros) elAhorros.innerText = formatRD(totalSav);
+            if (elIngresos) {
+                elIngresos.innerText = formatRD(totalSal);
+                elIngresos.previousElementSibling && (elIngresos.previousElementSibling.innerText = 'TOTAL INGRESOS');
+            }
+            if (elEgresos) {
+                elEgresos.innerText = formatRD(totalExp);
+                elEgresos.previousElementSibling && (elEgresos.previousElementSibling.innerText = 'TOTAL COMPROMETIDO');
+            }
+            if (elAhorros) {
+                elAhorros.innerText = formatRD(totalSav);
+                elAhorros.previousElementSibling && (elAhorros.previousElementSibling.innerText = 'TOTAL ACUMULADO');
+            }
             if (elResta) {
-                elResta.innerText = formatRD(resta);
-                elResta.style.color = resta >= 0 ? '#7dffb8' : '#ff5d5d';
+                elResta.innerText = formatRD(disponible);
+                elResta.style.color = disponible >= 0 ? '#7dffb8' : '#ff5d5d';
+                elResta.previousElementSibling && (elResta.previousElementSibling.innerText = 'DISPONIBLE');
             }
             if (elGastosFijos) elGastosFijos.innerText = formatRD(totalExp);
             if (elCuentas) elCuentas.innerText = formatRD(totalBanks);
             if (elDeudas) elDeudas.innerText = formatRD(totalLoans);
             if (elInformal) elInformal.innerText = formatRD(totalInformal);
+            const distTotals = {
+                gastos: totalExp,
+                bancos: totalBanks,
+                deudas: totalLoans,
+                informal: totalInformal
+            };
+            ['gastos','bancos','deudas','informal'].forEach(key => {
+                const el = document.querySelector(`[data-dist="${key}"]`);
+                if (el) el.innerText = formatRD(distTotals[key]);
+            });
 
             // Patrimonio Neto = Bancos - Deudas + Ahorros
             const patrimonio = totalBanks - totalLoans - totalInformal + totalSav;
