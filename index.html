@@ -182,6 +182,32 @@
             align-items: center;
             gap: 12px;
         }
+        .action-btn {
+            border: 1px solid rgba(159, 194, 255, 0.2);
+            border-radius: 999px;
+            background: rgba(159, 194, 255, 0.06);
+            color: #cfe3ff;
+            padding: 9px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+        .action-btn:hover {
+            background: rgba(57, 215, 255, 0.15);
+            color: #ffffff;
+        }
+        .action-btn.status {
+            background: rgba(125, 255, 184, 0.1);
+            border-color: rgba(125, 255, 184, 0.3);
+            color: #7dffb8;
+        }
+        .action-btn.status:hover {
+            background: rgba(125, 255, 184, 0.2);
+        }
         .content {
             flex: 1;
             padding: 30px;
@@ -1175,22 +1201,229 @@
             white-space: nowrap;
             transition: all 0.3s;
         }
-        .sub-btn:hover { background: rgba(159, 194, 255, 0.15); color: #fff; }
+        .sub-btn[data-theme="dashboard"] {
+            border-color: rgba(57, 215, 255, 0.4);
+            background: linear-gradient(120deg, rgba(57, 215, 255, 0.15), rgba(6, 18, 38, 0.7));
+        }
+        .sub-btn[data-theme="salary"] {
+            border-color: rgba(125, 255, 184, 0.4);
+            background: linear-gradient(120deg, rgba(125, 255, 184, 0.18), rgba(6, 18, 38, 0.7));
+            color: #7dffb8;
+        }
+        .sub-btn[data-theme="expenses"] {
+            border-color: rgba(255, 93, 93, 0.4);
+            background: linear-gradient(120deg, rgba(255, 93, 93, 0.18), rgba(6, 18, 38, 0.7));
+            color: #ff8f8f;
+        }
+        .sub-btn[data-theme="savings"] {
+            border-color: rgba(255, 215, 0, 0.4);
+            background: linear-gradient(120deg, rgba(255, 215, 0, 0.18), rgba(6, 18, 38, 0.7));
+            color: #ffd700;
+        }
+        .sub-btn[data-theme="annual"] {
+            border-color: rgba(189, 147, 249, 0.4);
+            background: linear-gradient(120deg, rgba(189, 147, 249, 0.18), rgba(6, 18, 38, 0.7));
+            color: #bd93f9;
+        }
+        .sub-btn[data-theme="banks"] {
+            border-color: rgba(57, 215, 255, 0.35);
+            background: linear-gradient(120deg, rgba(57, 215, 255, 0.18), rgba(6, 18, 38, 0.7));
+            color: #39d7ff;
+        }
+        .sub-btn[data-theme="loans"] {
+            border-color: rgba(255, 141, 101, 0.4);
+            background: linear-gradient(120deg, rgba(255, 141, 101, 0.18), rgba(6, 18, 38, 0.7));
+            color: #ffb38f;
+        }
+        .sub-btn[data-theme="informal"] {
+            border-color: rgba(189, 147, 249, 0.4);
+            background: linear-gradient(120deg, rgba(189, 147, 249, 0.18), rgba(6, 18, 38, 0.7));
+            color: #bd93f9;
+        }
+        .sub-btn:hover { filter: brightness(1.1); color: #fff; }
         .sub-btn.active {
-            background: #39d7ff;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+            transform: translateY(-2px);
             color: #061226;
-            border-color: #39d7ff;
+            background: linear-gradient(120deg, rgba(255,255,255,0.85), rgba(159, 194, 255, 0.9));
         }
         .personal-view { display: none; }
         .personal-view.active { display: block; }
+        .personal-view.view-dashboard,
+        .personal-view.view-salary,
+        .personal-view.view-expenses,
+        .personal-view.view-savings,
+        .personal-view.view-annual,
+        .personal-view.view-banks,
+        .personal-view.view-loans,
+        .personal-view.view-informal {
+            padding: 22px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.04);
+            margin-top: 18px;
+        }
+        .personal-view.view-dashboard { border-color: rgba(57,215,255,0.2); background: linear-gradient(145deg, rgba(57,215,255,0.08), rgba(6,18,38,0.92)); }
+        .personal-view.view-salary { border-color: rgba(125,255,184,0.25); background: radial-gradient(circle at 0% 0%, rgba(125,255,184,0.12), rgba(6,18,38,0.95)); }
+        .personal-view.view-expenses { border-color: rgba(255,93,93,0.25); background: radial-gradient(circle at 0% 0%, rgba(255,93,93,0.12), rgba(6,18,38,0.95)); }
+        .personal-view.view-savings { border-color: rgba(255,215,0,0.25); background: radial-gradient(circle at 0% 0%, rgba(255,215,0,0.12), rgba(6,18,38,0.95)); }
+        .personal-view.view-annual { border-color: rgba(189,147,249,0.25); background: radial-gradient(circle at 0% 0%, rgba(189,147,249,0.18), rgba(6,18,38,0.95)); }
+        .personal-view.view-banks { border-color: rgba(57,215,255,0.25); background: radial-gradient(circle at 0% 0%, rgba(57,215,255,0.12), rgba(6,18,38,0.95)); }
+        .personal-view.view-loans { border-color: rgba(255,141,101,0.25); background: radial-gradient(circle at 0% 0%, rgba(255,141,101,0.14), rgba(6,18,38,0.95)); }
+        .personal-view.view-informal { border-color: rgba(189,147,249,0.25); background: radial-gradient(circle at 0% 0%, rgba(189,147,249,0.18), rgba(6,18,38,0.95)); }
+        .view-salary .credit-card-v2,
+        .view-expenses .premium-modal-card,
+        .view-savings .premium-modal-card,
+        .view-banks .credit-card,
+        .view-loans .credit-card-v2,
+        .view-informal .credit-card-v2 {
+            background: rgba(6,18,38,0.8);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.45);
+        }
+        .view-salary .credit-card-v2 { border-color: rgba(125,255,184,0.6); background: linear-gradient(165deg, rgba(125,255,184,0.16), rgba(6,18,38,0.92)); }
+        .view-expenses .premium-modal-card { border-color: rgba(255,93,93,0.5); background: linear-gradient(165deg, rgba(255,93,93,0.18), rgba(6,18,38,0.95)); }
+        .view-savings .premium-modal-card { border-color: rgba(255,215,0,0.5); background: linear-gradient(165deg, rgba(255,215,0,0.2), rgba(6,18,38,0.95)); }
+        .view-annual .premium-modal-card { border-color: rgba(189,147,249,0.5); background: linear-gradient(165deg, rgba(189,147,249,0.2), rgba(6,18,38,0.95)); }
+        .view-banks .credit-card { border-color: rgba(57,215,255,0.45); background: linear-gradient(165deg, rgba(57,215,255,0.12), rgba(6,18,38,0.95)); }
+        .view-loans .credit-card-v2 { border-color: rgba(255,141,101,0.45); background: linear-gradient(165deg, rgba(255,141,101,0.16), rgba(6,18,38,0.95)); }
+        .view-informal .credit-card-v2 { border-color: rgba(189,147,249,0.45); background: linear-gradient(165deg, rgba(189,147,249,0.18), rgba(6,18,38,0.95)); }
+        .system-panel {
+            background: radial-gradient(120% 140% at 0% 0%, rgba(0, 255, 255, 0.08), rgba(6,18,38,0.9));
+            border: 1px solid rgba(0, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+        }
+        .system-header {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 24px;
+        }
+        .system-header h3 {
+            margin: 0;
+            font-size: 32px;
+            color: #ffffff;
+        }
+        .system-header p {
+            margin: 0;
+            color: #9fc2ff;
+            font-size: 14px;
+        }
+        .system-status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+        }
+        .system-card {
+            background: rgba(6, 18, 38, 0.8);
+            border: 1px solid rgba(0, 255, 255, 0.12);
+            border-radius: 14px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .system-card h4 {
+            margin: 0;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #7dffb8;
+        }
+        .system-card .metric-value {
+            font-size: 32px;
+            font-weight: 900;
+            color: #ffffff;
+        }
+        .system-card small {
+            color: #9fc2ff;
+            font-size: 12px;
+        }
+        .system-indicators {
+            margin-top: 28px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+        }
+        .status-pill {
+            padding: 18px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .status-pill strong {
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #9fc2ff;
+        }
+        .status-pill span {
+            font-size: 20px;
+            font-weight: 800;
+            color: #ffffff;
+        }
+        .status-pill[data-state="ok"] {
+            border-color: rgba(125, 255, 184, 0.4);
+            background: rgba(125, 255, 184, 0.08);
+            color: #7dffb8;
+        }
+        .status-pill[data-state="warn"] {
+            border-color: rgba(255, 215, 0, 0.4);
+            background: rgba(255, 215, 0, 0.08);
+            color: #ffd700;
+        }
+        .status-pill[data-state="down"] {
+            border-color: rgba(255, 93, 93, 0.4);
+            background: rgba(255, 93, 93, 0.08);
+            color: #ff5d5d;
+        }
+        .system-log {
+            margin-top: 32px;
+            background: rgba(6, 18, 38, 0.7);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 20px;
+        }
+        .system-log h4 {
+            margin: 0 0 12px;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .system-log ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .system-log li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 13px;
+            color: #cfe3ff;
+        }
+        .system-log li span:last-child {
+            font-weight: 700;
+            color: #7dffb8;
+        }
         
-        /* Modal Sentiment Colors */
-        .modal-salary { border-top: 5px solid #7dffb8; }
-        .modal-expenses { border-top: 5px solid #ff8f8f; }
-        .modal-savings { border-top: 5px solid #ffd700; }
-        .modal-banks { border-top: 5px solid #39d7ff; }
-        .modal-loans { border-top: 5px solid #ff5d5d; }
-        .modal-informal { border-top: 5px solid #bd93f9; }
+/* Modal Sentiment Colors */
+        .modal-salary { border-top: 5px solid #7dffb8; background: radial-gradient(circle at 0% 0%, rgba(125, 255, 184, 0.2), rgba(6, 18, 38, 0.95)); }
+        .modal-expenses { border-top: 5px solid #ff8f8f; background: radial-gradient(circle at 0% 0%, rgba(255, 93, 93, 0.18), rgba(6, 18, 38, 0.95)); }
+        .modal-savings { border-top: 5px solid #ffd700; background: radial-gradient(circle at 0% 0%, rgba(255, 215, 0, 0.18), rgba(6, 18, 38, 0.95)); }
+        .modal-banks { border-top: 5px solid #39d7ff; background: radial-gradient(circle at 0% 0%, rgba(57, 215, 255, 0.18), rgba(6, 18, 38, 0.95)); }
+        .modal-loans { border-top: 5px solid #ff5d5d; background: radial-gradient(circle at 0% 0%, rgba(255, 141, 101, 0.18), rgba(6, 18, 38, 0.95)); }
+        .modal-informal { border-top: 5px solid #bd93f9; background: radial-gradient(circle at 0% 0%, rgba(189, 147, 249, 0.18), rgba(6, 18, 38, 0.95)); }
         
         /* Strategy Area */
         .strategy-card {
@@ -1324,7 +1557,8 @@
                 <button class="menu-btn" data-view="cardPersonal" onclick="switchView('cardPersonal', this)"><i class="fa-solid fa-credit-card"></i> Gastos personales</button>
                 <button class="menu-btn" data-view="deudores" onclick="switchView('deudores', this)"><i class="fa-solid fa-hand-holding-dollar"></i> Deudores & Gracias</button>
                 <button class="menu-btn" data-view="finanzasPersonales" onclick="switchView('finanzasPersonales', this)"><i class="fa-solid fa-briefcase"></i> Finanzas Personales</button>
-             </nav>
+                <button class="menu-btn" data-admin-only="true" data-view="systemStatus" onclick="switchView('systemStatus', this)"><i class="fa-solid fa-shield-heart"></i> Estado del Sistema</button>
+              </nav>
 
             <div class="sidebar-footer hidden" id="sidebarFooter">
                 <div class="user-meta">
@@ -1345,6 +1579,7 @@
                     <button class="action-btn export" onclick="exportData()"><i class="fa-solid fa-download"></i> Exportar</button>
                     <button class="action-btn import" onclick="document.getElementById('importDataInput').click()"><i class="fa-solid fa-upload"></i> Importar</button>
                     <input type="file" id="importDataInput" style="display: none;" accept=".json" onchange="importData(event)">
+                    <button class="action-btn status" data-admin-only="true" onclick="openSystemStatus()"><i class="fa-solid fa-shield-heart"></i> Estado</button>
                 </div>
             </header>
 
@@ -1759,18 +1994,18 @@
                 </div>
 
                 <nav class="sub-nav">
-                    <button class="sub-btn active" onclick="switchPersonalView('vSFP', this)"><i class="fa-solid fa-chart-simple"></i> Dashboard</button>
-                    <button class="sub-btn" onclick="switchPersonalView('vSalary', this)"><i class="fa-solid fa-money-bill-trend-up"></i> Salarios</button>
-                    <button class="sub-btn" onclick="switchPersonalView('vExpenses', this)"><i class="fa-solid fa-receipt"></i> Gastos Fijos</button>
-                    <button class="sub-btn" onclick="switchPersonalView('vSavings', this)"><i class="fa-solid fa-piggy-bank"></i> Ahorros</button>
-                    <button class="sub-btn" onclick="switchPersonalView('vAnnual', this)"><i class="fa-solid fa-calendar-check"></i> Proyección Anual</button>
-                    <button class="sub-btn" onclick="switchPersonalView('vBanks', this)"><i class="fa-solid fa-building-columns"></i> Cuentas</button>
-                    <button class="sub-btn" onclick="switchPersonalView('vLoans', this)"><i class="fa-solid fa-credit-card"></i> Préstamos</button>
-                    <button class="sub-btn" onclick="switchPersonalView('vInformal', this)"><i class="fa-solid fa-handshake"></i> Deudas Informales</button>
+                    <button class="sub-btn active" data-theme="dashboard" onclick="switchPersonalView('vSFP', this)"><i class="fa-solid fa-chart-simple"></i> Dashboard</button>
+                    <button class="sub-btn" data-theme="salary" onclick="switchPersonalView('vSalary', this)"><i class="fa-solid fa-money-bill-trend-up"></i> Salarios</button>
+                    <button class="sub-btn" data-theme="expenses" onclick="switchPersonalView('vExpenses', this)"><i class="fa-solid fa-receipt"></i> Gastos Fijos</button>
+                    <button class="sub-btn" data-theme="savings" onclick="switchPersonalView('vSavings', this)"><i class="fa-solid fa-piggy-bank"></i> Ahorros</button>
+                    <button class="sub-btn" data-theme="annual" onclick="switchPersonalView('vAnnual', this)"><i class="fa-solid fa-calendar-check"></i> Proyección Anual</button>
+                    <button class="sub-btn" data-theme="banks" onclick="switchPersonalView('vBanks', this)"><i class="fa-solid fa-building-columns"></i> Cuentas</button>
+                    <button class="sub-btn" data-theme="loans" onclick="switchPersonalView('vLoans', this)"><i class="fa-solid fa-credit-card"></i> Préstamos</button>
+                    <button class="sub-btn" data-theme="informal" onclick="switchPersonalView('vInformal', this)"><i class="fa-solid fa-handshake"></i> Deudas Informales</button>
                 </nav>
 
                 <!-- 0. Dashboard SFP -->
-                <div id="vSFP" class="personal-view">
+                <div id="vSFP" class="personal-view view-dashboard">
                     <div class="personal-finance-layout">
                         <div class="dashboard-main-col">
                             <h3>Dashboard - Finanzas Personales</h3>
@@ -1833,7 +2068,7 @@
                 </div>
 
                 <!-- 1. Salario Mensual -->
-                <div id="vSalary" class="personal-view active">
+                <div id="vSalary" class="personal-view active view-salary">
                     <div class="personal-finance-layout">
                         <div>
                             <div class="credit-card-v2">
@@ -1854,7 +2089,7 @@
                 </div>
 
                 <!-- 2. Gastos Fijos -->
-                <div id="vExpenses" class="personal-view">
+                <div id="vExpenses" class="personal-view view-expenses">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
                         <!-- Tarjeta Principal -->
                         <div class="premium-modal-card" style="border-color: #ff5d5d; padding: 24px;">
@@ -1900,7 +2135,7 @@
                 </div>
 
                 <!-- 3. Ahorros -->
-                <div id="vSavings" class="personal-view">
+                <div id="vSavings" class="personal-view view-savings">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
                         <!-- Tarjeta Principal: Resumen de Ahorros -->
                         <div class="premium-modal-card" style="border-color: #ffd700; padding: 24px;">
@@ -1924,7 +2159,7 @@
                 </div>
 
                 <!-- 4. Ahorro Anual -->
-                <div id="vAnnual" class="personal-view">
+                <div id="vAnnual" class="personal-view view-annual">
                     <div class="panel" style="background: rgba(0,0,0,0.2); border: 1px dashed #ffd700;">
                         <h4 style="color: #ffd700; margin-top: 0;"><i class="fa-solid fa-brain"></i> Área Inteligente: Proyección</h4>
                 <p>Basado en tu ahorro disponible mensual actual de <strong id="pCurrentSavingsRate">RD$ 0,00</strong>:</p>
@@ -1973,7 +2208,7 @@
         <!-- Dashboard SFP block removed duplicate -->
 
                 <!-- 5. Cuentas Bancarias -->
-                <div id="vBanks" class="personal-view">
+                <div id="vBanks" class="personal-view view-banks">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
                         <!-- Tarjeta Principal -->
                         <div class="premium-modal-card" style="border-color: #39d7ff; padding: 24px;">
@@ -2029,7 +2264,7 @@
                 </div>
 
                 <!-- 6. Préstamos -->
-                <div id="vLoans" class="personal-view">
+                <div id="vLoans" class="personal-view view-loans">
                     <div class="personal-finance-layout">
                         <div>
                             <div class="credit-card-v2">
@@ -2050,7 +2285,7 @@
                 </div>
 
                 <!-- 7. Deudas Informales -->
-                <div id="vInformal" class="personal-view">
+                <div id="vInformal" class="personal-view view-informal">
                     <div class="personal-finance-layout">
                         <div>
                             <div class="credit-card-v2">
@@ -2075,6 +2310,65 @@
                 </div>
             </div>
         </section>
+
+        <section id="systemStatus" class="view" data-admin-only="true">
+            <div class="system-panel">
+                <div class="system-header">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <div style="width:48px; height:48px; border-radius:14px; background:rgba(0,255,255,0.12); display:flex; align-items:center; justify-content:center; font-size:20px;">🛡️</div>
+                        <div>
+                            <h3>Estado del Sistema</h3>
+                            <p>Monitoreo integral de Finanzas Pro, visible solo para administradores.</p>
+                        </div>
+                    </div>
+                    <p style="font-size:12px; color:#7dffb8; text-transform:uppercase; letter-spacing:2px;">Última verificación: <span id="ssHealthStamp">--</span></p>
+                </div>
+
+                <div class="system-status-grid">
+                    <div class="system-card">
+                        <h4>Sincronización</h4>
+                        <div class="metric-value" id="ssLastSync">--</div>
+                        <small>Hora local del último guardado exitoso.</small>
+                    </div>
+                    <div class="system-card">
+                        <h4>Tamaño del Estado</h4>
+                        <div class="metric-value" id="ssDataSize">--</div>
+                        <small>Incluye totales, archivos y proyecciones.</small>
+                    </div>
+                    <div class="system-card">
+                        <h4>Archivos Montados</h4>
+                        <div class="metric-value" id="ssFilesLoaded">0</div>
+                        <small>Transporte, Effi, Ads y cargas manuales.</small>
+                    </div>
+                    <div class="system-card">
+                        <h4>Registros Clave</h4>
+                        <div class="metric-value" id="ssDeudores">0</div>
+                        <small>Deudores activos + gastos manuales.</small>
+                    </div>
+                </div>
+
+                <div class="system-indicators">
+                    <div class="status-pill" id="ssApiStatus" data-state="warn">
+                        <strong>API Render</strong>
+                        <span>Verificando...</span>
+                        <small style="color:#9fc2ff; font-size:11px;">Salud del endpoint /healthz.</small>
+                    </div>
+                    <div class="status-pill" id="ssCacheStatus" data-state="ok">
+                        <strong>Sesión</strong>
+                        <span id="ssSessionUser">--</span>
+                        <small id="ssSessionRole" style="color:#9fc2ff; font-size:11px;">Rol - Estado local</small>
+                    </div>
+                </div>
+
+                <div class="system-log">
+                    <h4>Bitácora rápida</h4>
+                    <ul id="ssRecentFiles">
+                        <li><span>Sin registros</span><span>--</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
             </main>
         </div>
         </div>
@@ -2426,6 +2720,7 @@
             } else {
                 footer.classList.add('hidden');
             }
+            updateSystemStatus();
         }
 
         async function handleRegister() {
@@ -2506,6 +2801,14 @@
                     document.getElementById('loginOverlay').classList.remove('active');
                     setSidebarUserInfo();
                     updateSidebarVisibility();
+                    if (data.user.is_admin) {
+                        ensureSystemHealthWatcher();
+                        refreshApiHealthBadge();
+                    } else {
+                        systemHealth.apiStatus = 'checking';
+                        systemHealth.lastChecked = null;
+                    }
+                    updateSystemStatus();
                     loadState(); // cargar datos tras login
                 } else {
                     const errorData = await resp.json();
@@ -2524,6 +2827,13 @@
             sessionStorage.removeItem('user_id');
             sessionStorage.removeItem('username');
             sessionStorage.removeItem('is_admin');
+            sessionStorage.removeItem('last_sync_at');
+            if (window.__systemHealthInterval) {
+                clearInterval(window.__systemHealthInterval);
+                window.__systemHealthInterval = null;
+            }
+            systemHealth.apiStatus = 'checking';
+            systemHealth.lastChecked = null;
             setSidebarUserInfo();
             updateSidebarVisibility();
             document.getElementById('loginOverlay').classList.add('active');
@@ -2541,6 +2851,14 @@
             document.getElementById('loginOverlay').classList.remove('active');
             setSidebarUserInfo();
             updateSidebarVisibility();
+            if (isAdminUser()) {
+                ensureSystemHealthWatcher();
+                refreshApiHealthBadge();
+            } else {
+                systemHealth.apiStatus = 'checking';
+                systemHealth.lastChecked = null;
+            }
+            updateSystemStatus();
             return true;
         }
 
@@ -2550,7 +2868,8 @@
             menuButtons.forEach(button => {
                 const view = button.dataset.view;
                 if (!view) return;
-                if (!isAdmin && view !== 'finanzasPersonales') {
+                const adminOnly = button.dataset.adminOnly === 'true';
+                if (!isAdmin && (view !== 'finanzasPersonales' || adminOnly)) {
                     button.style.display = 'none';
                 } else {
                     button.style.display = 'flex';
@@ -2568,6 +2887,143 @@
                     switchView('finanzasPersonales', finanzasBtn);
                 }
             }
+            updateSystemStatus();
+        }
+
+        function formatStatusDate(value) {
+            if (!value) return '--';
+            try {
+                const parsed = new Date(value);
+                if (Number.isNaN(parsed.getTime())) return value;
+                return new Intl.DateTimeFormat('es-DO', {
+                    dateStyle: 'medium',
+                    timeStyle: 'medium'
+                }).format(parsed);
+            } catch (err) {
+                return value;
+            }
+        }
+
+        function getSystemLogEntries() {
+            const entries = [];
+            const labels = {
+                transporte: 'Guías Transporte',
+                effi: 'Movimientos Effi',
+                facebook: 'Facebook Ads',
+                tiktok: 'TikTok Ads'
+            };
+            const meta = ensureMeta();
+            if (meta.lastUpdatedBy) {
+                entries.push({ label: 'Último editor', value: meta.lastUpdatedBy });
+            }
+            Object.keys(labels).forEach(key => {
+                const file = (appState.files || {})[key];
+                if (file && file.name) {
+                    entries.push({ label: labels[key], value: file.name });
+                }
+            });
+            if ((appState.manualAdsGastos || []).length > 0) {
+                entries.push({ label: 'Gastos manuales', value: `${appState.manualAdsGastos.length} registros` });
+            }
+            if ((appState.deudores || []).length > 0) {
+                entries.push({ label: 'Deudores activos', value: `${appState.deudores.length}` });
+            }
+            if (entries.length === 0) {
+                entries.push({ label: 'Sin registros', value: '--' });
+            }
+            return entries.slice(0, 5);
+        }
+
+        function updateSystemStatus() {
+            const lastSyncEl = document.getElementById('ssLastSync');
+            if (!lastSyncEl) return;
+            const meta = ensureMeta();
+            const fallbackSync = meta.lastSyncAt || sessionStorage.getItem('last_sync_at');
+            lastSyncEl.innerText = fallbackSync ? formatStatusDate(fallbackSync) : 'Sin registros';
+
+            const dataSizeEl = document.getElementById('ssDataSize');
+            if (dataSizeEl) {
+                const bytes = meta.lastPayloadSize || 0;
+                dataSizeEl.innerText = bytes ? `${(bytes / 1024).toFixed(1)} KB` : '--';
+            }
+
+            const fileCount = Object.values(appState.files || {}).filter(file => file && file.name).length;
+            const filesEl = document.getElementById('ssFilesLoaded');
+            if (filesEl) filesEl.innerText = fileCount;
+
+            const keyRecords = (appState.deudores?.length || 0) + (appState.manualAdsGastos?.length || 0);
+            const recordsEl = document.getElementById('ssDeudores');
+            if (recordsEl) recordsEl.innerText = keyRecords;
+
+            const sessionUser = sessionStorage.getItem('username') || 'Sin sesión';
+            const sessionUserEl = document.getElementById('ssSessionUser');
+            if (sessionUserEl) sessionUserEl.innerText = sessionUser;
+            const sessionRoleEl = document.getElementById('ssSessionRole');
+            if (sessionRoleEl) sessionRoleEl.innerText = isAdminUser() ? 'Administrador • Control total' : 'Usuario • Acceso limitado';
+            const cachePill = document.getElementById('ssCacheStatus');
+            if (cachePill) {
+                cachePill.dataset.state = sessionStorage.getItem('auth_token') ? 'ok' : 'warn';
+            }
+
+            const apiPill = document.getElementById('ssApiStatus');
+            if (apiPill) {
+                const mapping = {
+                    ok: { label: 'Operativo', state: 'ok' },
+                    warn: { label: 'Inestable', state: 'warn' },
+                    down: { label: 'Sin respuesta', state: 'down' },
+                    checking: { label: 'Verificando...', state: 'warn' }
+                };
+                const current = mapping[systemHealth.apiStatus] || mapping.checking;
+                apiPill.dataset.state = current.state;
+                const valueEl = apiPill.querySelector('span');
+                if (valueEl) valueEl.innerText = current.label;
+            }
+
+            const stampEl = document.getElementById('ssHealthStamp');
+            if (stampEl) {
+                stampEl.innerText = systemHealth.lastChecked ? formatStatusDate(systemHealth.lastChecked) : 'Pendiente';
+            }
+
+            const logList = document.getElementById('ssRecentFiles');
+            if (logList) {
+                const entries = getSystemLogEntries();
+                logList.innerHTML = entries.map(entry => `<li><span>${entry.label}</span><span>${entry.value}</span></li>`).join('');
+            }
+        }
+
+        function openSystemStatus() {
+            if (!isAdminUser()) {
+                showAlert('Solo disponible para administradores.', 'warning');
+                return;
+            }
+            const btn = document.querySelector('.sidebar .menu-btn[data-view="systemStatus"]');
+            if (btn) {
+                switchView('systemStatus', btn);
+                updateSystemStatus();
+            } else {
+                showAlert('Actualice la página para acceder al panel de estado.', 'error');
+            }
+        }
+
+        async function refreshApiHealthBadge() {
+            if (!isAdminUser()) return;
+            try {
+                const resp = await fetch('/healthz', { cache: 'no-store' });
+                systemHealth.apiStatus = resp.ok ? 'ok' : 'warn';
+            } catch (err) {
+                systemHealth.apiStatus = 'down';
+            }
+            systemHealth.lastChecked = new Date().toISOString();
+            updateSystemStatus();
+        }
+
+        function ensureSystemHealthWatcher() {
+            if (window.__systemHealthInterval) return;
+            window.__systemHealthInterval = setInterval(() => {
+                if (isAdminUser()) {
+                    refreshApiHealthBadge();
+                }
+            }, 120000);
         }
 
         // Utilidad para la Zona Horaria de República Dominicana
@@ -2851,6 +3307,9 @@
             document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
             targetView.classList.add('active');
             if (btn) btn.classList.add('active');
+            if (id === 'systemStatus') {
+                updateSystemStatus();
+            }
         }
 
         function openEgresosModal() {
@@ -2974,8 +3433,35 @@
                 effi: null,
                 facebook: null,
                 tiktok: null
+            },
+            meta: {
+                lastSyncAt: null,
+                lastUpdatedBy: null,
+                lastPayloadSize: 0,
+                lastUserId: null
             }
         };
+        const systemHealth = {
+            apiStatus: 'checking',
+            lastChecked: null
+        };
+
+        function ensureMeta() {
+            if (!appState.meta) {
+                appState.meta = {
+                    lastSyncAt: null,
+                    lastUpdatedBy: null,
+                    lastPayloadSize: 0,
+                    lastUserId: null
+                };
+            } else {
+                appState.meta.lastSyncAt = appState.meta.lastSyncAt || null;
+                appState.meta.lastUpdatedBy = appState.meta.lastUpdatedBy || null;
+                appState.meta.lastPayloadSize = appState.meta.lastPayloadSize || 0;
+                appState.meta.lastUserId = appState.meta.lastUserId || null;
+            }
+            return appState.meta;
+        }
 
         async function loadState() {
             const userId = getCurrentUserId();
@@ -2998,6 +3484,10 @@
                 
                 if (saved) {
                     Object.assign(appState, saved);
+                    const meta = ensureMeta();
+                    if (meta.lastSyncAt) {
+                        sessionStorage.setItem('last_sync_at', meta.lastSyncAt);
+                    }
                     
                     document.getElementById('exchangeRate').value = appState.exchangeRate || 58;
                     document.getElementById('btnBanco').innerText = formatRD(appState.bancoMonto || 0);
@@ -3054,6 +3544,7 @@
                     restoreStatusLabels();
                     updateCreditCardDiffs();
                     updateResumenFinanciero();
+                    updateSystemStatus();
                 }
             } catch (e) { console.error('loadState error', e); }
         }
@@ -3070,6 +3561,11 @@
                     syncIndicator.innerText = '● Sincronizando...';
                     syncIndicator.style.color = '#ffd700';
                 }
+
+                const meta = ensureMeta();
+                meta.lastSyncAt = getDominicanTime();
+                meta.lastUpdatedBy = sessionStorage.getItem('username') || 'Administrador';
+                meta.lastUserId = userId;
 
                 const stateToSave = {
                     ...appState,
@@ -3089,7 +3585,11 @@
                     tiktokUSD: appState.ads?.tiktokUSD || 0
                 };
                 
-                const dataStr = JSON.stringify(stateToSave);
+                stateToSave.meta = { ...meta };
+                let dataStr = JSON.stringify(stateToSave);
+                meta.lastPayloadSize = dataStr.length;
+                stateToSave.meta.lastPayloadSize = meta.lastPayloadSize;
+                dataStr = JSON.stringify(stateToSave);
                 
                 // 1. Guardar en localStorage (Local)
                 localStorage.setItem(getAppKey(), dataStr);
@@ -3105,6 +3605,9 @@
                         syncIndicator.innerText = '● Sincronizado';
                         syncIndicator.style.color = '#7dffb8';
                     }
+                    if (resp.ok) {
+                        sessionStorage.setItem('last_sync_at', new Date().toISOString());
+                    }
                 } catch (apiErr) {
                     console.error('Error al sincronizar con el servidor:', apiErr);
                     if (syncIndicator) {
@@ -3113,6 +3616,7 @@
                     }
                 }
 
+                updateSystemStatus();
             } catch (e) {
                 console.error('Error guardando datos:', e);
             }
@@ -4585,6 +5089,7 @@
         initAuthTabs();
         setSidebarUserInfo();
         updateCreditCardDiffs();
+        updateSystemStatus();
     </script>
 </body>
 </html>
