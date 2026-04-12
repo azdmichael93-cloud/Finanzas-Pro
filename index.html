@@ -4115,6 +4115,7 @@ function processScheduledSavings() {
                             <span style="font-weight: 900; color: #ffd700; font-size: 16px;">${formatRD(s.monto)}</span>
                             ${typeof s.percent === 'number' ? `<span style="font-size:12px; color:#7dffb8; margin-left:6px;">(${s.percent.toFixed(2)}%)</span>` : ''}
                             <button onclick="deletePersonalProItem('ahorros', ${i})" class="icon-btn-danger"><i class="fa-solid fa-trash"></i></button>
+                            <button class="icon-btn-chat" onclick="openChat('${s.id}')" title="Chat"><i class="fa-solid fa-comment-dots"></i></button>
                             <button onclick="startEditItem('ahorros', ${i})" class="icon-btn-edit" title="Editar"><i class="fa-solid fa-pen"></i></button>
                         </div>
                     </div>`;
