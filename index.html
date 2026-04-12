@@ -2460,6 +2460,14 @@
                         <label class="value-label">Monto</label>
                         <input id="editItemMonto" type="number" step="0.01" class="value-input" style="width:100%;"/>
                     </div>
+                    <div class="form-group">
+                        <label class="value-label">Día del mes</label>
+                        <input id="editItemDay" type="number" min="1" max="31" class="value-input" style="width:100%;"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="value-label">Día del mes</label>
+                        <input id="editItemDay" type="number" min="1" max="31" class="value-input" style="width:100%;" />
+                    </div>
                 </div>
                 <input type="hidden" id="editItemCat" value=""/>
                 <input type="hidden" id="editItemIndex" value="-1"/>
@@ -2505,10 +2513,14 @@
                             <option value="Anual">Anual (Meta a 12 meses)</option>
                         </select>
                     </div>
-                    <div class="form-group" style="grid-column: 1 / -1;">
-                        <label class="value-label">Concepto o Meta</label>
-                        <input id="savDesc" type="text" placeholder="Ej. Fondo de Emergencia" class="value-input" style="width:100%;">
-                    </div>
+        <div class="form-group" style="grid-column: 1 / 2;">
+            <label class="value-label">Concepto o Meta</label>
+            <input id="savDesc" type="text" placeholder="Ej. Fondo de Emergencia" class="value-input" style="width:100%;">
+        </div>
+        <div class="form-group" style="grid-column: 2 / 3;">
+            <label class="value-label">Día del mes</label>
+            <input id="savDay" type="number" min="1" max="31" class="value-input" style="width:100%;" value="1">
+        </div>
                     <div class="form-group">
                         <label class="value-label">Monto a Ahorrar</label>
                         <input id="savMonto" type="number" step="0.01" class="value-input" style="width:100%; font-size: 18px; font-weight: 800;" oninput="updateSavingsPercent()">
@@ -2922,6 +2934,7 @@
                 systemHealth.apiStatus = 'checking';
                 systemHealth.lastChecked = null;
             }
+            processScheduledSavings();
             updateSystemStatus();
             return true;
         }
@@ -3759,29 +3772,34 @@
             showAlert('Gasto fijo registrado.', 'success');
         }
 
-        function addPersonalSaving() {
-            const type = document.getElementById('savType').value;
-            const desc = document.getElementById('savDesc').value;
-            const monto = parseMoney(document.getElementById('savMonto').value || 0);
+function addPersonalSaving() {
+    const day = Number(document.getElementById('savDay').value || 1);
+    const type = document.getElementById('savType').value;
+    const desc = document.getElementById('savDesc').value;
+    const monto = parseMoney(document.getElementById('savMonto').value || 0);
+    
+    if (!desc || monto <= 0) {
+        showAlert('Por favor ingresa un concepto y un monto.', 'error');
+        return;
+    }
+    if (day < 1 || day > 31) {
+        showAlert('Día del mes debe estar entre 1 y 31', 'error');
+        return;
+    }
+    const totalIncome = (appState.finanzasPersonales.salarios || []).reduce((a,s)=> a + Number(s.monto||0), 0);
+    const pct = totalIncome > 0 ? (monto / totalIncome) * 100 : 0;
+    const descWithDay = `${desc} - Día ${day}`;
+    const saving = { type, desc: descWithDay, day, monto, id: Date.now(), fecha: getDominicanTime(), percent: pct };
+    appState.finanzasPersonales.ahorros = appState.finanzasPersonales.ahorros || [];
+    appState.finanzasPersonales.ahorros.push(saving);
+    saveState();
             
-            if (!desc || monto <= 0) {
-                showAlert('Por favor ingresa un concepto y un monto.', 'error');
-                return;
-            }
-            const saving = { type, desc, monto, id: Date.now(), fecha: getDominicanTime() };
-            // calcular porcentaje respecto al total de ingresos para el ahorro actual
-            const totalIncome = (appState.finanzasPersonales.salarios || []).reduce((a,s)=> a + Number(s.monto||0), 0);
-            const pct = totalIncome > 0 ? (monto / totalIncome) * 100 : 0;
-            saving.percent = pct;
-            appState.finanzasPersonales.ahorros = appState.finanzasPersonales.ahorros || [];
-            appState.finanzasPersonales.ahorros.push(saving);
-            saveState();
-            
-            document.getElementById('savDesc').value = '';
-            document.getElementById('savMonto').value = '';
-            // limpiar porcentaje display
-            const elPct = document.getElementById('savPercentDisplay');
-            if (elPct) elPct.value = '';
+    document.getElementById('savDesc').value = '';
+    document.getElementById('savMonto').value = '';
+    document.getElementById('savDay').value = '1';
+    // limpiar porcentaje display
+    const elPct = document.getElementById('savPercentDisplay');
+    if (elPct) elPct.value = '';
             renderPersonalPro();
             closeModal('mSavings');
             showAlert('Fondo de ahorro registrado.', 'success');
@@ -3915,31 +3933,70 @@
             document.getElementById('editItemDesc').value = item.desc || item.name || '';
             const amount = item.monto ?? item.balance ?? 0;
             document.getElementById('editItemMonto').value = amount;
+            // Cargar día si existe (ahorros) o usar 1 por defecto
+            const dayVal = (item.day != null && typeof item.day !== 'undefined') ? item.day : 1;
+            const dayInput = document.getElementById('editItemDay');
+            if (dayInput) dayInput.value = dayVal;
             openModal('mEditItem');
         }
 
         function saveEditItem() {
             const category = document.getElementById('editItemCat').value;
             const idx = Number(document.getElementById('editItemIndex').value);
-            const desc = document.getElementById('editItemDesc').value;
+            const descInput = document.getElementById('editItemDesc').value;
             const monto = parseMoney(document.getElementById('editItemMonto').value || 0);
+            const dayInputVal = Number(document.getElementById('editItemDay').value || 1);
             const arr = (appState.finanzasPersonales[category] || []);
             if (arr[idx]) {
-                arr[idx].desc = desc;
+                // Construir base para descripción y anexar día si aplica
+                const baseDesc = descInput.includes(' - Día ') ? descInput.split(' - Día ')[0] : descInput;
+                const newDesc = `${baseDesc} - Día ${dayInputVal}`;
+                arr[idx].desc = newDesc;
+                arr[idx].day = dayInputVal;
                 if ('monto' in arr[idx]) arr[idx].monto = monto;
                 if ('balance' in arr[idx]) arr[idx].balance = monto;
+                // Recalcular porcentaje si aplica (solo para ahorros)
+                if (category === 'ahorros') {
+                    const totalIncome = (appState.finanzasPersonales.salarios || []).reduce((a,s)=> a + Number(s.monto||0), 0);
+                    arr[idx].percent = totalIncome > 0 ? (monto / totalIncome) * 100 : 0;
+                }
             }
             saveState();
             renderPersonalPro();
             closeModal('mEditItem');
         }
 
-        function updateAhorroCurrentBalance(index, value) {
-            if (!appState.finanzasPersonales.ahorros[index]) return;
-            appState.finanzasPersonales.ahorros[index].currentBalance = Number(value) || 0;
-            saveState();
-            renderPersonalPro();
-        }
+function updateAhorroCurrentBalance(index, value) {
+    if (!appState.finanzasPersonales.ahorros[index]) return;
+    appState.finanzasPersonales.ahorros[index].currentBalance = Number(value) || 0;
+    saveState();
+    renderPersonalPro();
+}
+
+// Auto-contribute on day
+function processScheduledSavings() {
+  const now = new Date();
+  const day = now.getDate();
+  const monthKey = now.getFullYear() + '-' + (now.getMonth() + 1);
+  const ahorros = appState.finanzasPersonales.ahorros || [];
+  let updated = false;
+
+  ahorros.forEach((s) => {
+    if (s.day && Number(s.day) === day) {
+      if (!s.appliedMonth || s.appliedMonth !== monthKey) {
+        s.currentBalance = (s.currentBalance || 0) + Number(s.monto || 0);
+        s.appliedMonth = monthKey;
+        updated = true;
+      }
+    }
+  });
+
+  if (updated) {
+    saveState();
+    renderPersonalPro();
+    updateDashboardSfpCounter();
+  }
+}
 
         function renderPersonalPro() {
             const fp = appState.finanzasPersonales;
