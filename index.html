@@ -3,7 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexora Finanzas Pro App</title>
+    <title>2Nexora Finanzas Pro App</title>
+    <meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=2Nexora+Finanzas+Pro+App" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:title" content="2Nexora Finanzas Pro App" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://finanzas-pro-app-q8i4.onrender.com/" />
+    <meta property="og:description" content="Finanzas Pro - Gestión financiera personal y empresarial" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="2Nexora Finanzas Pro App" />
+    <meta name="twitter:image" content="https://via.placeholder.com/1200x630.png?text=2Nexora+Finanzas+Pro+App" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>">
     <script src="./node_modules/xlsx/dist/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -139,6 +149,21 @@
             background: rgba(255, 93, 93, 0.15);
             border-color: rgba(255, 93, 93, 0.4);
             color: #ffb3b3;
+        }
+        .icon-btn-edit {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.25);
+            color: #fff;
+            border-radius: 6px;
+            padding: 4px 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 6px;
+        }
+        .icon-btn-edit:hover {
+            background: rgba(255,255,255,0.15);
         }
         .menu-btn {
             background: transparent;
@@ -1632,7 +1657,7 @@
             <div class="panel">
                 <div class="dashboard-layout">
                     <div class="dashboard-main-col">
-                        <h3>Nexora Finanzas Pro App - Dashboard</h3>
+                        <h3>2Nexora Finanzas Pro App - Dashboard</h3>
                         <p style="margin-top:0;color:#cfe3ff;"></p>
 
                     <div class="cards-wrapper">
@@ -2419,6 +2444,28 @@
                 <div class="modal-actions">
                     <button class="btn" onclick="closeModal('mSalary')">Cancelar</button>
                     <button class="btn primary" onclick="addPersonalIncome()">Guardar Ingreso</button>
+                </div>
+            </div>
+        </div>
+        <!-- Editor modal para items de Finanzas Personales -->
+        <div id="mEditItem" class="overlay over-mPremium">
+            <div class="modal" style="border-top: 5px solid #39d7ff; background: radial-gradient(circle at 0% 0%, rgba(57,215,255,0.18), rgba(6,18,38,0.95));">
+                <h4><i class="fa-solid fa-pen"></i> Editar Registro</h4>
+                <div class="modal-grid" style="grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="form-group">
+                        <label class="value-label">Descripción</label>
+                        <input id="editItemDesc" type="text" class="value-input" style="width:100%;"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="value-label">Monto</label>
+                        <input id="editItemMonto" type="number" step="0.01" class="value-input" style="width:100%;"/>
+                    </div>
+                </div>
+                <input type="hidden" id="editItemCat" value=""/>
+                <input type="hidden" id="editItemIndex" value="-1"/>
+                <div class="modal-actions">
+                    <button class="btn" onclick="closeModal('mEditItem')">Cancelar</button>
+                    <button class="btn primary" onclick="saveEditItem()">Guardar</button>
                 </div>
             </div>
         </div>
@@ -3859,6 +3906,34 @@
             renderPersonalPro();
         }
 
+        function startEditItem(category, index) {
+            const arr = appState.finanzasPersonales[category] || [];
+            const item = arr[index];
+            if (!item) return;
+            document.getElementById('editItemCat').value = category;
+            document.getElementById('editItemIndex').value = index;
+            document.getElementById('editItemDesc').value = item.desc || item.name || '';
+            const amount = item.monto ?? item.balance ?? 0;
+            document.getElementById('editItemMonto').value = amount;
+            openModal('mEditItem');
+        }
+
+        function saveEditItem() {
+            const category = document.getElementById('editItemCat').value;
+            const idx = Number(document.getElementById('editItemIndex').value);
+            const desc = document.getElementById('editItemDesc').value;
+            const monto = parseMoney(document.getElementById('editItemMonto').value || 0);
+            const arr = (appState.finanzasPersonales[category] || []);
+            if (arr[idx]) {
+                arr[idx].desc = desc;
+                if ('monto' in arr[idx]) arr[idx].monto = monto;
+                if ('balance' in arr[idx]) arr[idx].balance = monto;
+            }
+            saveState();
+            renderPersonalPro();
+            closeModal('mEditItem');
+        }
+
         function updateAhorroCurrentBalance(index, value) {
             if (!appState.finanzasPersonales.ahorros[index]) return;
             appState.finanzasPersonales.ahorros[index].currentBalance = Number(value) || 0;
@@ -3887,6 +3962,7 @@
                         <div class="value-group">
                             <span style="font-weight: 900; color: #7dffb8; font-size: 16px;">${formatRD(s.monto)}</span>
                             <button onclick="deletePersonalProItem('salarios', ${i})" class="icon-btn-danger"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="startEditItem('salarios', ${i})" class="icon-btn-edit" title="Editar"><i class="fa-solid fa-pen"></i></button>
                         </div>
                     </div>`;
                 });
@@ -3912,7 +3988,7 @@
                         nextDay = dayNum;
                         nextExpense = e;
                     }
-                    expHtml += `<div class="item-card" style="background: rgba(255,93,93,0.05); border-color: rgba(255,93,93,0.2);">
+                    expHtml += `<div class=\"item-card\" style=\"background: rgba(255,93,93,0.05); border-color: rgba(255,93,93,0.2);">
                         <div>
                             <div class="item-card-title">${e.desc}</div>
                             <div class="item-tags">
@@ -3922,6 +3998,7 @@
                         <div class="value-group">
                             <span style="font-weight: 900; color: #ff8f8f; font-size: 16px;">${formatRD(e.monto)}</span>
                             <button onclick="deletePersonalProItem('gastosFijos', ${i})" class="icon-btn-danger"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="startEditItem('gastosFijos', ${i})" class="icon-btn-edit" title="Editar"><i class="fa-solid fa-pen"></i></button>
                         </div>
                     </div>`;
                 });
@@ -3981,6 +4058,7 @@
                             <span style="font-weight: 900; color: #ffd700; font-size: 16px;">${formatRD(s.monto)}</span>
                             ${typeof s.percent === 'number' ? `<span style="font-size:12px; color:#7dffb8; margin-left:6px;">(${s.percent.toFixed(2)}%)</span>` : ''}
                             <button onclick="deletePersonalProItem('ahorros', ${i})" class="icon-btn-danger"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="startEditItem('ahorros', ${i})" class="icon-btn-edit" title="Editar"><i class="fa-solid fa-pen"></i></button>
                         </div>
                     </div>`;
                 });
@@ -4110,6 +4188,7 @@
                         <div class="value-group">
                             <span style="font-weight: 900; color: #39d7ff; font-size: 16px;">${formatRD(b.balance)}</span>
                             <button onclick="deletePersonalProItem('cuentasBancarias', ${i})" class="icon-btn-danger"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="startEditItem('cuentasBancarias', ${i})" class="icon-btn-edit" title="Editar"><i class="fa-solid fa-pen"></i></button>
                         </div>
                     </div>`;
                 });
@@ -4161,6 +4240,7 @@
                                 <div style="font-size:10px; color: #9fc2ff;">Aprobado: ${formatRD(l.approved)}</div>
                             </div>
                             <button onclick="deletePersonalProItem('prestamos', ${i})" class="icon-btn-danger"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="startEditItem('prestamos', ${i})" class="icon-btn-edit" title="Editar"><i class="fa-solid fa-pen"></i></button>
                         </div>
                     </div>`;
                 });
@@ -4186,6 +4266,7 @@
                         <div class="value-group">
                             <span style="font-weight: 900; color: #bd93f9; font-size: 16px;">${formatRD(d.monto)}</span>
                             <button onclick="deletePersonalProItem('deudasInformales', ${i})" class="icon-btn-danger"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="startEditItem('deudasInformales', ${i})" class="icon-btn-edit" title="Editar"><i class="fa-solid fa-pen"></i></button>
                         </div>
                     </div>`;
                 });
