@@ -70,73 +70,381 @@ app.post('/chat', async (req, res) => {
         systemPrompt += '\n--- FIN DATOS ---';
     }
 
-    try {
-        const apiKey = process.env.ANTHROPIC_API_KEY;
-        if (!apiKey) return res.json({ response: buildOfflineResponse(message, context) });
+    const googleKey    = process.env.GOOGLE_AI_KEY;
+    const openaiKey    = process.env.OPENAI_API_KEY;
+    const anthropicKey = process.env.ANTHROPIC_API_KEY;
 
-        const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': apiKey,
-                'anthropic-version': '2023-06-01'
-            },
-            body: JSON.stringify({
-                model: 'claude-opus-4-5',
-                max_tokens: 600,
-                system: systemPrompt,
-                messages: [{ role: 'user', content: message }]
-            })
-        });
-
-        if (!apiRes.ok) throw new Error('Anthropic API ' + apiRes.status);
-        const data = await apiRes.json();
-        const text = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('\n').trim();
-        res.json({ response: text || 'Sin respuesta del modelo.' });
-
-    } catch (err) {
-        console.error('❌ /chat error:', err.message);
-        res.json({ response: buildOfflineResponse(message, context) });
+    // ── Prioridad: Gemini → OpenAI → Claude → Offline ─────────────
+    if (googleKey) {
+        try {
+            const apiRes = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${googleKey}`,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        systemInstruction: { parts: [{ text: systemPrompt }] },
+                        contents: [{ role: 'user', parts: [{ text: message }] }],
+                        generationConfig: {
+                            maxOutputTokens: 600,
+                            temperature: 0.4,
+                            topP: 0.9
+                        }
+                    })
+                }
+            );
+            if (!apiRes.ok) throw new Error('Gemini API ' + apiRes.status);
+            const data = await apiRes.json();
+            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+            if (!text) throw new Error('Gemini: respuesta vacía');
+            console.log('🤖 Respondido por Gemini');
+            return res.json({ response: text });
+        } catch (err) {
+            console.error('❌ Gemini error:', err.message, '— usando offline');
+            return res.json({ response: buildOfflineResponse(message, context) });
+        }
     }
+
+    if (openaiKey) {
+        try {
+            const apiRes = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${openaiKey}`
+                },
+                body: JSON.stringify({
+                    model: 'gpt-4o-mini',
+                    max_tokens: 600,
+                    temperature: 0.4,
+                    messages: [
+                        { role: 'system', content: systemPrompt },
+                        { role: 'user',   content: message }
+                    ]
+                })
+            });
+            if (!apiRes.ok) throw new Error('OpenAI API ' + apiRes.status);
+            const data = await apiRes.json();
+            const text = data?.choices?.[0]?.message?.content?.trim() || '';
+            if (!text) throw new Error('OpenAI: respuesta vacía');
+            console.log('🤖 Respondido por OpenAI');
+            return res.json({ response: text });
+        } catch (err) {
+            console.error('❌ OpenAI error:', err.message, '— usando offline');
+            return res.json({ response: buildOfflineResponse(message, context) });
+        }
+    }
+
+    if (anthropicKey) {
+        try {
+            const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': anthropicKey,
+                    'anthropic-version': '2023-06-01'
+                },
+                body: JSON.stringify({
+                    model: 'claude-haiku-4-5-20251001',
+                    max_tokens: 600,
+                    system: systemPrompt,
+                    messages: [{ role: 'user', content: message }]
+                })
+            });
+            if (!apiRes.ok) throw new Error('Anthropic API ' + apiRes.status);
+            const data = await apiRes.json();
+            const text = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('\n').trim();
+            if (!text) throw new Error('Claude: respuesta vacía');
+            console.log('🤖 Respondido por Claude');
+            return res.json({ response: text });
+        } catch (err) {
+            console.error('❌ Claude error:', err.message, '— usando offline');
+            return res.json({ response: buildOfflineResponse(message, context) });
+        }
+    }
+
+    // Sin ninguna API key — modo offline
+    console.log('💡 Modo offline activo');
+    return res.json({ response: buildOfflineResponse(message, context) });
 });
 
+// ═══════════════════════════════════════════════════════════════════
+//  MOTOR DE RESPUESTAS INTELIGENTE — sin API key, 100% local
+//  Cubre más de 30 intenciones con análisis real de los datos.
+// ═══════════════════════════════════════════════════════════════════
 function buildOfflineResponse(message, ctx) {
-    if (!ctx) return 'No tengo acceso a tus datos. Carga los archivos Excel primero.';
-    const msg = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    const fmt = (n) => 'RD$ ' + Number(n || 0).toLocaleString('es-DO', { minimumFractionDigits: 2 });
+    const n  = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const msg = n(message);
+    const fmt = v => 'RD$ ' + Number(v || 0).toLocaleString('es-DO', { minimumFractionDigits: 2 });
+    const pct = (a, b) => b > 0 ? ((a / b) * 100).toFixed(2) + '%' : '0.00%';
+    const sign = v => v >= 0 ? '✅' : '⚠️';
+    const has  = (...words) => words.some(w => msg.includes(n(w)));
 
-    if (msg.includes('ganancia') || msg.includes('utilidad') || msg.includes('rentab')) {
-        if (ctx.effi) {
-            const e = ctx.effi;
-            const ingresos = e.recaudo || 0;
-            const egresos  = (e.compra||0)+(e.fleteCon||0)+(e.fleteDev||0)+(e.fleteSin||0)+(e.comisionRetiro||0)+(e.fulfillment||0);
-            const ganancia = ingresos - egresos;
-            const margen   = ingresos > 0 ? ((ganancia/ingresos)*100).toFixed(2) : '0.00';
-            return `Resumen de rentabilidad Effi:\n• Recaudo de ventas: ${fmt(ingresos)}\n• Total egresos: ${fmt(egresos)}\n• Ganancia neta: ${fmt(ganancia)}\n• Margen: ${margen}%`;
+    // ── Utilidades de cálculo ──────────────────────────────────────
+    const effi = ctx && ctx.effi ? ctx.effi : null;
+    const tr   = ctx && ctx.transporte ? ctx.transporte : null;
+    const fp   = ctx || {};
+
+    const calcEffi = () => {
+        if (!effi) return null;
+        const ingresos  = effi.recaudo || 0;
+        const costos    = effi.compra  || 0;
+        const fletes    = (effi.fleteCon||0) + (effi.fleteDev||0) + (effi.fleteSin||0);
+        const comisiones= (effi.comisionRetiro||0) + (effi.fulfillment||0);
+        const egresos   = costos + fletes + comisiones;
+        const ganancia  = ingresos - egresos;
+        const margen    = ingresos > 0 ? (ganancia / ingresos) * 100 : 0;
+        const roi       = costos   > 0 ? (ganancia / costos)  * 100 : 0;
+        return { ingresos, costos, fletes, comisiones, egresos, ganancia, margen, roi };
+    };
+
+    const calcPersonal = () => {
+        const sal  = fp.salarios      || 0;
+        const gast = fp.gastosFijos   || 0;
+        const aho  = fp.ahorros       || 0;
+        const banc = fp.bancos        || 0;
+        const prest= fp.prestamos     || 0;
+        const inf  = fp.deudasInformal|| 0;
+        const disp = sal - gast - aho;
+        const patr = banc - prest - inf + aho;
+        return { sal, gast, aho, banc, prest, inf, disp, patr };
+    };
+
+    // ── Saludos y ayuda ────────────────────────────────────────────
+    if (has('hola','buenos','buenas','hey','hi','saludos')) {
+        return `¡Hola! Soy tu asistente financiero de Finanzas Pro 👋\n\nPuedo ayudarte con:\n• 💰 Ganancias y rentabilidad de Effi\n• 📦 Estado de guías y devoluciones\n• 💳 Deudas y préstamos\n• 🐷 Ahorros y proyecciones\n• 🏦 Saldos bancarios\n• 📊 Resumen general de tus finanzas\n• ⚠️  Alertas y riesgos\n\n¿Sobre qué quieres saber?`;
+    }
+
+    if (has('ayuda','que puedes','que sabes','comandos','opciones','menu')) {
+        return `Estos son los temas que manejo:\n\n📊 EFFI COMMERCE\n• "¿cuál es mi ganancia?"\n• "¿cómo están mis fletes?"\n• "analiza mis devoluciones"\n• "¿cuánto gasté en publicidad?"\n• "rentabilidad del negocio"\n• "¿cuál es mi ROI?"\n• "costos de operación"\n\n🚚 TRANSPORTE\n• "estado de mis guías"\n• "¿cuántas devoluciones tengo?"\n• "¿qué porcentaje entrego?"\n\n💼 FINANZAS PERSONALES\n• "¿cuánto me queda libre?"\n• "mis deudas y préstamos"\n• "proyección de ahorros"\n• "patrimonio neto"\n• "¿estoy ahorrando bien?"\n\n🔍 ANÁLISIS\n• "resumen general"\n• "alertas financieras"\n• "¿estoy bien o mal?"`;
+    }
+
+    // ── EFFI: Ganancia / Rentabilidad / ROI ───────────────────────
+    if (has('ganancia','utilidad','rentab','roi','rendimiento','profit')) {
+        const e = calcEffi();
+        if (!e) return '📂 Carga el archivo de Effi (.xls) para ver tu rentabilidad.';
+        const estado = e.ganancia >= 0 ? '✅ Período rentable' : '⚠️ Período con pérdida';
+        const consejo = e.margen < 10
+            ? 'Tu margen es bajo (menor al 10%). Considera revisar costos de fletes o precios de venta.'
+            : e.margen < 25
+            ? 'Tu margen es aceptable. Hay espacio para optimizar fletes y comisiones.'
+            : '¡Excelente margen! Tu negocio está operando con buena eficiencia.';
+        return `${estado}\n\n💰 RENTABILIDAD EFFI\n• Recaudo de ventas:    ${fmt(e.ingresos)}\n• Costo mercancía:      ${fmt(e.costos)}\n• Fletes (total):       ${fmt(e.fletes)}\n• Comisiones/Fulfill.:  ${fmt(e.comisiones)}\n• Total egresos:        ${fmt(e.egresos)}\n────────────────────────\n• Ganancia neta:        ${fmt(e.ganancia)}\n• Margen de ganancia:   ${e.margen.toFixed(2)}%\n• ROI sobre costo:      ${e.roi.toFixed(2)}%\n\n💡 ${consejo}`;
+    }
+
+    // ── EFFI: Fletes ───────────────────────────────────────────────
+    if (has('flete','envio','envío','transporte','logistica','logística')) {
+        const e = calcEffi();
+        if (!e || !effi) return '📂 Carga el archivo de Effi para ver el detalle de fletes.';
+        const pctFletes = e.ingresos > 0 ? ((e.fletes / e.ingresos) * 100).toFixed(2) : '0.00';
+        const alerta = parseFloat(pctFletes) > 20
+            ? '⚠️ Los fletes superan el 20% de tus ingresos. Es un costo alto a controlar.'
+            : '✅ Tus fletes están en un rango saludable respecto a los ingresos.';
+        return `🚚 DETALLE DE FLETES\n• Flete con recaudo:    ${fmt(effi.fleteCon)}\n• Flete devolución:     ${fmt(effi.fleteDev)}\n• Flete sin recaudo:    ${fmt(effi.fleteSin)}\n────────────────────────\n• Total fletes:         ${fmt(e.fletes)}\n• % sobre ingresos:     ${pctFletes}%\n\n${alerta}`;
+    }
+
+    // ── EFFI: Devoluciones (Effi) ──────────────────────────────────
+    if (has('devoluci','devolucion') && !tr) {
+        if (!effi) return '📂 Carga el archivo de Effi para ver devoluciones.';
+        return `📦 DEVOLUCIONES EN EFFI\n• Flete de devolución:  ${fmt(effi.fleteDev)}\n• Indemnizaciones:      ${fmt(effi.indemnizacion)}\n\n💡 Las devoluciones generan costo de flete doble (envío + retorno). Cada devolución reduce directamente tu ganancia neta.`;
+    }
+
+    // ── TRANSPORTE: Guías y devoluciones ──────────────────────────
+    if (has('guia','guías','guias','estado','orden','ordenes','órdenes','entrega','reparto') || (has('devoluci') && tr)) {
+        if (!tr) return '📂 Carga el reporte de Guías de Transporte (.xlsx) para ver el estado.';
+        const pEntrega = tr.totalOrdenes > 0 ? (tr.entregadas  / tr.totalOrdenes * 100) : 0;
+        const pDevol   = tr.totalOrdenes > 0 ? (tr.devoluciones/ tr.totalOrdenes * 100) : 0;
+        const pTransit = tr.totalOrdenes > 0 ? (tr.enTransito  / tr.totalOrdenes * 100) : 0;
+        const estadoEntrega = pEntrega >= 80 ? '✅ Buena tasa de entrega' : pEntrega >= 60 ? '⚠️ Tasa de entrega regular' : '🚨 Tasa de entrega baja';
+        const estadoDevol   = pDevol   <= 10 ? '✅ Devoluciones bajo control' : pDevol <= 20 ? '⚠️ Devoluciones elevadas' : '🚨 Devoluciones críticas';
+        return `📦 ESTADO DE GUÍAS\n• Total órdenes:        ${tr.totalOrdenes}\n• Entregadas:           ${tr.entregadas} (${pEntrega.toFixed(1)}%) ${pEntrega >= 75 ? '✅' : '⚠️'}\n• Devoluciones:         ${tr.devoluciones} (${pDevol.toFixed(1)}%) ${pDevol <= 15 ? '✅' : '🚨'}\n• En tránsito:          ${tr.enTransito} (${pTransit.toFixed(1)}%)\n• En reparto:           ${tr.enReparto}\n• Con novedad:          ${tr.novedad}\n\n${estadoEntrega}\n${estadoDevol}`;
+    }
+
+    // ── EFFI: Recaudo / Ventas ─────────────────────────────────────
+    if (has('recaudo','venta','ventas','ingreso','ingresos','cobro')) {
+        if (!effi) return '📂 Carga el archivo de Effi para ver el recaudo.';
+        const e = calcEffi();
+        return `💵 RECAUDO Y VENTAS\n• Total recaudado:      ${fmt(effi.recaudo)}\n• Retiro de cuenta:     ${fmt(effi.retiro)}\n• Dinero disponible:    ${fmt((effi.recaudo||0) - (effi.retiro||0))}\n\n💡 El recaudo incluye todos los pagos recibidos por ventas entregadas. El retiro es lo que ya moviste fuera de Effi.`;
+    }
+
+    // ── EFFI: Costos de operación ──────────────────────────────────
+    if (has('costo','gasto','egreso','fulfillment','comision','comisión','operacion','operación')) {
+        const e = calcEffi();
+        if (!e || !effi) return '📂 Carga el archivo de Effi para ver los costos.';
+        const pCosto  = e.ingresos > 0 ? (e.costos      / e.ingresos * 100).toFixed(1) : '0.0';
+        const pFletes = e.ingresos > 0 ? (e.fletes      / e.ingresos * 100).toFixed(1) : '0.0';
+        const pCom    = e.ingresos > 0 ? (e.comisiones  / e.ingresos * 100).toFixed(1) : '0.0';
+        return `📊 ESTRUCTURA DE COSTOS\n• Mercancía:            ${fmt(e.costos)} (${pCosto}%)\n• Fletes totales:       ${fmt(e.fletes)} (${pFletes}%)\n• Comis./Fulfillment:   ${fmt(e.comisiones)} (${pCom}%)\n────────────────────────\n• Total egresos:        ${fmt(e.egresos)}\n• Ingresos:             ${fmt(e.ingresos)}\n• Ganancia:             ${fmt(e.ganancia)}\n\n💡 El mayor costo es ${e.costos >= e.fletes ? 'la mercancía' : 'los fletes'}. Optimiza ese rubro primero para mejorar tu margen.`;
+    }
+
+    // ── Personal: Disponible / Sobrante ───────────────────────────
+    if (has('disponible','sobrante','libre','queda','sobra','liquidez')) {
+        const p = calcPersonal();
+        const estado = p.disp >= 0 ? '✅ Tienes dinero disponible' : '🚨 Tus compromisos superan tus ingresos';
+        const consejo = p.disp > 0 && p.aho === 0
+            ? `💡 Tienes ${fmt(p.disp)} libre pero no estás ahorrando. Considera apartar al menos el 10% (${fmt(p.sal * 0.10)}).`
+            : p.disp < 0
+            ? `⚠️ Déficit de ${fmt(Math.abs(p.disp))}. Revisa tus gastos fijos.`
+            : `💡 Tu disponible es ${pct(p.disp, p.sal)} de tus ingresos. ¡Buen manejo!`;
+        return `💼 DISPONIBILIDAD PERSONAL\n• Ingresos totales:     ${fmt(p.sal)}\n• Gastos fijos:         ${fmt(p.gast)}\n• Ahorros mensuales:    ${fmt(p.aho)}\n────────────────────────\n• Disponible:           ${fmt(p.disp)}\n\n${estado}\n${consejo}`;
+    }
+
+    // ── Personal: Ahorros ─────────────────────────────────────────
+    if (has('ahorro','ahorrar','ahorra','fondo','meta','proyeccion','proyección')) {
+        const p = calcPersonal();
+        const pctAho = p.sal > 0 ? (p.aho / p.sal * 100).toFixed(1) : '0.0';
+        const meta6m  = p.aho * 6;
+        const meta12m = p.aho * 12;
+        const recom   = p.sal > 0 ? p.sal * 0.20 : 0;
+        const estadoAho = parseFloat(pctAho) >= 20 ? '✅ Excelente tasa de ahorro (+20%)' : parseFloat(pctAho) >= 10 ? '👍 Buena tasa de ahorro (10-20%)' : parseFloat(pctAho) > 0 ? '⚠️ Tasa de ahorro baja (menos del 10%)' : '🚨 No estás ahorrando actualmente';
+        return `🐷 AHORROS Y PROYECCIÓN\n• Ahorro mensual:       ${fmt(p.aho)}\n• % de tus ingresos:    ${pctAho}%\n• Proyección 6 meses:   ${fmt(meta6m)}\n• Proyección 12 meses:  ${fmt(meta12m)}\n• Ahorro ideal (20%):   ${fmt(recom)}\n\n${estadoAho}\n${p.aho < recom && p.sal > 0 ? `💡 Para llegar al 20% ideal, deberías ahorrar ${fmt(recom - p.aho)} adicionales al mes.` : p.aho >= recom ? '🎉 ¡Estás cumpliendo el objetivo de ahorro del 20%!' : ''}`;
+    }
+
+    // ── Personal: Deudas y préstamos ──────────────────────────────
+    if (has('deuda','prestamo','préstamo','credito','crédito','debo','debe','informal')) {
+        const p = calcPersonal();
+        const totalDeudas = p.prest + p.inf;
+        const pctDeuda    = p.banc  > 0 ? (totalDeudas / p.banc * 100).toFixed(1) : '0.0';
+        const mesesPago   = p.disp  > 0 ? (totalDeudas / p.disp).toFixed(1)       : '∞';
+        const estadoDeuda = totalDeudas === 0 ? '✅ ¡Sin deudas registradas!' : totalDeudas < p.sal * 3 ? '✅ Nivel de deuda manejable' : totalDeudas < p.sal * 6 ? '⚠️ Deuda moderada' : '🚨 Nivel de deuda alto';
+        return `💳 DEUDAS Y COMPROMISOS\n• Préstamos formales:   ${fmt(p.prest)}\n• Deudas informales:    ${fmt(p.inf)}\n────────────────────────\n• Total comprometido:   ${fmt(totalDeudas)}\n• vs. saldo bancario:   ${pctDeuda}%\n• Meses para saldarlas: ${mesesPago}\n\n${estadoDeuda}\n${totalDeudas > 0 && p.disp > 0 ? `💡 Con tu disponible actual de ${fmt(p.disp)}/mes, podrías saldar todas tus deudas en aprox. ${mesesPago} meses.` : ''}`;
+    }
+
+    // ── Personal: Bancos / Saldo ───────────────────────────────────
+    if (has('banco','bancos','cuenta','saldo','efectivo','dinero en banco','liquidez')) {
+        const p = calcPersonal();
+        const pctVsDeudas = p.banc > 0 && (p.prest + p.inf) > 0 ? ((p.prest + p.inf) / p.banc * 100).toFixed(1) : '0.0';
+        return `🏦 SALDO BANCARIO\n• Dinero en cuentas:    ${fmt(p.banc)}\n• Deudas totales:       ${fmt(p.prest + p.inf)}\n• Liquidez neta:        ${fmt(p.banc - p.prest - p.inf)}\n• Deuda vs Banco:       ${pctVsDeudas}%\n\n${p.banc > (p.prest + p.inf) ? '✅ Tus activos bancarios superan tus deudas.' : '⚠️ Tus deudas superan tu saldo bancario.'}`;
+    }
+
+    // ── Personal: Patrimonio neto ──────────────────────────────────
+    if (has('patrimonio','neto','riqueza','capital','vale','valgo')) {
+        const p = calcPersonal();
+        const estado = p.patr >= 0 ? '✅ Patrimonio positivo' : '🚨 Patrimonio negativo (deudas > activos)';
+        return `🏆 PATRIMONIO NETO\n• Saldo bancario:       ${fmt(p.banc)}\n• Ahorros:              ${fmt(p.aho)}\n• (-) Préstamos:        ${fmt(p.prest)}\n• (-) Deudas informales:${fmt(p.inf)}\n────────────────────────\n• Patrimonio neto:      ${fmt(p.patr)}\n\n${estado}\n💡 El patrimonio neto mide cuánto tienes realmente libre después de todas las deudas.`;
+    }
+
+    // ── Salario / Ingresos ─────────────────────────────────────────
+    if (has('salario','sueldo','ingreso mensual','gano','cobro mensual')) {
+        const p = calcPersonal();
+        const pctGast = p.sal > 0 ? (p.gast / p.sal * 100).toFixed(1) : '0.0';
+        const pctAho  = p.sal > 0 ? (p.aho  / p.sal * 100).toFixed(1) : '0.0';
+        return `💵 INGRESOS MENSUALES\n• Total ingresos:       ${fmt(p.sal)}\n• Gastos fijos:         ${fmt(p.gast)} (${pctGast}%)\n• Ahorros:              ${fmt(p.aho)} (${pctAho}%)\n• Disponible:           ${fmt(p.disp)}\n\n${p.gast > p.sal * 0.7 ? '⚠️ Tus gastos fijos superan el 70% de tus ingresos. Zona de riesgo.' : '✅ Buena distribución de ingresos.'}`;
+    }
+
+    // ── Resumen general ────────────────────────────────────────────
+    if (has('resumen','general','todo','panorama','como estoy','cómo estoy','situacion','situación','status')) {
+        const p = calcPersonal();
+        const e = calcEffi();
+        let resp = `📊 RESUMEN GENERAL FINANCIERO\n\n`;
+
+        if (e) {
+            resp += `🏪 NEGOCIO (EFFI)\n• Ventas:               ${fmt(e.ingresos)}\n• Ganancia neta:        ${fmt(e.ganancia)} (${e.margen.toFixed(1)}%)\n• Estado:               ${e.ganancia >= 0 ? '✅ Rentable' : '🚨 Pérdida'}\n\n`;
         }
-        return 'Carga el archivo de Effi para calcular tu ganancia.';
-    }
-    if (msg.includes('deuda') || msg.includes('prestamo') || msg.includes('credito')) {
-        const total = (ctx.prestamos||0) + (ctx.deudasInformal||0);
-        return `Resumen de deudas:\n• Préstamos: ${fmt(ctx.prestamos)}\n• Deudas informales: ${fmt(ctx.deudasInformal)}\n• Total: ${fmt(total)}`;
-    }
-    if (msg.includes('ahorro')) {
-        const pct = (ctx.salarios||0) > 0 ? (((ctx.ahorros||0)/ctx.salarios)*100).toFixed(2) : '0.00';
-        return `Ahorros mensuales: ${fmt(ctx.ahorros)} (${pct}% de tus ingresos de ${fmt(ctx.salarios)}).`;
-    }
-    if (msg.includes('devoluci') || msg.includes('effi') || msg.includes('flete')) {
-        if (ctx.transporte) {
-            const t = ctx.transporte;
-            const pctD = t.totalOrdenes > 0 ? ((t.devoluciones/t.totalOrdenes)*100).toFixed(2) : '0.00';
-            return `Estado guías (${t.totalOrdenes} total):\n• Entregadas: ${t.entregadas}\n• Devoluciones: ${t.devoluciones} (${pctD}%)\n• En tránsito: ${t.enTransito}\n• En reparto: ${t.enReparto}`;
+        if (tr) {
+            const pE = tr.totalOrdenes > 0 ? (tr.entregadas/tr.totalOrdenes*100).toFixed(1) : '0.0';
+            resp += `🚚 LOGÍSTICA\n• Entrega:              ${pE}% de ${tr.totalOrdenes} órdenes\n• Devoluciones:         ${tr.devoluciones} paquetes\n\n`;
         }
-        return 'Carga el reporte de guías de transporte primero.';
+        resp += `💼 PERSONAL\n• Ingresos:             ${fmt(p.sal)}\n• Disponible:           ${fmt(p.disp)} ${sign(p.disp)}\n• Patrimonio neto:      ${fmt(p.patr)} ${sign(p.patr)}\n• Deudas totales:       ${fmt(p.prest + p.inf)}`;
+        return resp;
     }
-    if (msg.includes('disponible') || msg.includes('sobrante')) {
-        const disponible = (ctx.salarios||0)-(ctx.gastosFijos||0)-(ctx.ahorros||0);
-        return `Resumen personal:\n• Ingresos: ${fmt(ctx.salarios)}\n• Gastos fijos: ${fmt(ctx.gastosFijos)}\n• Ahorros: ${fmt(ctx.ahorros)}\n• Disponible: ${fmt(disponible)}`;
+
+    // ── Alertas / Riesgos ──────────────────────────────────────────
+    if (has('alerta','riesgo','problema','mal','crisis','preocup','peligro','warn')) {
+        const p = calcPersonal();
+        const e = calcEffi();
+        const alertas = [];
+
+        if (e) {
+            if (e.ganancia < 0)          alertas.push('🚨 Tu negocio está en pérdida este período.');
+            if (e.margen < 10 && e.margen >= 0) alertas.push('⚠️ Margen de ganancia menor al 10%. Riesgo operativo.');
+            if (e.fletes > e.ingresos * 0.25) alertas.push('⚠️ Los fletes superan el 25% de tus ingresos.');
+        }
+        if (tr) {
+            if (tr.totalOrdenes > 0 && tr.devoluciones / tr.totalOrdenes > 0.20) alertas.push('🚨 Tasa de devolución superior al 20%. Impacto alto en ganancias.');
+            if (tr.totalOrdenes > 0 && tr.entregadas   / tr.totalOrdenes < 0.60) alertas.push('⚠️ Menos del 60% de las órdenes entregadas.');
+        }
+        if (p.disp < 0)                  alertas.push('🚨 Tus gastos personales superan tus ingresos.');
+        if (p.gast > p.sal * 0.70)       alertas.push('⚠️ Gastos fijos por encima del 70% de tus ingresos.');
+        if (p.prest + p.inf > p.sal * 6) alertas.push('🚨 Deudas superiores a 6 meses de ingresos.');
+        if (p.aho === 0 && p.sal > 0)    alertas.push('⚠️ No tienes ahorros registrados.');
+        if (p.patr < 0)                  alertas.push('🚨 Patrimonio neto negativo. Tus deudas superan tus activos.');
+
+        if (alertas.length === 0) return '✅ ¡Todo en orden! No detecté alertas financieras en este momento. Sigue así.';
+        return `🔍 ALERTAS DETECTADAS (${alertas.length})\n\n${alertas.join('\n')}\n\n💡 Escríbeme sobre cualquiera de estos puntos para un análisis más detallado.`;
     }
-    return 'Puedo ayudarte con: ganancias, deudas, ahorros, devoluciones de Effi o tu disponible personal. ¿Qué necesitas?';
+
+    // ── ¿Estoy bien? ───────────────────────────────────────────────
+    if (has('bien','mal','como voy','cómo voy','como va','que tal','qué tal','analiza')) {
+        const p = calcPersonal();
+        const e = calcEffi();
+        const puntos = [];
+        let score = 0;
+
+        if (e) {
+            if (e.ganancia > 0)   { puntos.push('✅ Negocio rentable'); score++; }
+            else                  { puntos.push('❌ Negocio con pérdida'); }
+            if (e.margen >= 20)   { puntos.push('✅ Buen margen de ganancia'); score++; }
+            else if (e.margen > 0){ puntos.push('⚠️ Margen mejorable'); }
+        }
+        if (p.disp > 0)           { puntos.push('✅ Flujo personal positivo'); score++; }
+        else                      { puntos.push('❌ Flujo personal negativo'); }
+        if (p.aho > p.sal * 0.10) { puntos.push('✅ Ahorrando más del 10%'); score++; }
+        else if (p.aho > 0)       { puntos.push('⚠️ Ahorrando menos del 10%'); }
+        else                      { puntos.push('❌ Sin ahorro registrado'); }
+        if (p.patr > 0)           { puntos.push('✅ Patrimonio positivo'); score++; }
+        else if (p.patr < 0)      { puntos.push('❌ Patrimonio negativo'); }
+
+        const total   = puntos.length;
+        const calif   = score >= total * 0.8 ? '🏆 Excelente situación financiera'
+                      : score >= total * 0.6 ? '👍 Situación financiera estable'
+                      : score >= total * 0.4 ? '⚠️ Situación financiera con riesgos'
+                      :                        '🚨 Situación financiera crítica';
+
+        return `📈 DIAGNÓSTICO FINANCIERO\n${calif}\n\n${puntos.join('\n')}\n\nPuntuación: ${score}/${total} indicadores positivos\n\n💡 Escríbeme "alertas" para ver los riesgos específicos o "resumen" para el detalle completo.`;
+    }
+
+    // ── Publicidad / Ads ───────────────────────────────────────────
+    if (has('publicidad','ads','facebook','tiktok','marketing','pauta','anuncio')) {
+        return `📢 PUBLICIDAD\nLos datos de publicidad (Facebook Ads / TikTok Ads) se cargan desde la pestaña "Cargar Archivo".\n\nUna vez cargados, el dashboard calcula automáticamente:\n• Gasto en USD convertido a RD$\n• Costo por orden\n• Impacto en ganancia neta\n\n¿Ya cargaste tus reportes de publicidad?`;
+    }
+
+    // ── Comparación / Período ──────────────────────────────────────
+    if (has('compara','anterior','mes pasado','periodo','período','historico','histórico')) {
+        return `📅 COMPARACIÓN DE PERÍODOS\nActualmente trabajo con el período del reporte cargado.\n\nPara comparar períodos:\n1. Usa "Historial de Cuadres" en el menú lateral\n2. Registra el cobro de ganancias de cada período\n3. El historial acumula los registros para seguimiento\n\n¿Quieres que analice el período actual en detalle?`;
+    }
+
+    // ── Recomendaciones ────────────────────────────────────────────
+    if (has('recomien','consejo','que hago','que debo','mejora','optimiza','suger')) {
+        const p = calcPersonal();
+        const e = calcEffi();
+        const recs = [];
+
+        if (e) {
+            if (e.margen < 15)        recs.push('📦 Negocia mejores precios de compra o aumenta precios de venta para subir el margen por encima del 15%.');
+            if (e.fletes > e.ingresos * 0.20) recs.push('🚚 Los fletes son altos. Evalúa consolidar envíos o negociar tarifas con la transportista.');
+            if (tr && tr.devoluciones / (tr.totalOrdenes || 1) > 0.15) recs.push('📋 Tasa de devolución alta. Mejora las descripciones de productos y la calidad de empaque.');
+        }
+        if (p.aho < p.sal * 0.10 && p.sal > 0) recs.push(`💰 Ahorra mínimo el 10% de tus ingresos (${fmt(p.sal * 0.10)}/mes). Automatiza el ahorro el día de cobro.`);
+        if (p.prest + p.inf > p.sal * 3)        recs.push('💳 Prioriza saldar deudas. Empieza por la de mayor interés o la más pequeña para ganar momentum.');
+        if (p.disp > p.sal * 0.20 && p.aho < p.sal * 0.15) recs.push('🐷 Tienes buen flujo libre. Aumenta tu ahorro mensual, tienes capacidad para ello.');
+
+        if (recs.length === 0) return '✅ Tus números se ven bien. Mantén la disciplina financiera y sigue monitoreando cada período.';
+        return `💡 RECOMENDACIONES PERSONALIZADAS\n\n${recs.map((r,i) => `${i+1}. ${r}`).join('\n\n')}`;
+    }
+
+    // ── Gracias / Despedida ────────────────────────────────────────
+    if (has('gracias','thank','perfecto','excelente','listo','ok','entendi','entendí')) {
+        return `¡Con gusto! 😊 Recuerda que puedo ayudarte en cualquier momento con el análisis de tus finanzas.\n\nEscríbeme "ayuda" para ver todo lo que puedo hacer por ti.`;
+    }
+
+    // ── Fallback inteligente ───────────────────────────────────────
+    const tieneEffi = !!effi;
+    const tieneTr   = !!tr;
+    const tieneFp   = fp.salarios > 0;
+    const datosDisp = [tieneEffi && 'Effi', tieneTr && 'Transporte', tieneFp && 'Finanzas Personales'].filter(Boolean);
+
+    return `No entendí exactamente tu consulta, pero tengo acceso a: ${datosDisp.length > 0 ? datosDisp.join(', ') : 'datos aún no cargados'}.\n\nPuedes preguntarme sobre:\n• "ganancia" — rentabilidad del negocio\n• "guías" — estado de órdenes\n• "disponible" — flujo personal\n• "deudas" — préstamos\n• "alertas" — riesgos detectados\n• "resumen" — panorama completo\n• "ayuda" — todas las opciones`;
 }
 
 /* ── AUTENTICACIÓN ──────────────────────────────────────────────────── */
