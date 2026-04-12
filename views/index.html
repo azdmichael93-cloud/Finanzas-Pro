@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Finanzas Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Chatbot styles */
+        .chat-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .chat-modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            z-index: 1001;
+        }
+
+        .chat-modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 400px;
+            max-width: 90%;
+        }
+
+        .chat-messages {
+            height: 300px;
+            overflow-y: scroll;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        .chat-input-area {
+            display: flex;
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .chat-send {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Finanzas Pro</h1>
+
+    <button class="chat-button">Chat with us</button>
+
+    <div class="chat-modal">
+        <div class="chat-modal-content">
+            <h2>Chatbot</h2>
+            <div class="chat-messages">
+                <!-- Messages will be displayed here -->
+            </div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" placeholder="Type your message...">
+                <button class="chat-send">Send</button>
+            </div>
+            <button class="close-button">Close</button>
+        </div>
+    </div>
+
+    <script src="chat.js"></script>
+    <script>
+        // JavaScript to handle modal functionality
+        const chatButton = document.querySelector('.chat-button');
+        const chatModal = document.querySelector('.chat-modal');
+        const closeButton = document.querySelector('.close-button');
+
+        chatButton.addEventListener('click', () => {
+            chatModal.style.display = 'block';
+        });
+
+        closeButton.addEventListener('click', () => {
+            chatModal.style.display = 'none';
+        });
+
+        // Prevent scrolling of the main page when the modal is open
+        chatModal.addEventListener('wheel', function(event) {
+            event.stopPropagation();
+        });
+
+    </script>
+</body>
+</html>
