@@ -5416,27 +5416,53 @@ function processScheduledSavings() {
             }
         }
 
+        async function fetchUploadedFileBuffer(fileName) {
+            const direct = await fetch('/uploads/' + encodeURIComponent(fileName));
+            if (direct.ok) {
+                return { arrayBuffer: await direct.arrayBuffer(), resolvedName: fileName };
+            }
+
+            const listResp = await fetch('/api/files/list');
+            if (!listResp.ok) return null;
+            const payload = await listResp.json();
+            const files = Array.isArray(payload.files) ? payload.files : [];
+            const wanted = normalizeText(fileName);
+
+            const candidate = files
+                .filter(f => {
+                    const n = normalizeText(f.name || '');
+                    return n === wanted || n.endsWith('-' + wanted) || n.includes(wanted);
+                })
+                .sort((a, b) => new Date(b.modified || 0) - new Date(a.modified || 0))[0];
+
+            if (!candidate) return null;
+            const fallback = await fetch('/uploads/' + encodeURIComponent(candidate.name));
+            if (!fallback.ok) return null;
+            return { arrayBuffer: await fallback.arrayBuffer(), resolvedName: candidate.name };
+        }
+
         async function processUploadedFileByType(type, fileName) {
             if (!fileName) return false;
             try {
-                const fileResponse = await fetch('/uploads/' + encodeURIComponent(fileName));
-                if (!fileResponse.ok) return false;
-                const arrayBuffer = await fileResponse.arrayBuffer();
+                const loaded = await fetchUploadedFileBuffer(fileName);
+                if (!loaded) return false;
+                const arrayBuffer = loaded.arrayBuffer;
+                const resolvedName = loaded.resolvedName || fileName;
 
                 if (type === 'transporte') {
-                    appState.files.transporte = { name: fileName, b64: arrayBufferToBase64(arrayBuffer) };
+                    appState.files.transporte = { name: resolvedName, b64: arrayBufferToBase64(arrayBuffer) };
                     restoreStatusLabels();
                     extractDevolucionAOrigenFromTransporteBuffer(arrayBuffer);
                 } else if (type === 'effi') {
-                    appState.files.effi = { name: fileName, b64: arrayBufferToBase64(arrayBuffer) };
+                    appState.files.effi = { name: resolvedName, b64: arrayBufferToBase64(arrayBuffer) };
                     restoreStatusLabels();
                     extractCompraMercanciaFromEffiBuffer(arrayBuffer);
                 } else if (type === 'facebook') {
-                    appState.files.facebook = { name: fileName, b64: arrayBufferToBase64(arrayBuffer) };
+                    appState.files.facebook = { name: resolvedName, b64: arrayBufferToBase64(arrayBuffer) };
                     restoreStatusLabels();
                     extractFacebookSpentFromBuffer(arrayBuffer);
                 } else if (type === 'tiktok') {
-                    appState.files.tiktok = { name: fileName, b64: arrayBufferToBase64(arrayBuffer) };
+                    appState.files.tiktok = { name: resolvedName, b64: arrayBufferToBase64(arrayBuffer) };
                     restoreStatusLabels();
                     extractTikTokSpentFromBuffer(arrayBuffer);
                 } else {
