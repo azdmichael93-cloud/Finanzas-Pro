@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: finanzas-pro-app
+    env: node
+    region: florida # us-east o frankfurt (eu-central)
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: NODE_ENV
+        value: production

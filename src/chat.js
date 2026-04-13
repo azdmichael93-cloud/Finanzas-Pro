@@ -460,12 +460,57 @@
 
         if (typeof appState !== 'undefined') {
             const fp = appState.finanzasPersonales || {};
-            ctx.salarios      = sum(fp.salarios,       'monto');
-            ctx.gastosFijos   = sum(fp.gastosFijos,     'monto');
-            ctx.ahorros       = sum(fp.ahorros,         'monto');
-            ctx.bancos        = sum(fp.cuentasBancarias,'balance');
-            ctx.prestamos     = sum(fp.prestamos,       'owed');
-            ctx.deudasInformal= sum(fp.deudasInformales,'monto');
+            
+            // Totales
+            ctx.salarios        = sum(fp.salarios, 'monto');
+            ctx.gastosFijos     = sum(fp.gastosFijos, 'monto');
+            ctx.ahorros         = sum(fp.ahorros, 'monto');
+            ctx.bancos          = sum(fp.cuentasBancarias, 'balance');
+            ctx.prestamos       = sum(fp.prestamos, 'owed');
+            ctx.deudasInformal  = sum(fp.deudasInformales, 'monto');
+            
+            // Detalles completos para el chatbot
+            ctx.salariosDetails        = fp.salarios || [];
+            ctx.gastosFijosDetails     = fp.gastosFijos || [];
+            ctx.ahorrosDetails         = fp.ahorros || [];
+            ctx.bancosDetails          = fp.cuentasBancarias || [];
+            ctx.prestamosDetails       = fp.prestamos || [];
+            ctx.deudasInformalDetails  = fp.deudasInformales || [];
+        }
+
+        // Egresos manuales
+        if (typeof appState !== 'undefined' && appState.egresosManuales) {
+            ctx.egresosManuales = sum(appState.egresosManuales, 'monto');
+            ctx.egresosManualesDetails = appState.egresosManuales;
+        }
+
+        // Gastos personales
+        if (typeof appState !== 'undefined' && appState.gastosPersonales) {
+            ctx.gastosPersonales = sum(appState.gastosPersonales, 'monto');
+            ctx.gastosPersonalesDetails = appState.gastosPersonales;
+        }
+
+        // Deudores
+        if (typeof appState !== 'undefined' && appState.deudores) {
+            ctx.deudores = sum(appState.deudores, 'monto');
+            ctx.deudoresDetails = appState.deudores;
+        }
+
+        // Ads
+        if (typeof adsTotals !== 'undefined' && adsTotals) {
+            ctx.ads = {
+                facebookUSD: adsTotals.facebookUSD || 0,
+                tiktokUSD: adsTotals.tiktokUSD || 0,
+                totalRD: adsTotals.totalRD || 0,
+                rate: adsTotals.rate || 57
+            };
+        }
+        
+        // Ads manuales
+        if (typeof appState !== 'undefined' && appState.manualAds) {
+            ctx.ads = ctx.ads || {};
+            ctx.ads.manualAdsDetails = appState.manualAds;
+            ctx.ads.totalRD = (ctx.ads.totalRD || 0) + sum(appState.manualAds, 'monto');
         }
 
         if (typeof effiTotals !== 'undefined' && effiTotals) {
@@ -479,6 +524,7 @@
                 comisionRetiro: effiTotals.comisionRetiro || 0,
                 fulfillment:    effiTotals.fulfillment    || 0,
                 indemnizacion:  effiTotals.indemnizacion  || 0,
+                debitoRevertido: effiTotals.debitoRevertido || 0,
             };
         }
 

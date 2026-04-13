@@ -15,7 +15,7 @@
     <meta name="twitter:title" content="2Nexora Finanzas Pro App" />
     <meta name="twitter:image" content="https://via.placeholder.com/1200x630.png?text=2Nexora+Finanzas+Pro+App" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>">
-    <script src="./node_modules/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="./node_modules/exceljs/dist/exceljs.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
         <style>
         body {
@@ -1897,37 +1897,157 @@
         </section>
 
         <section id="deudores" class="view">
-            <div class="panel" style="max-width: 700px; margin: 0 auto;">
-                <h3 style="text-align: center; margin-bottom: 20px;">Deudores & Gracias</h3>
+            <div class="panel" style="max-width: 700px; margin: 0 auto; background: linear-gradient(145deg, rgba(20, 42, 87, 0.95), rgba(10, 26, 54, 0.98)); border: 1px solid rgba(57, 215, 255, 0.25);">
+                <h3 style="text-align: center; margin-bottom: 24px; color: #ffffff; font-size: 26px; font-weight: 800;">
+                    <i class="fa-solid fa-people-arrows" style="color: #ffd700; margin-right: 10px;"></i>
+                    Deudores & Gracias
+                </h3>
                 
-                <div class="credit-card" style="margin-bottom: 16px;">
-                    <div class="credit-title">Agregar Deudor</div>
-                    <div style="display: grid; grid-template-columns: 1fr 2fr 1fr auto; gap: 8px; align-items: center;">
-                        <input id="deudorNombre" type="text" placeholder="Nombre" style="padding: 8px; font-size: 12px;">
-                        <input id="deudorDesc" type="text" placeholder="Descripción" style="padding: 8px; font-size: 12px;">
-                        <input id="deudorMonto" type="number" step="0.01" placeholder="Monto" style="padding: 8px; font-size: 12px;">
-                        <button class="gastos-btn" onclick="addDeudor()" style="padding: 8px 16px; font-size: 12px;">+</button>
+                <div class="premium-card" style="margin-bottom: 20px;">
+                    <div class="premium-card-header" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.05));">
+                        <i class="fa-solid fa-user-plus" style="color: #ffd700;"></i>
+                        <span style="color: #ffd700; font-weight: 700;">Agregar Deudor</span>
+                    </div>
+                    <div class="premium-card-body">
+                        <div style="display: grid; grid-template-columns: 1fr 2fr 1fr auto; gap: 12px; align-items: center;">
+                            <input id="deudorNombre" type="text" placeholder="Nombre" class="premium-input" style="padding: 12px; font-size: 13px;">
+                            <input id="deudorDesc" type="text" placeholder="Descripción" class="premium-input" style="padding: 12px; font-size: 13px;">
+                            <input id="deudorMonto" type="number" step="0.01" placeholder="0.00" class="premium-input premium-input-number" style="padding: 12px; font-size: 13px;">
+                            <button class="premium-btn-warning" onclick="addDeudor()" style="padding: 12px 20px; font-size: 20px; width: auto; height: 42px;">+</button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="credit-card">
-                    <div class="credit-title">Lista de Deudores</div>
-                    <div class="credit-head" style="font-size: 10px;">
-                        <span>Nombre</span>
-                        <span>Descripción</span>
-                        <span>Monto</span>
-                        <span>Acción</span>
+                <div class="premium-card">
+                    <div class="premium-card-header" style="background: linear-gradient(135deg, rgba(57, 215, 255, 0.15), rgba(57, 215, 255, 0.05));">
+                        <i class="fa-solid fa-list" style="color: #39d7ff;"></i>
+                        <span style="color: #39d7ff; font-weight: 700;">Lista de Deudores</span>
                     </div>
-                    <div id="deudoresList">
-                        <div class="egresos-empty">Sin deudores registrados.</div>
-                    </div>
-                    <div class="credit-total" style="margin-top: 10px;">
-                        <span style="font-size: 12px;">Total pendiente</span>
-                        <span id="deudoresTotal" style="font-size: 14px;">RD$ 0,00</span>
+                    <div class="premium-card-body">
+                        <div class="deudores-grid-header">
+                            <span>Nombre</span>
+                            <span>Descripción</span>
+                            <span style="text-align: right;">Monto</span>
+                            <span style="text-align: center;">Acción</span>
+                        </div>
+                        <div id="deudoresList" class="deudores-list" style="min-height: 120px;">
+                            <div class="egresos-empty">Sin deudores registrados.</div>
+                        </div>
+                        <div class="deudores-total">
+                            <span><i class="fa-solid fa-exclamation-circle" style="margin-right: 8px;"></i>Total pendiente</span>
+                            <span id="deudoresTotal" style="font-size: 22px; font-weight: 900; color: #ff5d5d;">RD$ 0,00</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <style>
+        .premium-card {
+            background: rgba(10, 26, 54, 0.6);
+            border: 1px solid rgba(57, 215, 255, 0.15);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+        .premium-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            font-size: 15px;
+            border-bottom: 1px solid rgba(57, 215, 255, 0.1);
+        }
+        .premium-card-body {
+            padding: 18px;
+        }
+        .deudores-grid-header {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr auto;
+            gap: 12px;
+            font-size: 11px;
+            color: #9fc2ff;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(57, 215, 255, 0.15);
+            margin-bottom: 12px;
+        }
+        .deudores-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .deudores-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .deudores-list::-webkit-scrollbar-thumb {
+            background: rgba(57, 215, 255, 0.3);
+            border-radius: 4px;
+        }
+        .deudor-item {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr auto;
+            gap: 12px;
+            align-items: center;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .deudor-item:hover {
+            background: rgba(57, 215, 255, 0.08);
+            border-color: rgba(57, 215, 255, 0.2);
+        }
+        .deudor-item .nombre {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .deudor-item .desc {
+            color: #9fc2ff;
+            font-size: 13px;
+        }
+        .deudor-item .monto {
+            color: #7dffb8;
+            font-weight: 800;
+            font-size: 14px;
+            text-align: right;
+        }
+        .deudor-item .btn-delete {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 93, 93, 0.3);
+            background: rgba(255, 93, 93, 0.1);
+            color: #ff5d5d;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        .deudor-item .btn-delete:hover {
+            background: #ff5d5d;
+            color: #ffffff;
+            transform: scale(1.1);
+        }
+        .deudores-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, rgba(255, 93, 93, 0.2), rgba(255, 93, 93, 0.1));
+            border: 1px solid rgba(255, 93, 93, 0.3);
+            border-radius: 10px;
+            font-size: 14px;
+            color: #ff8f8f;
+            font-weight: 700;
+        }
+        </style>
 
         <section id="finanzasPersonales" class="view">
             <div class="panel">
@@ -2304,239 +2424,338 @@
         </div>
 
         <!-- MODALES FINANZAS PERSONALES PRO -->
-        <div id="mEndYear" class="overlay over-mPremium">
-            <div class="modal" style="border-top: 5px solid #39d7ff; background: radial-gradient(circle at 0% 0%, rgba(57, 215, 255, 0.18), rgba(6, 18, 38, 0.95));">
-                <h4 style="color: #39d7ff;"><i class="fa-solid fa-gift"></i> Añadir Entrada Fin de Año</h4>
-                <div class="modal-grid" style="grid-template-columns: 1fr; gap: 15px;">
-                    <div class="form-group">
-                        <label class="value-label">Tipo de Entrada</label>
-                        <select id="eyType" class="value-input" style="width:100%; height:38px;">
-                            <option value="Pago del mes">Pago del mes</option>
-                            <option value="Regalia">Regalía (Doble Sueldo)</option>
-                            <option value="Sueldo 14">Sueldo 14</option>
-                            <option value="Otros">Otros</option>
+        <div id="mEndYear" class="premium-modal-overlay">
+            <div class="premium-modal-container">
+                <button class="premium-modal-close" onclick="closeModal('mEndYear')" aria-label="Cerrar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="premium-modal-header">
+                    <div class="premium-modal-icon" style="background: linear-gradient(135deg, rgba(57, 215, 255, 0.2), rgba(57, 215, 255, 0.1)); border-color: rgba(57, 215, 255, 0.3); color: #39d7ff;">
+                        <i class="fa-solid fa-gift"></i>
+                    </div>
+                    <h3>Añadir Entrada Fin de Año</h3>
+                    <p>Registra tus ingresos extras de temporada</p>
+                </div>
+                <form class="premium-modal-form" onsubmit="event.preventDefault(); addPersonalEndYear();">
+                    <div class="premium-form-group full-width">
+                        <label for="eyType">Tipo de Entrada</label>
+                        <select id="eyType" class="premium-input">
+                            <option value="Pago del mes">📅 Pago del mes</option>
+                            <option value="Regalia">🎁 Regalía (Doble Sueldo)</option>
+                            <option value="Sueldo 14">🏆 Sueldo 14</option>
+                            <option value="Otros">💰 Otros</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label class="value-label">Concepto</label>
-                        <input id="eyDesc" type="text" placeholder="Ej. Regalía Empresa X" class="value-input" style="width:100%;">
+                    <div class="premium-form-group full-width">
+                        <label for="eyDesc">Concepto</label>
+                        <input id="eyDesc" type="text" placeholder="Ej. Regalía Empresa X" class="premium-input">
                     </div>
-                    <div class="form-group">
-                        <label class="value-label">Monto (RD$)</label>
-                        <input id="eyMonto" type="number" step="0.01" class="value-input" style="width:100%; font-size: 18px; font-weight: 800;">
+                    <div class="premium-form-group full-width">
+                        <label for="eyMonto">Monto (RD$)</label>
+                        <input id="eyMonto" type="number" step="0.01" class="premium-input premium-input-number" placeholder="0.00" required>
                     </div>
-                </div>
-                <!-- Campo oculto para index de edición -->
-                <input type="hidden" id="eyEditIndex" value="-1">
-                <div class="modal-actions">
-                    <button class="btn" onclick="closeModal('mEndYear')">Cancelar</button>
-                    <button class="btn primary" onclick="addPersonalEndYear()">Guardar Entrada</button>
-                </div>
+                    <input type="hidden" id="eyEditIndex" value="-1">
+                    <div class="premium-modal-footer" style="gap: 12px; padding: 0;">
+                        <button type="button" class="premium-btn-secondary" onclick="closeModal('mEndYear')">Cancelar</button>
+                        <button type="submit" class="premium-btn-primary">
+                            <i class="fa-solid fa-check"></i> Guardar Entrada
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
-        <div id="mSalary" class="overlay over-mPremium">
-            <div class="modal modal-salary">
-                <h4><i class="fa-solid fa-money-bill-trend-up"></i> Registrar Ingreso</h4>
-                <div class="modal-grid" style="grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="form-group">
-                        <label class="value-label">Tipo de Ingreso</label>
-                        <select id="salType" class="value-input" style="width:100%; height:38px;">
-                            <option value="Nomina">Nómina (Fijo)</option>
-                            <option value="Variable">Variable / Otros</option>
-                            <option value="Bono">Bono / Extra</option>
-                        </select>
+        <div id="mSalary" class="premium-modal-overlay">
+            <div class="premium-modal-container">
+                <button class="premium-modal-close" onclick="closeModal('mSalary')" aria-label="Cerrar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="premium-modal-header">
+                    <div class="premium-modal-icon" style="background: linear-gradient(135deg, rgba(125, 255, 184, 0.2), rgba(125, 255, 184, 0.1)); border-color: rgba(125, 255, 184, 0.3); color: #7dffb8;">
+                        <i class="fa-solid fa-money-bill-trend-up"></i>
                     </div>
-                    <div class="form-group">
-                        <label class="value-label">Día de Cobro (1-31)</label>
-                        <input id="salDay" type="number" min="1" max="31" class="value-input" style="width:100%;">
-                    </div>
-                    <div class="form-group" style="grid-column: 1 / -1;">
-                        <label class="value-label">Descripción</label>
-                        <input id="salDesc" type="text" placeholder="Ej. Sueldo Empresa X" class="value-input" style="width:100%;">
-                    </div>
-                    <div class="form-group" style="grid-column: 1 / -1;">
-                        <label class="value-label">Monto Mensual</label>
-                        <input id="salMonto" type="number" step="0.01" class="value-input" style="width:100%; font-size: 18px; font-weight: 800;">
-                    </div>
+                    <h3>Registrar Ingreso</h3>
+                    <p>Agrega tus fuentes de ingreso mensuales</p>
                 </div>
-                <div class="modal-actions">
-                    <button class="btn" onclick="closeModal('mSalary')">Cancelar</button>
-                    <button class="btn primary" onclick="addPersonalIncome()">Guardar Ingreso</button>
-                </div>
+                <form class="premium-modal-form" onsubmit="event.preventDefault(); addPersonalIncome();">
+                    <div class="premium-form-row">
+                        <div class="premium-form-group">
+                            <label for="salType">Tipo de Ingreso</label>
+                            <select id="salType" class="premium-input">
+                                <option value="Nomina">💼 Nómina (Fijo)</option>
+                                <option value="Variable">📈 Variable / Otros</option>
+                                <option value="Bono">🎁 Bono / Extra</option>
+                            </select>
+                        </div>
+                        <div class="premium-form-group">
+                            <label for="salDay">Día de Cobro (1-31)</label>
+                            <input id="salDay" type="number" min="1" max="31" class="premium-input" placeholder="15">
+                        </div>
+                    </div>
+                    <div class="premium-form-group full-width">
+                        <label for="salDesc">Descripción</label>
+                        <input id="salDesc" type="text" placeholder="Ej. Sueldo Empresa X" class="premium-input">
+                    </div>
+                    <div class="premium-form-group full-width">
+                        <label for="salMonto">Monto Mensual</label>
+                        <input id="salMonto" type="number" step="0.01" class="premium-input premium-input-number" placeholder="0.00" required>
+                    </div>
+                    <div class="premium-modal-footer" style="gap: 12px; padding: 0;">
+                        <button type="button" class="premium-btn-secondary" onclick="closeModal('mSalary')">Cancelar</button>
+                        <button type="submit" class="premium-btn-primary">
+                            <i class="fa-solid fa-check"></i> Guardar Ingreso
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
         <!-- Editor modal para items de Finanzas Personales -->
-        <div id="mEditItem" class="overlay over-mPremium">
-            <div class="modal" style="border-top: 5px solid #39d7ff; background: radial-gradient(circle at 0% 0%, rgba(57,215,255,0.18), rgba(6,18,38,0.95));">
-                <h4><i class="fa-solid fa-pen"></i> Editar Registro</h4>
-                <div class="modal-grid" style="grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <div class="form-group">
-                        <label class="value-label">Descripción</label>
-                        <input id="editItemDesc" type="text" class="value-input" style="width:100%;"/>
+        <div id="mEditItem" class="premium-modal-overlay">
+            <div class="premium-modal-container">
+                <button class="premium-modal-close" onclick="closeModal('mEditItem')" aria-label="Cerrar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="premium-modal-header">
+                    <div class="premium-modal-icon" style="background: linear-gradient(135deg, rgba(57, 215, 255, 0.2), rgba(57, 215, 255, 0.1)); border-color: rgba(57, 215, 255, 0.3); color: #39d7ff;">
+                        <i class="fa-solid fa-pen"></i>
                     </div>
-                    <div class="form-group">
-                        <label class="value-label">Monto</label>
-                        <input id="editItemMonto" type="number" step="0.01" class="value-input" style="width:100%;"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="value-label">Día del mes</label>
-                        <input id="editItemDay" type="number" min="1" max="31" class="value-input" style="width:100%;"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="value-label">Día del mes</label>
-                        <input id="editItemDay" type="number" min="1" max="31" class="value-input" style="width:100%;" />
-                    </div>
+                    <h3>Editar Registro</h3>
+                    <p>Modifica los datos del registro</p>
                 </div>
-                <input type="hidden" id="editItemCat" value=""/>
-                <input type="hidden" id="editItemIndex" value="-1"/>
-                <div class="modal-actions">
-                    <button class="btn" onclick="closeModal('mEditItem')">Cancelar</button>
-                    <button class="btn primary" onclick="saveEditItem()">Guardar</button>
-                </div>
+                <form class="premium-modal-form" onsubmit="event.preventDefault(); saveEditItem();">
+                    <div class="premium-form-group full-width">
+                        <label for="editItemDesc">Descripción</label>
+                        <input id="editItemDesc" type="text" class="premium-input" required>
+                    </div>
+                    <div class="premium-form-row">
+                        <div class="premium-form-group">
+                            <label for="editItemMonto">Monto</label>
+                            <input id="editItemMonto" type="number" step="0.01" class="premium-input premium-input-number" required>
+                        </div>
+                        <div class="premium-form-group">
+                            <label for="editItemDay">Día del mes</label>
+                            <input id="editItemDay" type="number" min="1" max="31" class="premium-input" required>
+                        </div>
+                    </div>
+                    <input type="hidden" id="editItemCat" value=""/>
+                    <input type="hidden" id="editItemIndex" value="-1"/>
+                    <div class="premium-modal-footer" style="gap: 12px; padding: 0;">
+                        <button type="button" class="premium-btn-secondary" onclick="closeModal('mEditItem')">Cancelar</button>
+                        <button type="submit" class="premium-btn-primary">
+                            <i class="fa-solid fa-check"></i> Guardar
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
-        <div id="mExpenses" class="overlay over-mPremium">
-            <div class="modal modal-expenses">
-                <h4><i class="fa-solid fa-receipt"></i> Gasto Fijo Detallado</h4>
-                <div class="modal-grid" style="gap: 15px;">
-                    <div class="form-group">
-                        <label class="value-label">Descripción del Gasto</label>
-                        <input id="expFijoDesc" type="text" placeholder="Ej. Alquiler, Luz, Internet" class="value-input" style="width:100%;">
+        <div id="mExpenses" class="premium-modal-overlay">
+            <div class="premium-modal-container">
+                <button class="premium-modal-close" onclick="closeModal('mExpenses')" aria-label="Cerrar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="premium-modal-header">
+                    <div class="premium-modal-icon" style="background: linear-gradient(135deg, rgba(255, 93, 93, 0.2), rgba(255, 93, 93, 0.1)); border-color: rgba(255, 93, 93, 0.3); color: #ff8f8f;">
+                        <i class="fa-solid fa-receipt"></i>
                     </div>
-                    <div class="form-group">
-                        <label class="value-label">Monto a Pagar</label>
-                        <input id="expFijoMonto" type="number" step="0.01" placeholder="0.00" class="value-input" style="width:100%; font-size: 18px; font-weight: 800;">
-                    </div>
-                    <div class="form-group">
-                        <label class="value-label">Día de vencimiento (1-31)</label>
-                        <input id="expFijoDay" type="number" min="1" max="31" class="value-input" style="width:100%;">
-                    </div>
+                    <h3>Gasto Fijo Detallado</h3>
+                    <p>Registra tus gastos fijos mensuales</p>
                 </div>
-                <div class="modal-actions">
-                    <button class="btn" onclick="closeModal('mExpenses')">Cancelar</button>
-                    <button class="btn primary" style="background: #ff5d5d;" onclick="addPersonalFixedExpense()">Registrar Gasto</button>
-                </div>
+                <form class="premium-modal-form" onsubmit="event.preventDefault(); addPersonalFixedExpense();">
+                    <div class="premium-form-group full-width">
+                        <label for="expFijoDesc">Descripción del Gasto</label>
+                        <input id="expFijoDesc" type="text" placeholder="Ej. Alquiler, Luz, Internet" class="premium-input">
+                    </div>
+                    <div class="premium-form-row">
+                        <div class="premium-form-group">
+                            <label for="expFijoMonto">Monto a Pagar</label>
+                            <input id="expFijoMonto" type="number" step="0.01" placeholder="0.00" class="premium-input premium-input-number" required>
+                        </div>
+                        <div class="premium-form-group">
+                            <label for="expFijoDay">Día de vencimiento (1-31)</label>
+                            <input id="expFijoDay" type="number" min="1" max="31" class="premium-input" placeholder="30">
+                        </div>
+                    </div>
+                    <div class="premium-modal-footer" style="gap: 12px; padding: 0;">
+                        <button type="button" class="premium-btn-secondary" onclick="closeModal('mExpenses')">Cancelar</button>
+                        <button type="submit" class="premium-btn-danger">
+                            <i class="fa-solid fa-check"></i> Registrar Gasto
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
-        <div id="mSavings" class="overlay over-mPremium">
-            <div class="modal modal-savings">
-                <h4><i class="fa-solid fa-piggy-bank"></i> Registro de Ahorro</h4>
-                <div class="modal-grid" style="gap: 15px;">
-                    <div class="form-group" style="grid-column: 1 / -1;">
-                        <label class="value-label">Tipo de Ahorro</label>
-                        <select id="savType" class="value-input" style="width:100%; height:38px;">
-                            <option value="Mensual">Mensual (Ahorro recurrente)</option>
-                            <option value="Anual">Anual (Meta a 12 meses)</option>
+        <div id="mSavings" class="premium-modal-overlay">
+            <div class="premium-modal-container">
+                <button class="premium-modal-close" onclick="closeModal('mSavings')" aria-label="Cerrar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="premium-modal-header">
+                    <div class="premium-modal-icon" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1)); border-color: rgba(255, 215, 0, 0.3); color: #ffd700;">
+                        <i class="fa-solid fa-piggy-bank"></i>
+                    </div>
+                    <h3>Registro de Ahorro</h3>
+                    <p>Configura tus metas de ahorro</p>
+                </div>
+                <form class="premium-modal-form" onsubmit="event.preventDefault(); addPersonalSaving();">
+                    <div class="premium-form-group full-width">
+                        <label for="savType">Tipo de Ahorro</label>
+                        <select id="savType" class="premium-input">
+                            <option value="Mensual">📅 Mensual (Ahorro recurrente)</option>
+                            <option value="Anual">🎯 Anual (Meta a 12 meses)</option>
                         </select>
                     </div>
-        <div class="form-group" style="grid-column: 1 / 2;">
-            <label class="value-label">Concepto o Meta</label>
-            <input id="savDesc" type="text" placeholder="Ej. Fondo de Emergencia" class="value-input" style="width:100%;">
-        </div>
-        <div class="form-group" style="grid-column: 2 / 3;">
-            <label class="value-label">Día del mes</label>
-            <input id="savDay" type="number" min="1" max="31" class="value-input" style="width:100%;" value="1">
-        </div>
-                    <div class="form-group">
-                        <label class="value-label">Monto a Ahorrar</label>
-                        <input id="savMonto" type="number" step="0.01" class="value-input" style="width:100%; font-size: 18px; font-weight: 800;" oninput="updateSavingsPercent()">
+                    <div class="premium-form-row">
+                        <div class="premium-form-group">
+                            <label for="savDesc">Concepto o Meta</label>
+                            <input id="savDesc" type="text" placeholder="Ej. Fondo de Emergencia" class="premium-input">
+                        </div>
+                        <div class="premium-form-group">
+                            <label for="savDay">Día del mes</label>
+                            <input id="savDay" type="number" min="1" max="31" class="premium-input" value="1">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label class="value-label">% del salario ahorrado</label>
-                        <input id="savPercentDisplay" type="text" class="value-input" style="width:100%; background:#0d1a33; color:#7dffb8;" readonly>
+                    <div class="premium-form-row">
+                        <div class="premium-form-group">
+                            <label for="savMonto">Monto a Ahorrar</label>
+                            <input id="savMonto" type="number" step="0.01" class="premium-input premium-input-number" placeholder="0.00" oninput="updateSavingsPercent()" required>
+                        </div>
+                        <div class="premium-form-group">
+                            <label for="savPercentDisplay">% del salario ahorrado</label>
+                            <input id="savPercentDisplay" type="text" class="premium-input" style="background: rgba(10, 26, 54, 0.8); color: #7dffb8; text-align: right; font-weight: 800;" readonly>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-actions">
-                    <button class="btn" onclick="closeModal('mSavings')">Cancelar</button>
-                    <button class="btn primary" style="background: #ffd700; color: #000;" onclick="addPersonalSaving()">Guardar Ahorro</button>
-                </div>
+                    <div class="premium-modal-footer" style="gap: 12px; padding: 0;">
+                        <button type="button" class="premium-btn-secondary" onclick="closeModal('mSavings')">Cancelar</button>
+                        <button type="submit" class="premium-btn-warning">
+                            <i class="fa-solid fa-check"></i> Guardar Ahorro
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
-        <div id="mBanks" class="overlay over-mPremium">
-            <div class="modal modal-banks">
-                <h4><i class="fa-solid fa-building-columns"></i> Cuenta Bancaria</h4>
-                <div class="modal-grid" style="gap: 15px;">
-                    <div class="form-group">
-                        <label class="value-label">Nombre del Banco</label>
-                        <input id="bankName" type="text" placeholder="Ej. Banreservas, BHD" class="value-input" style="width:100%;">
+        <div id="mBanks" class="premium-modal-overlay">
+            <div class="premium-modal-container">
+                <button class="premium-modal-close" onclick="closeModal('mBanks')" aria-label="Cerrar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="premium-modal-header">
+                    <div class="premium-modal-icon" style="background: linear-gradient(135deg, rgba(57, 215, 255, 0.2), rgba(57, 215, 255, 0.1)); border-color: rgba(57, 215, 255, 0.3); color: #39d7ff;">
+                        <i class="fa-solid fa-building-columns"></i>
                     </div>
-                    <div class="form-group">
-                        <label class="value-label">Tipo de Cuenta</label>
-                        <select id="bankType" class="value-input" style="width:100%; height:38px;">
-                            <option value="Ahorros">Cuenta de Ahorros</option>
-                            <option value="Corriente">Cuenta Corriente</option>
-                            <option value="Nomina">Cuenta de Nómina</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="value-label">Saldo Actual</label>
-                        <input id="bankBalance" type="number" step="0.01" placeholder="0.00" class="value-input" style="width:100%; font-size: 18px; font-weight: 800;">
-                    </div>
+                    <h3>Cuenta Bancaria</h3>
+                    <p>Agrega tus cuentas bancarias</p>
                 </div>
-                <div class="modal-actions">
-                    <button class="btn" onclick="closeModal('mBanks')">Cancelar</button>
-                    <button class="btn primary" style="background: #39d7ff; color: #061226;" onclick="addPersonalBank()">Añadir Cuenta</button>
-                </div>
+                <form class="premium-modal-form" onsubmit="event.preventDefault(); addPersonalBank();">
+                    <div class="premium-form-group full-width">
+                        <label for="bankName">Nombre del Banco</label>
+                        <input id="bankName" type="text" placeholder="Ej. Banreservas, BHD" class="premium-input">
+                    </div>
+                    <div class="premium-form-row">
+                        <div class="premium-form-group">
+                            <label for="bankType">Tipo de Cuenta</label>
+                            <select id="bankType" class="premium-input">
+                                <option value="Ahorros">🏦 Cuenta de Ahorros</option>
+                                <option value="Corriente">📊 Cuenta Corriente</option>
+                                <option value="Nomina">💳 Cuenta de Nómina</option>
+                            </select>
+                        </div>
+                        <div class="premium-form-group">
+                            <label for="bankBalance">Saldo Actual</label>
+                            <input id="bankBalance" type="number" step="0.01" placeholder="0.00" class="premium-input premium-input-number" required>
+                        </div>
+                    </div>
+                    <div class="premium-modal-footer" style="gap: 12px; padding: 0;">
+                        <button type="button" class="premium-btn-secondary" onclick="closeModal('mBanks')">Cancelar</button>
+                        <button type="submit" class="premium-btn-primary">
+                            <i class="fa-solid fa-plus"></i> Añadir Cuenta
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
-        <div id="mLoans" class="overlay over-mPremium">
-            <div class="modal modal-loans">
-                <h4><i class="fa-solid fa-credit-card"></i> Préstamo / Crédito</h4>
-                <div class="modal-grid" style="grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="form-group" style="grid-column: 1 / -1;">
-                        <label class="value-label">Entidad / Nombre del Préstamo</label>
-                        <input id="loanName" type="text" placeholder="Ej. Préstamo Vehículo Banco X" class="value-input" style="width:100%;">
+        <div id="mLoans" class="premium-modal-overlay">
+            <div class="premium-modal-container">
+                <button class="premium-modal-close" onclick="closeModal('mLoans')" aria-label="Cerrar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="premium-modal-header">
+                    <div class="premium-modal-icon" style="background: linear-gradient(135deg, rgba(255, 93, 93, 0.2), rgba(255, 93, 93, 0.1)); border-color: rgba(255, 93, 93, 0.3); color: #ff8f8f;">
+                        <i class="fa-solid fa-credit-card"></i>
                     </div>
-                    <div class="form-group">
-                        <label class="value-label">Monto Aprobado</label>
-                        <input id="loanApproved" type="number" step="0.01" placeholder="0.00" class="value-input" style="width:100%;">
-                    </div>
-                    <div class="form-group">
-                        <label class="value-label">Total Adeudado</label>
-                        <input id="loanOwed" type="number" step="0.01" placeholder="0.00" class="value-input" style="width:100%; font-size: 18px; font-weight: 800; color: #ff5d5d;">
-                    </div>
-                    <div class="form-group">
-                        <label class="value-label">Día de Corte</label>
-                        <input id="loanCut" type="number" min="1" max="31" placeholder="1-31" class="value-input" style="width:100%;">
-                    </div>
-                    <div class="form-group">
-                        <label class="value-label">Día Máx. de Pago</label>
-                        <input id="loanPay" type="number" min="1" max="31" placeholder="1-31" class="value-input" style="width:100%;">
-                    </div>
+                    <h3>Préstamo / Crédito</h3>
+                    <p>Registra tus préstamos y créditos</p>
                 </div>
-                <div class="modal-actions">
-                    <button class="btn" onclick="closeModal('mLoans')">Cancelar</button>
-                    <button class="btn primary" style="background: #ff5d5d;" onclick="addPersonalLoan()">Registrar Deuda</button>
-                </div>
+                <form class="premium-modal-form" onsubmit="event.preventDefault(); addPersonalLoan();">
+                    <div class="premium-form-group full-width">
+                        <label for="loanName">Entidad / Nombre del Préstamo</label>
+                        <input id="loanName" type="text" placeholder="Ej. Préstamo Vehículo Banco X" class="premium-input">
+                    </div>
+                    <div class="premium-form-row">
+                        <div class="premium-form-group">
+                            <label for="loanApproved">Monto Aprobado</label>
+                            <input id="loanApproved" type="number" step="0.01" placeholder="0.00" class="premium-input premium-input-number">
+                        </div>
+                        <div class="premium-form-group">
+                            <label for="loanOwed">Total Adeudado</label>
+                            <input id="loanOwed" type="number" step="0.01" placeholder="0.00" class="premium-input premium-input-number" style="color: #ff5d5d;">
+                        </div>
+                    </div>
+                    <div class="premium-form-row">
+                        <div class="premium-form-group">
+                            <label for="loanCut">Día de Corte</label>
+                            <input id="loanCut" type="number" min="1" max="31" placeholder="1-31" class="premium-input">
+                        </div>
+                        <div class="premium-form-group">
+                            <label for="loanPay">Día Máx. de Pago</label>
+                            <input id="loanPay" type="number" min="1" max="31" placeholder="1-31" class="premium-input">
+                        </div>
+                    </div>
+                    <div class="premium-modal-footer" style="gap: 12px; padding: 0;">
+                        <button type="button" class="premium-btn-secondary" onclick="closeModal('mLoans')">Cancelar</button>
+                        <button type="submit" class="premium-btn-danger">
+                            <i class="fa-solid fa-check"></i> Registrar Deuda
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
-        <div id="mInformal" class="overlay over-mPremium">
-            <div class="modal modal-informal">
-                <h4><i class="fa-solid fa-handshake"></i> Deuda Informal</h4>
-                <div class="modal-grid" style="gap: 15px;">
-                    <div class="form-group">
-                        <label class="value-label">Nombre del Acreedor</label>
-                        <input id="infName" type="text" placeholder="Ej. Juan Pérez" class="value-input" style="width:100%;">
+        <div id="mInformal" class="premium-modal-overlay">
+            <div class="premium-modal-container">
+                <button class="premium-modal-close" onclick="closeModal('mInformal')" aria-label="Cerrar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="premium-modal-header">
+                    <div class="premium-modal-icon" style="background: linear-gradient(135deg, rgba(189, 147, 249, 0.2), rgba(189, 147, 249, 0.1)); border-color: rgba(189, 147, 249, 0.3); color: #bd93f9;">
+                        <i class="fa-solid fa-handshake"></i>
                     </div>
-                    <div class="form-group">
-                        <label class="value-label">Motivo de la Deuda</label>
-                        <input id="infDesc" type="text" placeholder="Ej. Préstamo personal emergencia" class="value-input" style="width:100%;">
-                    </div>
-                    <div class="form-group">
-                        <label class="value-label">Monto Adeudado</label>
-                        <input id="infMonto" type="number" step="0.01" placeholder="0.00" class="value-input" style="width:100%; font-size: 18px; font-weight: 800; color: #bd93f9;">
-                    </div>
+                    <h3>Deuda Informal</h3>
+                    <p>Registra tus deudas con personas cercanas</p>
                 </div>
-                <div class="modal-actions">
-                    <button class="btn" onclick="closeModal('mInformal')">Cancelar</button>
-                    <button class="btn primary" style="background: #bd93f9;" onclick="addPersonalInformal()">Registrar Deuda</button>
-                </div>
+                <form class="premium-modal-form" onsubmit="event.preventDefault(); addPersonalInformal();">
+                    <div class="premium-form-group full-width">
+                        <label for="infName">Nombre del Acreedor</label>
+                        <input id="infName" type="text" placeholder="Ej. Juan Pérez" class="premium-input">
+                    </div>
+                    <div class="premium-form-group full-width">
+                        <label for="infDesc">Motivo de la Deuda</label>
+                        <input id="infDesc" type="text" placeholder="Ej. Préstamo personal emergencia" class="premium-input">
+                    </div>
+                    <div class="premium-form-group full-width">
+                        <label for="infMonto">Monto Adeudado</label>
+                        <input id="infMonto" type="number" step="0.01" placeholder="0.00" class="premium-input premium-input-number" style="color: #bd93f9;" required>
+                    </div>
+                    <div class="premium-modal-footer" style="gap: 12px; padding: 0;">
+                        <button type="button" class="premium-btn-secondary" onclick="closeModal('mInformal')">Cancelar</button>
+                        <button type="submit" class="premium-btn-purple">
+                            <i class="fa-solid fa-check"></i> Registrar Deuda
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -2584,32 +2803,76 @@
             </div>
         </div>
 
-    <div id="personalOverlay" class="overlay over-mPremium">
-        <div class="modal">
-            <h4><i class="fa-solid fa-user"></i> Gastos personales</h4>
-            <div class="modal-grid">
-                <input id="personalDesc" type="text" placeholder="Descripción">
-                <input id="personalMonto" type="number" step="0.01" placeholder="Monto">
-                <button class="btn primary" onclick="addPersonalGasto()">Agregar</button>
+    <div id="personalOverlay" class="premium-modal-overlay">
+        <div class="premium-modal-container">
+            <button class="premium-modal-close" onclick="closePersonalModal()" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="premium-modal-header">
+                <div class="premium-modal-icon" style="background: linear-gradient(135deg, rgba(57, 215, 255, 0.2), rgba(57, 215, 255, 0.1)); border-color: rgba(57, 215, 255, 0.3); color: #39d7ff;">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <h3>Gastos personales</h3>
+                <p>Registra tus gastos personales adicionales</p>
             </div>
-            <div id="personalModalList" class="egresos-empty">Sin gastos personales registrados.</div>
-            <div class="modal-actions">
-                <button class="btn" onclick="closePersonalModal()">Cerrar</button>
+            <form class="premium-modal-form" onsubmit="event.preventDefault(); addPersonalGasto();">
+                <div class="premium-form-row">
+                    <div class="premium-form-group">
+                        <label for="personalDesc">Descripción</label>
+                        <input id="personalDesc" type="text" placeholder="Ej. Comida, Transporte" class="premium-input" required>
+                    </div>
+                    <div class="premium-form-group">
+                        <label for="personalMonto">Monto</label>
+                        <input id="personalMonto" type="number" step="0.01" placeholder="0.00" class="premium-input premium-input-number" required>
+                    </div>
+                </div>
+                <button type="submit" class="premium-btn-primary" style="margin-top: 10px;">
+                    <i class="fa-solid fa-plus"></i> Agregar
+                </button>
+            </form>
+            <div class="premium-modal-content">
+                <h4>📋 Gastos registrados</h4>
+                <div id="personalModalList" class="premium-list">Sin gastos personales registrados.</div>
+            </div>
+            <div class="premium-modal-footer">
+                <button class="premium-btn-secondary" onclick="closePersonalModal()">Cerrar</button>
             </div>
         </div>
     </div>
 
-    <div id="manualAdsOverlay" class="overlay over-mPremium">
-        <div class="modal">
-            <h4><i class="fa-solid fa-bullhorn"></i> Gastos publicitarios manuales</h4>
-            <div class="modal-grid">
-                <input id="manualAdsDesc" type="text" placeholder="Descripción">
-                <input id="manualAdsMonto" type="number" step="0.01" placeholder="Monto">
-                <button class="btn primary" onclick="addManualAdsGasto()">Agregar</button>
+    <div id="manualAdsOverlay" class="premium-modal-overlay">
+        <div class="premium-modal-container">
+            <button class="premium-modal-close" onclick="closeManualAdsModal()" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="premium-modal-header">
+                <div class="premium-modal-icon" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1)); border-color: rgba(255, 215, 0, 0.3); color: #ffd700;">
+                    <i class="fa-solid fa-bullhorn"></i>
+                </div>
+                <h3>Gastos publicitarios manuales</h3>
+                <p>Registra gastos de publicidad no importados</p>
             </div>
-            <div id="manualAdsModalList" class="egresos-empty">Sin gastos publicitarios manuales.</div>
-            <div class="modal-actions">
-                <button class="btn" onclick="closeManualAdsModal()">Cerrar</button>
+            <form class="premium-modal-form" onsubmit="event.preventDefault(); addManualAdsGasto();">
+                <div class="premium-form-row">
+                    <div class="premium-form-group">
+                        <label for="manualAdsDesc">Descripción</label>
+                        <input id="manualAdsDesc" type="text" placeholder="Ej. Campaña Facebook" class="premium-input" required>
+                    </div>
+                    <div class="premium-form-group">
+                        <label for="manualAdsMonto">Monto</label>
+                        <input id="manualAdsMonto" type="number" step="0.01" placeholder="0.00" class="premium-input premium-input-number" required>
+                    </div>
+                </div>
+                <button type="submit" class="premium-btn-warning" style="margin-top: 10px;">
+                    <i class="fa-solid fa-plus"></i> Agregar
+                </button>
+            </form>
+            <div class="premium-modal-content">
+                <h4>📋 Gastos registrados</h4>
+                <div id="manualAdsModalList" class="premium-list">Sin gastos publicitarios manuales.</div>
+            </div>
+            <div class="premium-modal-footer">
+                <button class="premium-btn-secondary" onclick="closeManualAdsModal()">Cerrar</button>
             </div>
         </div>
     </div>
@@ -2672,25 +2935,469 @@
         </div>
     </div>
 
-    <div id="egresosOverlay" class="overlay over-mPremium">
-        <div class="modal">
-            <h4><i class="fa-solid fa-money-bill-wave"></i> Egresos manuales</h4>
-            <div class="modal-grid">
-                <select id="egresoTipo" class="value-input">
-                    <option value="Egresos">Egresos</option>
-                    <option value="Facebook ads">Facebook ads</option>
-                    <option value="Tik Tok ads">Tik Tok ads</option>
-                </select>
-                <input id="egresoDesc" type="text" placeholder="Descripción del egreso" class="value-input">
-                <input id="egresoMonto" type="number" step="0.01" placeholder="Monto" class="value-input">
-                <button class="btn primary" onclick="addEgresoManual()">Agregar</button>
+    <!-- Premium Egresos Modal -->
+    <div id="egresosOverlay" class="premium-modal-overlay">
+        <div class="premium-modal-container">
+            <button class="premium-modal-close" onclick="closeEgresosModal()" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="premium-modal-header">
+                <div class="premium-modal-icon">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                </div>
+                <h3>Egresos manuales</h3>
+                <p>Registra tus gastos operativos y costos del negocio</p>
             </div>
-            <div id="egresosModalList" class="egresos-empty">Sin egresos registrados.</div>
-            <div class="modal-actions">
-                <button class="btn" onclick="closeEgresosModal()">Cerrar</button>
+            <form class="premium-modal-form" onsubmit="event.preventDefault(); addEgresoManual();">
+                <div class="premium-form-row">
+                    <div class="premium-form-group">
+                        <label for="egresoTipo">Tipo de Egreso</label>
+                        <select id="egresoTipo" class="premium-input">
+                            <option value="Egresos">📊 Egresos</option>
+                            <option value="Facebook ads">📘 Facebook Ads</option>
+                            <option value="Tik Tok ads">🎵 TikTok Ads</option>
+                        </select>
+                    </div>
+                    <div class="premium-form-group">
+                        <label for="egresoMonto">Monto (RD$)</label>
+                        <input id="egresoMonto" type="number" step="0.01" placeholder="0.00" class="premium-input premium-input-number" required>
+                    </div>
+                </div>
+                <div class="premium-form-group full-width">
+                    <label for="egresoDesc">Descripción del egreso</label>
+                    <input id="egresoDesc" type="text" placeholder="Describe el egreso..." class="premium-input" required>
+                </div>
+                <button type="submit" class="premium-btn-primary" id="egresoSubmitBtn">
+                    <i class="fa-solid fa-plus"></i> Agregar Egreso
+                </button>
+            </form>
+            <div class="premium-modal-content">
+                <h4>📋 Egresos registrados</h4>
+                <div id="egresosModalList" class="premium-list">
+                    Sin egresos registrados.
+                </div>
+            </div>
+            <div class="premium-modal-footer">
+                <button class="premium-btn-secondary" onclick="closeEgresosModal()">Cerrar</button>
             </div>
         </div>
     </div>
+
+    <style>
+    /* Premium Modal Overlay */
+    .premium-modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(6, 18, 38, 0.85);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 10001;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    .premium-modal-overlay.active {
+        display: flex;
+        opacity: 1;
+    }
+    .premium-modal-overlay body.no-scroll {
+        overflow: hidden;
+    }
+
+    /* Premium Modal Container */
+    .premium-modal-container {
+        background: linear-gradient(145deg, rgba(20, 42, 87, 0.95), rgba(10, 26, 54, 0.98));
+        border: 1px solid rgba(57, 215, 255, 0.25);
+        border-radius: 16px;
+        width: 100%;
+        max-width: 480px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 
+            0 25px 50px rgba(0, 0, 0, 0.5),
+            0 0 0 1px rgba(57, 215, 255, 0.1),
+            0 0 40px rgba(57, 215, 255, 0.15);
+        transform: scale(0.9) translateY(20px);
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+    }
+    .premium-modal-overlay.active .premium-modal-container {
+        transform: scale(1) translateY(0);
+    }
+
+    /* Close Button */
+    .premium-modal-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #9fc2ff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        z-index: 10;
+    }
+    .premium-modal-close:hover {
+        background: rgba(255, 93, 93, 0.2);
+        border-color: rgba(255, 93, 93, 0.4);
+        color: #ff5d5d;
+        transform: rotate(90deg);
+    }
+
+    /* Modal Header */
+    .premium-modal-header {
+        text-align: center;
+        padding: 30px 30px 20px;
+        border-bottom: 1px solid rgba(57, 215, 255, 0.1);
+    }
+    .premium-modal-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, rgba(255, 93, 93, 0.2), rgba(255, 93, 93, 0.1));
+        border: 1px solid rgba(255, 93, 93, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+        font-size: 24px;
+        color: #ff8f8f;
+    }
+    .premium-modal-header h3 {
+        margin: 0 0 8px;
+        font-size: 22px;
+        font-weight: 800;
+        color: #ffffff;
+        letter-spacing: -0.5px;
+    }
+    .premium-modal-header p {
+        margin: 0;
+        font-size: 13px;
+        color: #9fc2ff;
+    }
+
+    /* Modal Form */
+    .premium-modal-form {
+        padding: 24px 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .premium-form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+    .premium-form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .premium-form-group.full-width {
+        grid-column: 1 / -1;
+    }
+    .premium-form-group label {
+        font-size: 12px;
+        font-weight: 700;
+        color: #9fc2ff;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .premium-input {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid rgba(159, 194, 255, 0.2);
+        background: rgba(10, 26, 54, 0.6);
+        color: #ffffff;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        outline: none;
+    }
+    .premium-input:focus {
+        border-color: #39d7ff;
+        box-shadow: 0 0 0 3px rgba(57, 215, 255, 0.15), 0 0 20px rgba(57, 215, 255, 0.1);
+        background: rgba(10, 26, 54, 0.8);
+    }
+    .premium-input::placeholder {
+        color: rgba(159, 194, 255, 0.4);
+    }
+    .premium-input-number {
+        font-size: 18px;
+        font-weight: 800;
+        text-align: right;
+        color: #7dffb8;
+    }
+    .premium-input:focus:invalid {
+        border-color: rgba(255, 93, 93, 0.5);
+        box-shadow: 0 0 0 3px rgba(255, 93, 93, 0.15);
+    }
+    .premium-input:valid:not(:placeholder-shown) {
+        border-color: rgba(125, 255, 184, 0.4);
+    }
+
+    /* Premium Buttons */
+    .premium-btn-primary {
+        width: 100%;
+        padding: 14px 24px;
+        border-radius: 12px;
+        border: none;
+        background: linear-gradient(135deg, #39d7ff, #0066cc);
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: 800;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 15px rgba(57, 215, 255, 0.3);
+    }
+    .premium-btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(57, 215, 255, 0.4);
+    }
+    .premium-btn-primary:active {
+        transform: translateY(0);
+    }
+    .premium-btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+    .premium-btn-primary.loading {
+        position: relative;
+        color: transparent;
+    }
+    .premium-btn-primary.loading::after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #ffffff;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .premium-btn-secondary {
+        padding: 12px 24px;
+        border-radius: 10px;
+        border: 1px solid rgba(159, 194, 255, 0.2);
+        background: transparent;
+        color: #9fc2ff;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .premium-btn-secondary:hover {
+        background: rgba(159, 194, 255, 0.1);
+        border-color: rgba(159, 194, 255, 0.4);
+        color: #ffffff;
+    }
+
+    .premium-btn-warning {
+        padding: 12px 24px;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(135deg, #ffd700, #ff9500);
+        color: #06243a;
+        font-size: 14px;
+        font-weight: 800;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    }
+    .premium-btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+    }
+
+    .premium-btn-purple {
+        padding: 12px 24px;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(135deg, #bd93f9, #8b5cf6);
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 800;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 15px rgba(189, 147, 249, 0.3);
+    }
+    .premium-btn-purple:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(189, 147, 249, 0.4);
+    }
+
+    /* Modal Content */
+    .premium-modal-content {
+        padding: 0 30px 20px;
+    }
+    .premium-modal-content h4 {
+        margin: 0 0 12px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #9fc2ff;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .premium-list {
+        background: rgba(10, 26, 54, 0.4);
+        border: 1px solid rgba(57, 215, 255, 0.1);
+        border-radius: 10px;
+        padding: 12px;
+        max-height: 180px;
+        overflow-y: auto;
+        font-size: 13px;
+        color: #cfe3ff;
+    }
+    .premium-list .egresos-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px dashed rgba(57, 215, 255, 0.1);
+    }
+    .premium-list .egresos-row:last-child {
+        border-bottom: none;
+    }
+    .premium-list .egresos-empty {
+        text-align: center;
+        color: #9fc2ff;
+        font-style: italic;
+        padding: 20px;
+    }
+
+    /* Modal Footer */
+    .premium-modal-footer {
+        padding: 20px 30px;
+        border-top: 1px solid rgba(57, 215, 255, 0.1);
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Responsive */
+    @media (max-width: 520px) {
+        .premium-form-row {
+            grid-template-columns: 1fr;
+        }
+        .premium-modal-container {
+            max-width: 100%;
+            margin: 10px;
+        }
+        .premium-modal-header {
+            padding: 24px 20px 16px;
+        }
+        .premium-modal-form {
+            padding: 20px;
+        }
+        .premium-modal-content {
+            padding: 0 20px 16px;
+        }
+        .premium-modal-footer {
+            padding: 16px 20px;
+        }
+    }
+    </style>
+
+    <script>
+    // Premium Modal Functions
+    function openEgresosModal() {
+        const overlay = document.getElementById('egresosOverlay');
+        overlay.classList.add('active');
+        document.body.classList.add('no-scroll');
+        renderEgresosLists();
+        
+        // Focus first input
+        setTimeout(() => {
+            document.getElementById('egresoDesc').focus();
+        }, 300);
+    }
+
+    function closeEgresosModal() {
+        const overlay = document.getElementById('egresosOverlay');
+        overlay.classList.remove('active');
+        document.body.classList.remove('no-scroll');
+    }
+
+    // ESC key support
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const egresosOverlay = document.getElementById('egresosOverlay');
+            if (egresosOverlay.classList.contains('active')) {
+                closeEgresosModal();
+            }
+        }
+    });
+
+    // Close on backdrop click
+    document.getElementById('egresosOverlay').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeEgresosModal();
+        }
+    });
+
+    // Loading state on submit
+    function addEgresoManual() {
+        const desc = document.getElementById('egresoDesc').value.trim();
+        const monto = parseMoney(document.getElementById('egresoMonto').value || 0);
+        
+        if (!desc) {
+            showAlert('Por favor ingresa una descripción', 'error');
+            return;
+        }
+        if (monto <= 0) {
+            showAlert('Por favor ingresa un monto válido', 'error');
+            return;
+        }
+        
+        const btn = document.getElementById('egresoSubmitBtn');
+        btn.classList.add('loading');
+        btn.disabled = true;
+        
+        setTimeout(() => {
+            const tipo = document.getElementById('egresoTipo').value;
+            const egreso = { tipo, desc, monto, fecha: getDominicanTime() };
+            appState.egresosManuales = appState.egresosManuales || [];
+            appState.egresosManuales.push(egreso);
+            saveState();
+            
+            document.getElementById('egresoDesc').value = '';
+            document.getElementById('egresoMonto').value = '';
+            
+            btn.classList.remove('loading');
+            btn.disabled = false;
+            
+            renderEgresosLists();
+            renderEgresosLists(); // Update main list too
+            
+            showAlert('Egreso agregado correctamente', 'success');
+        }, 500);
+    }
+    </script>
 
     <div id="alertOverlay" class="overlay" style="z-index: 9999;">
         <div class="modal" style="max-width: 400px; text-align: center;">
@@ -2702,6 +3409,51 @@
             </div>
         </div>
     </div>
+
+    <!-- Premium Confirm Modal -->
+    <div id="confirmOverlay" class="premium-modal-overlay">
+        <div class="premium-modal-container" style="max-width: 420px;">
+            <button class="premium-modal-close" onclick="closeConfirmModal()" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="premium-modal-header">
+                <div class="premium-modal-icon" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1)); border-color: rgba(255, 215, 0, 0.3); color: #ffd700;">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h3 id="confirmTitle">Confirmar acción</h3>
+                <p id="confirmMessage">¿Estás seguro de continuar?</p>
+            </div>
+            <div class="premium-modal-footer" style="gap: 12px; justify-content: center;">
+                <button class="premium-btn-secondary" onclick="closeConfirmModal()">Cancelar</button>
+                <button class="premium-btn-danger" id="confirmBtn" onclick="confirmAction()">
+                    <i class="fa-solid fa-check"></i> Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    .premium-btn-danger {
+        padding: 12px 24px;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(135deg, #ff5d5d, #cc0000);
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 15px rgba(255, 93, 93, 0.3);
+    }
+    .premium-btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 93, 93, 0.4);
+    }
+    </style>
 
         <script>
         function showAlert(message, type = 'warning') {
@@ -2724,9 +3476,51 @@
                 title.innerText = 'Advertencia';
                 icon.style.color = '#ffd700';
             }
-            
+
             overlay.classList.add('active');
+            document.body.classList.add('no-scroll');
         }
+
+        // Premium Confirm Modal Functions
+        let confirmCallback = null;
+
+        function showConfirmModal(title, message, callback) {
+            document.getElementById('confirmTitle').innerText = title;
+            document.getElementById('confirmMessage').innerText = message;
+            confirmCallback = callback;
+            document.getElementById('confirmOverlay').classList.add('active');
+            document.body.classList.add('no-scroll');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmOverlay').classList.remove('active');
+            document.body.classList.remove('no-scroll');
+            confirmCallback = null;
+        }
+
+        function confirmAction() {
+            if (confirmCallback) {
+                confirmCallback();
+            }
+            closeConfirmModal();
+        }
+
+        // ESC key support for confirm modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const confirmOverlay = document.getElementById('confirmOverlay');
+                if (confirmOverlay.classList.contains('active')) {
+                    closeConfirmModal();
+                }
+            }
+        });
+
+        // Close on backdrop click
+        document.getElementById('confirmOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeConfirmModal();
+            }
+        });
 
         function isAdminUser() {
             return sessionStorage.getItem('is_admin') === 'true';
@@ -4664,11 +5458,13 @@ function processScheduledSavings() {
             let total = 0;
             deudores.forEach((d, i) => {
                 total += Number(d.monto);
-                html += `<div class="credit-row" style="padding: 6px 8px; font-size: 11px;">
-                    <span class="credit-name" style="font-size: 11px;">${d.nombre}</span>
-                    <span style="color:#cfe3ff;font-size:10px;">${d.desc}</span>
-                    <span style="color:#ffb3b3;font-weight:800;font-size:11px;">${formatRD(d.monto)}</span>
-                    <button onclick="deleteDeudor(${i})" style="background: #7dffb8; border: none; border-radius: 4px; color: #003300; cursor: pointer; padding: 2px 8px; font-size: 10px; font-weight: 700;">✓</button>
+                html += `<div class="deudor-item">
+                    <span class="nombre">${d.nombre}</span>
+                    <span class="desc">${d.desc || '-'}</span>
+                    <span class="monto">${formatRD(d.monto)}</span>
+                    <button class="btn-delete" onclick="deleteDeudor(${i})" title="Marcar como pagado">
+                        <i class="fa-solid fa-check"></i>
+                    </button>
                 </div>`;
             });
             
@@ -4758,52 +5554,56 @@ function processScheduledSavings() {
         }
 
         function clearAllFiles() {
-            if (!confirm('¿Seguro que deseas limpiar todos los archivos cargados y sus cálculos? Esta acción es irreversible.')) return;
-            
-            appState.files = {};
-            appState.ads = { facebookUSD: 0, tiktokUSD: 0 };
-            
-            document.getElementById('fileTransporte').value = '';
-            document.getElementById('fileEffi').value = '';
-            document.getElementById('fileFacebook').value = '';
-            document.getElementById('fileTiktok').value = '';
-            
-            effiTotals.compra = 0;
-            effiTotals.fleteCon = 0;
-            effiTotals.fleteDev = 0;
-            effiTotals.fleteSin = 0;
-            effiTotals.recaudo = 0;
-            effiTotals.fulfillment = 0;
-            effiTotals.retiro = 0;
-            effiTotals.comisionRetiro = 0;
-            effiTotals.indemnizacion = 0;
-            effiTotals.debitoRevertido = 0;
-            
-            transporteTotals.generada = 0;
-            transporteTotals.devolucion = 0;
-            transporteTotals.transito = 0;
-            transporteTotals.entregada = 0;
-            transporteTotals.reparto = 0;
-            transporteTotals.novedad = 0;
-            transporteTotals.totalOrdenes = 0;
-            
-            document.getElementById('stGenerada').innerText = '0';
-            document.getElementById('stDevolucionOrigen').innerText = '0';
-            document.getElementById('stEnTransito').innerText = '0';
-            document.getElementById('stEntregadaDestino').innerText = '0';
-            document.getElementById('stEnReparto').innerText = '0';
-            document.getElementById('stNovedad').innerText = '0';
-            document.getElementById('stTotalOrdenes').innerText = '0';
-            
-            updateAdsReportCard();
-            updateResultadoOperativoCard();
-            updateResumenPremium();
-            updateRestaCard();
-            restoreStatusLabels();
-            
-            saveState();
-            
-            showAlert('Todos los reportes y archivos han sido limpiados exitosamente.', 'success');
+            showConfirmModal(
+                '🗑️ Limpiar Archivos',
+                '¿Seguro que deseas limpiar todos los archivos cargados y sus cálculos? Esta acción es irreversible.',
+                () => {
+                    appState.files = {};
+                    appState.ads = { facebookUSD: 0, tiktokUSD: 0 };
+                    
+                    document.getElementById('fileTransporte').value = '';
+                    document.getElementById('fileEffi').value = '';
+                    document.getElementById('fileFacebook').value = '';
+                    document.getElementById('fileTiktok').value = '';
+                    
+                    effiTotals.compra = 0;
+                    effiTotals.fleteCon = 0;
+                    effiTotals.fleteDev = 0;
+                    effiTotals.fleteSin = 0;
+                    effiTotals.recaudo = 0;
+                    effiTotals.fulfillment = 0;
+                    effiTotals.retiro = 0;
+                    effiTotals.comisionRetiro = 0;
+                    effiTotals.indemnizacion = 0;
+                    effiTotals.debitoRevertido = 0;
+                    
+                    transporteTotals.generada = 0;
+                    transporteTotals.devolucion = 0;
+                    transporteTotals.transito = 0;
+                    transporteTotals.entregada = 0;
+                    transporteTotals.reparto = 0;
+                    transporteTotals.novedad = 0;
+                    transporteTotals.totalOrdenes = 0;
+                    
+                    document.getElementById('stGenerada').innerText = '0';
+                    document.getElementById('stDevolucionOrigen').innerText = '0';
+                    document.getElementById('stEnTransito').innerText = '0';
+                    document.getElementById('stEntregadaDestino').innerText = '0';
+                    document.getElementById('stEnReparto').innerText = '0';
+                    document.getElementById('stNovedad').innerText = '0';
+                    document.getElementById('stTotalOrdenes').innerText = '0';
+                    
+                    updateAdsReportCard();
+                    updateResultadoOperativoCard();
+                    updateResumenPremium();
+                    updateRestaCard();
+                    restoreStatusLabels();
+                    
+                    saveState();
+                    
+                    showAlert('Todos los reportes y archivos han sido limpiados exitosamente.', 'success');
+                }
+            );
         }
 
         function exportData() {
@@ -4967,9 +5767,25 @@ function processScheduledSavings() {
         function extractDevolucionAOrigenFromTransporteBuffer(arrayBuffer) {
             try {
                 const data = new Uint8Array(arrayBuffer);
-                const wb = XLSX.read(data, { type: 'array' });
-                const ws = wb.Sheets[wb.SheetNames[0]];
-                const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+                const workbook = new ExcelJS.Workbook();
+                workbook.xlsx.load(data);
+                const ws = workbook.getWorksheet(1);
+                // Get headers from first row
+                const headerRow = ws.getRow(1);
+                const headers = [];
+                headerRow.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+                    headers.push(cell.value ? String(cell.value).trim() : '');
+                });
+                const rows = [];
+                // Start from row 2 (skip header)
+                ws.eachRow({ includeEmpty: true, rowStart: 2 }, (row, rowNumber) => {
+                    const rowData = {};
+                    row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+                        const header = headers[colNumber - 1] || '';
+                        rowData[header] = cell.value !== null && cell.value !== undefined ? cell.value : '';
+                    });
+                    rows.push(rowData);
+                });
 
                 let countGenerada = 0;
                 let countTransito = 0;
@@ -5033,17 +5849,51 @@ function processScheduledSavings() {
                 // El archivo Effi viene como HTML .xls, lo leemos en latin1 para no perder acentos
                 const rawText = new TextDecoder('iso-8859-1').decode(new Uint8Array(arrayBuffer));
                 const normalizedText = rawText.replace(/>([-]?\d+),(\d{2})<\/td>/g, '>$1.$2</td>');
-
-                const wb = XLSX.read(normalizedText, { type: 'string' });
-                
+ 
+                const workbook = new ExcelJS.Workbook();
+                workbook.xlsx.load(normalizedText);
+                 
                 // Intentar con Sheet1 primero, luego Sheet2 si está vacío
-                let ws = wb.Sheets[wb.SheetNames[0]];
-                let rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
-                
+                let ws = workbook.getWorksheet(1);
+                // Get headers from first row
+                const headerRow = ws.getRow(1);
+                const headers = [];
+                headerRow.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+                    headers.push(cell.value ? String(cell.value).trim() : '');
+                });
+                const rows = [];
+                // Start from row 2 (skip header)
+                ws.eachRow({ includeEmpty: true, rowStart: 2 }, (row, rowNumber) => {
+                    const rowData = {};
+                    row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+                        const header = headers[colNumber - 1] || '';
+                        rowData[header] = cell.value !== null && cell.value !== undefined ? cell.value : '';
+                    });
+                    rows.push(rowData);
+                });
+                 
                 // Si Sheet1 está vacío, probar Sheet2
-                if (rows.length === 0 && wb.SheetNames.length > 1) {
-                    ws = wb.Sheets[wb.SheetNames[1]];
-                    rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+                if (rows.length === 0 && workbook.worksheetCount > 1) {
+                    ws = workbook.getWorksheet(2);
+                    // Get headers from first row
+                    const headerRow2 = ws.getRow(1);
+                    const headers2 = [];
+                    headerRow2.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+                        headers2.push(cell.value ? String(cell.value).trim() : '');
+                    });
+                    const rows2 = [];
+                    // Start from row 2 (skip header)
+                    ws.eachRow({ includeEmpty: true, rowStart: 2 }, (row, rowNumber) => {
+                        const rowData = {};
+                        row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+                            const header = headers2[colNumber - 1] || '';
+                            rowData[header] = cell.value !== null && cell.value !== undefined ? cell.value : '';
+                        });
+                        rows2.push(rowData);
+                    });
+                    // Replace rows with rows2
+                    rows.length = 0;
+                    rows2.forEach(r => rows.push(r));
                 }
                 
                 console.log('Total filas:', rows.length);
@@ -5148,9 +5998,18 @@ function processScheduledSavings() {
         function extractAdsSpentFromBuffer(arrayBuffer, platform) {
             try {
                 const data = new Uint8Array(arrayBuffer);
-                const wb = XLSX.read(data, { type: 'array' });
-                const ws = wb.Sheets[wb.SheetNames[0]];
-                const aoa = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+                const workbook = new ExcelJS.Workbook();
+                workbook.xlsx.load(data);
+                const ws = workbook.getWorksheet(1);
+                
+                const aoa = [];
+                ws.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+                    const rowArray = [];
+                    row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+                        rowArray.push(cell.value !== null && cell.value !== undefined ? cell.value : '');
+                    });
+                    aoa.push(rowArray);
+                });
 
                 let headerRowIndex = -1;
                 let campaignColIndex = -1;
