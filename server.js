@@ -30,6 +30,7 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use('/src', express.static(path.join(__dirname, 'src')));
+app.use('/uploads', express.static(UPLOADS_DIR));
 app.use(express.static(__dirname));
 
 /* ── RUTAS ESTÁTICAS ────────────────────────────────────────────────── */
@@ -50,7 +51,7 @@ app.post('/chat', async (req, res) => {
         'Usa texto plano con saltos de línea, sin markdown con asteriscos ni almohadillas.';
 
     if (context && typeof context === 'object') {
-        const fmt = (n) => 'RD$ ' + Number(n || 0).toLocaleString('es-DO', { minimumFractionDigits: 2 });
+        const fmt = (n) => 'RD$ ' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         const c = context;
         systemPrompt += '\n\n--- DATOS FINANCIEROS ACTUALES ---';
         if (c.salarios !== undefined) {
@@ -175,7 +176,7 @@ app.post('/chat', async (req, res) => {
 function buildOfflineResponse(message, ctx) {
     const n  = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const msg = n(message);
-    const fmt = v => 'RD$ ' + Number(v || 0).toLocaleString('es-DO', { minimumFractionDigits: 2 });
+    const fmt = v => 'RD$ ' + Number(v || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const pct = (a, b) => b > 0 ? ((a / b) * 100).toFixed(2) + '%' : '0.00%';
     const sign = v => v >= 0 ? '✅' : '⚠️';
     const has  = (...words) => words.some(w => msg.includes(n(w)));
@@ -548,7 +549,14 @@ app.get('/api/state', (req, res) => {
 /* ── ARCHIVOS ───────────────────────────────────────────────────────── */
 const storage = multer.diskStorage({
     destination: UPLOADS_DIR,
-    filename: (_req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
+    filename: (_req, file, cb) => {
+        let safeName = file.originalname || 'upload.bin';
+        // Convertir posibles problemas de codificación de UTF-8 leídos como latin1
+        try { safeName = Buffer.from(safeName, 'latin1').toString('utf8'); } catch(e){}
+        // Remover acentos y dejar solo caracteres seguros para URLs y Windows
+        safeName = safeName.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9.-]/g, '_');
+        cb(null, Date.now() + '-' + safeName);
+    }
 });
 const upload = multer({ storage });
 
