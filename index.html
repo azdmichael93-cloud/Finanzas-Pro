@@ -1582,11 +1582,12 @@
                 <div class="status-dual">
                     <div class="status-card">
                         <h4>Estados de guías</h4>
-                        <div class="status-row"><span>Devolución a origen</span><span id="stDevolucionOrigen" style="color: #ff8f8f;">--</span></div>
+                        <div class="status-row"><span>Generada</span><span id="stGenerada" style="color: #c9c9c9;">--</span></div>
                         <div class="status-row"><span>En transito</span><span id="stEnTransito" style="color: #ffd700;">--</span></div>
-                        <div class="status-row"><span>Entregada a destino</span><span id="stEntregadaDestino" style="color: #7dffb8;">--</span></div>
                         <div class="status-row"><span>En reparto</span><span id="stEnReparto" style="color: #39d7ff;">--</span></div>
+                        <div class="status-row"><span>Entregada a destino</span><span id="stEntregadaDestino" style="color: #7dffb8;">--</span></div>
                         <div class="status-row"><span>Novedad</span><span id="stNovedad" style="color: #ffb3b3;">--</span></div>
+                        <div class="status-row"><span>Devolución a origen</span><span id="stDevolucionOrigen" style="color: #ff8f8f;">--</span></div>
                         <div class="status-row" style="border-top: 1px solid #2f5da9; margin-top: 8px; padding-top: 12px; border-bottom: none;"><span style="font-weight: 800; color: #fff;">Total de ordenes</span><span id="stTotalOrdenes" style="font-weight: 800; color: #ffffff;">--</span></div>
                     </div>
 
@@ -1611,12 +1612,12 @@
                             <div class="result-row"><span>Recaudo de venta</span><span id="rsRecaudo">RD$ 0,00</span></div>
                             <div class="result-row"><span>Débito revertido + Indemnización</span><span id="rsOtrosIngresos">RD$ 0,00</span></div>
                             <div class="result-row"><span>Total costos (Compra + Fletes + Fulfillment)</span><span id="rsCostos">RD$ 0,00</span></div>
-                            <div class="result-total"><span>Resultado neto</span><span id="rsNeto">RD$ 0,00</span></div>
+                                <div class="result-total"><span>Ganancias segun Effi</span><span id="rsNeto">RD$ 0,00</span></div>
                         </div>
                         <div style="background: rgba(10, 26, 54, 0.5); border-radius: 12px; padding: 15px; border: 1px solid rgba(47, 93, 169, 0.3);">
                             <h4 style="margin: 0 0 10px; color: #39d7ff;">Pendiente por depositar</h4>
                             <div class="result-row"><span>Retiro de dinero cuenta</span><span id="rsRetiro">RD$ 0,00</span></div>
-                            <div class="result-row"><span>Resultado neto</span><span id="rsNetoDep">RD$ 0,00</span></div>
+                                <div class="result-row"><span>Ganancias segun Effi</span><span id="rsNetoDep">RD$ 0,00</span></div>
                             <div class="result-total" style="background: #39d7ff; color: #06243a;"><span>Diferencia</span><span id="rsDiffDep">RD$ 0,00</span></div>
                         </div>
                     </div>
@@ -1676,11 +1677,11 @@
 
                         <div class="resta-card">
                             <div class="resta-title">Descuento sobre resultado neto</div>
-                            <div class="resta-row"><span>Resultado neto</span><span id="rtNetoBase">RD$ 0,00</span></div>
+                                <div class="resta-row"><span>Retiro de dinero</span><span id="rtNetoBase">RD$ 0,00</span></div>
                             <div class="resta-row"><span>Menos Egresos</span><span id="rtEgresos">RD$ 0,00</span></div>
                             <div class="resta-row"><span>Menos Facebook</span><span id="rtFacebook">RD$ 0,00</span></div>
                             <div class="resta-row"><span>Menos Tiktok</span><span id="rtTiktok">RD$ 0,00</span></div>
-                            <div class="resta-final"><span>Resultado final</span><span id="rtFinal">RD$ 0,00</span></div>
+                                <div class="resta-final"><span>GANANCIAS A RECOGER</span><span id="rtFinal">RD$ 0,00</span></div>
                         </div>
 
                         <div class="split-card">
@@ -1742,7 +1743,10 @@
                 </div>
 
                 <div class="status-panel">
-                    <div class="status-panel-title">Estado de archivos cargados</div>
+                    <div class="status-panel-title" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>Estado de archivos cargados</span>
+                        <button class="gastos-btn" style="background: #e74c3c; border-color: #e74c3c; padding: 4px 10px; font-size: 11px; margin: 0;" onclick="clearAllFiles()" title="Limpiar todos los reportes importados">Limpiar Todo</button>
+                    </div>
                     <div class="status-item">
                         <span>Guías</span>
                         <span id="stTransporte" class="empty">Ningún archivo seleccionado</span>
@@ -2645,11 +2649,11 @@
 
                 <div class="report-print-block">
                     <div class="resta-title">Descuento sobre resultado neto</div>
-                    <div class="resta-row"><span>Resultado neto</span><span id="prNetoBase">RD$ 0,00</span></div>
+                        <div class="resta-row"><span>Retiro de dinero</span><span id="prNetoBase">RD$ 0,00</span></div>
                     <div class="resta-row"><span>Menos Egresos</span><span id="prRtEgresos">RD$ 0,00</span></div>
                     <div class="resta-row"><span>Menos Facebook</span><span id="prRtFacebook">RD$ 0,00</span></div>
                     <div class="resta-row"><span>Menos Tiktok</span><span id="prRtTiktok">RD$ 0,00</span></div>
-                    <div class="resta-final"><span>Resultado final</span><span id="prRtFinal">RD$ 0,00</span></div>
+                        <div class="resta-final"><span>GANANCIAS A RECOGER</span><span id="prRtFinal">RD$ 0,00</span></div>
                 </div>
 
                 <div class="report-print-block" style="border-color: rgba(67, 182, 127, 0.7);">
@@ -3129,6 +3133,7 @@
             debitoRevertido: 0
         };
         const transporteTotals = {
+            generada: 0,
             devolucion: 0,
             transito: 0,
             entregada: 0,
@@ -3218,7 +3223,7 @@
         }
 
         function updateRestaCard() {
-            const base = Number(dashboardTotals.netoOperativo || 0);
+            const base = Number(effiTotals.retiro || 0);
             const egresosEgresos = getEgresosManualTotal('Egresos');
             const adsTotals = getAdsReportTotals();
             const facebook = adsTotals.facebookRD;
@@ -3239,10 +3244,10 @@
             document.getElementById('rtEgresos').innerText = formatRD(egresosEgresos);
             document.getElementById('rtFacebook').innerText = formatRD(facebook);
             document.getElementById('rtTiktok').innerText = formatRD(tiktok);
-            document.getElementById('rtFinal').innerText = formatRD(final);
-            document.getElementById('rtFinal').style.color = final >= 0 ? '#003300' : '#8b0000';
+            document.getElementById('rtFinal').innerText = final < 0 ? '' : formatRD(final);
+            document.getElementById('rtFinal').style.color = '#003300'; // Solo verde si es positivo
 
-            const mitad = final / 2;
+            const mitad = final < 0 ? 0 : (final / 2);
             dashboardTotals.alcedoShare = mitad;
             document.getElementById('spPersona1').innerText = formatRD(mitad);
             document.getElementById('spPersona2').innerText = formatRD(mitad);
@@ -3385,9 +3390,9 @@
             const adsTotals = getAdsReportTotals();
             const egresosFacebook = adsTotals.facebookRD;
             const egresosTiktok = adsTotals.tiktokRD;
-            const base = Number(dashboardTotals.netoOperativo || 0);
+            const base = Number(effiTotals.retiro || 0);
             const final = base - egresosEgresos - egresosFacebook - egresosTiktok;
-            const mitad = final / 2;
+            const mitad = final < 0 ? 0 : (final / 2);
 
             const generatedAt = document.getElementById('prGeneratedAt');
             if (generatedAt) generatedAt.innerText = `Generado: ${getDominicanTime()}`;
@@ -3398,7 +3403,7 @@
             document.getElementById('prRtEgresos').innerText = formatRD(egresosEgresos);
             document.getElementById('prRtFacebook').innerText = formatRD(egresosFacebook);
             document.getElementById('prRtTiktok').innerText = formatRD(egresosTiktok);
-            document.getElementById('prRtFinal').innerText = formatRD(final);
+            document.getElementById('prRtFinal').innerText = final < 0 ? '' : formatRD(final);
             document.getElementById('prPersona1').innerText = formatRD(mitad);
             document.getElementById('prPersona2').innerText = formatRD(mitad);
 
@@ -3463,11 +3468,11 @@
                 <div class="card"><div class="title">Detalle de egresos manuales</div>${document.getElementById('prEgresosList').innerHTML}</div>
                 <div class="card">
                     <div class="title">Descuento sobre resultado neto</div>
-                    <div class="row"><span>Resultado neto</span><span>${document.getElementById('prNetoBase').innerText}</span></div>
+                    <div class="row"><span>Retiro de dinero</span><span>${document.getElementById('prNetoBase').innerText}</span></div>
                     <div class="row"><span>Menos Egresos</span><span>${document.getElementById('prRtEgresos').innerText}</span></div>
                     <div class="row"><span>Menos Facebook</span><span>${document.getElementById('prRtFacebook').innerText}</span></div>
                     <div class="row"><span>Menos Tiktok</span><span>${document.getElementById('prRtTiktok').innerText}</span></div>
-                    <div class="final"><span>Resultado final</span><span>${document.getElementById('prRtFinal').innerText}</span></div>
+                    <div class="final"><span>GANANCIAS A RECOGER</span><span>${document.getElementById('prRtFinal').innerText}</span></div>
                 </div>
                 <div class="card"><div class="title">Ganancias a repartir</div><div class="split">
                     <div class="mini"><div class="k">Alcedo</div><div class="v">${document.getElementById('prPersona1').innerText}</div></div>
@@ -4732,23 +4737,73 @@ function processScheduledSavings() {
         }
 
         function restoreStatusLabels() {
-            const files = appState.files;
-            if (files.transporte) {
-                document.getElementById('stTransporte').innerText = files.transporte.name;
-                document.getElementById('stTransporte').className = 'filename';
-            }
-            if (files.effi) {
-                document.getElementById('stEffi').innerText = files.effi.name;
-                document.getElementById('stEffi').className = 'filename';
-            }
-            if (files.facebook) {
-                document.getElementById('stFacebook').innerText = files.facebook.name;
-                document.getElementById('stFacebook').className = 'filename';
-            }
-            if (files.tiktok) {
-                document.getElementById('stTiktok').innerText = files.tiktok.name;
-                document.getElementById('stTiktok').className = 'filename';
-            }
+            const files = appState.files || {};
+            
+            const updateLabel = (id, fileObj) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (fileObj && fileObj.name) {
+                    el.innerText = fileObj.name;
+                    el.className = 'filename';
+                } else {
+                    el.innerText = 'Ningún archivo seleccionado';
+                    el.className = 'empty';
+                }
+            };
+
+            updateLabel('stTransporte', files.transporte);
+            updateLabel('stEffi', files.effi);
+            updateLabel('stFacebook', files.facebook);
+            updateLabel('stTiktok', files.tiktok);
+        }
+
+        function clearAllFiles() {
+            if (!confirm('¿Seguro que deseas limpiar todos los archivos cargados y sus cálculos? Esta acción es irreversible.')) return;
+            
+            appState.files = {};
+            appState.ads = { facebookUSD: 0, tiktokUSD: 0 };
+            
+            document.getElementById('fileTransporte').value = '';
+            document.getElementById('fileEffi').value = '';
+            document.getElementById('fileFacebook').value = '';
+            document.getElementById('fileTiktok').value = '';
+            
+            effiTotals.compra = 0;
+            effiTotals.fleteCon = 0;
+            effiTotals.fleteDev = 0;
+            effiTotals.fleteSin = 0;
+            effiTotals.recaudo = 0;
+            effiTotals.fulfillment = 0;
+            effiTotals.retiro = 0;
+            effiTotals.comisionRetiro = 0;
+            effiTotals.indemnizacion = 0;
+            effiTotals.debitoRevertido = 0;
+            
+            transporteTotals.generada = 0;
+            transporteTotals.devolucion = 0;
+            transporteTotals.transito = 0;
+            transporteTotals.entregada = 0;
+            transporteTotals.reparto = 0;
+            transporteTotals.novedad = 0;
+            transporteTotals.totalOrdenes = 0;
+            
+            document.getElementById('stGenerada').innerText = '0';
+            document.getElementById('stDevolucionOrigen').innerText = '0';
+            document.getElementById('stEnTransito').innerText = '0';
+            document.getElementById('stEntregadaDestino').innerText = '0';
+            document.getElementById('stEnReparto').innerText = '0';
+            document.getElementById('stNovedad').innerText = '0';
+            document.getElementById('stTotalOrdenes').innerText = '0';
+            
+            updateAdsReportCard();
+            updateResultadoOperativoCard();
+            updateResumenPremium();
+            updateRestaCard();
+            restoreStatusLabels();
+            
+            saveState();
+            
+            showAlert('Todos los reportes y archivos han sido limpiados exitosamente.', 'success');
         }
 
         function exportData() {
@@ -4916,29 +4971,33 @@ function processScheduledSavings() {
                 const ws = wb.Sheets[wb.SheetNames[0]];
                 const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
 
-                let count = 0;
+                let countGenerada = 0;
                 let countTransito = 0;
-                let countEntregada = 0;
                 let countReparto = 0;
+                let countEntregada = 0;
                 let countNovedad = 0;
+                let count = 0; // Devolucion
                 let totalOrdenes = 0;
                 rows.forEach((row) => {
                     const estado = normalizeText(row['Estado global guía inicial'] || '');
                     if (estado) totalOrdenes += 1;
-                    if (estado.includes('devolucion a origen')) count += 1;
+                    if (estado.includes('generada') || estado.includes('generado')) countGenerada += 1;
                     if (estado.includes('en transito') || estado.includes('transito')) countTransito += 1;
                     if (estado.includes('entregada a destino') || estado.includes('entregad')) countEntregada += 1;
                     if (estado.includes('en reparto') || estado.includes('reparto')) countReparto += 1;
                     if (estado.includes('novedad')) countNovedad += 1;
+                    if (estado.includes('devolucion a origen') || estado.includes('devolucion')) count += 1;
                 });
 
-                document.getElementById('stDevolucionOrigen').innerText = String(count);
+                document.getElementById('stGenerada').innerText = String(countGenerada);
                 document.getElementById('stEnTransito').innerText = String(countTransito);
-                document.getElementById('stEntregadaDestino').innerText = String(countEntregada);
                 document.getElementById('stEnReparto').innerText = String(countReparto);
+                document.getElementById('stEntregadaDestino').innerText = String(countEntregada);
                 document.getElementById('stNovedad').innerText = String(countNovedad);
+                document.getElementById('stDevolucionOrigen').innerText = String(count);
                 document.getElementById('stTotalOrdenes').innerText = String(totalOrdenes);
 
+                transporteTotals.generada = countGenerada;
                 transporteTotals.devolucion = count;
                 transporteTotals.transito = countTransito;
                 transporteTotals.entregada = countEntregada;
@@ -4948,11 +5007,12 @@ function processScheduledSavings() {
 
                 updateResumenPremium();
             } catch (_) {
-                document.getElementById('stDevolucionOrigen').innerText = 'error';
+                document.getElementById('stGenerada').innerText = 'error';
                 document.getElementById('stEnTransito').innerText = 'error';
-                document.getElementById('stEntregadaDestino').innerText = 'error';
                 document.getElementById('stEnReparto').innerText = 'error';
+                document.getElementById('stEntregadaDestino').innerText = 'error';
                 document.getElementById('stNovedad').innerText = 'error';
+                document.getElementById('stDevolucionOrigen').innerText = 'error';
                 document.getElementById('stTotalOrdenes').innerText = 'error';
             }
         }
@@ -5085,32 +5145,107 @@ function processScheduledSavings() {
             return null;
         }
 
-        function extractFacebookSpentFromBuffer(arrayBuffer) {
+        function extractAdsSpentFromBuffer(arrayBuffer, platform) {
             try {
                 const data = new Uint8Array(arrayBuffer);
                 const wb = XLSX.read(data, { type: 'array' });
                 const ws = wb.Sheets[wb.SheetNames[0]];
-                const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+                const aoa = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
 
-                let totalUSD = 0;
-                rows.forEach((row) => {
-                    const keys = Object.keys(row);
-                    if (keys.length === 0) return;
+                let headerRowIndex = -1;
+                let campaignColIndex = -1;
+                let costColIndex = -1;
 
-                    const campaignKey = findKeyByAliases(keys, ['nombre de la campana', 'campaign name']);
-                    const spentKey = findKeyByAliases(keys, ['importe gastado usd', 'importe gastado', 'amount spent usd', 'amount spent']);
-                    if (!spentKey) return;
+                const campaignAliases = platform === 'facebook' 
+                    ? ['nombre de la campana', 'campaign name'] 
+                    : ['campaign name', 'campaign', 'nombre de campana', 'nombre campana', 'ad group name'];
+                    
+                const costAliases = platform === 'facebook'
+                    ? ['importe gastado usd', 'importe gastado', 'amount spent usd', 'amount spent']
+                    : ['cost', 'spend', 'amount spent', 'gasto', 'importe gastado'];
 
-                    if (campaignKey) {
-                        const c = normalizeText(row[campaignKey]);
-                        if (c.startsWith('total') || c.startsWith('totales') || c.startsWith('total de')) return;
+                for (let i = 0; i < aoa.length; i++) {
+                    const row = aoa[i];
+                    if (!Array.isArray(row)) continue;
+                    
+                    let campIdx = -1;
+                    let costIdx = -1;
+                    
+                    for (let j = 0; j < row.length; j++) {
+                        const cell = normalizeText(row[j]);
+                        if (campIdx === -1 && campaignAliases.some(a => cell === a)) campIdx = j;
+                        if (costIdx === -1 && costAliases.some(a => cell === a)) costIdx = j;
                     }
 
-                    const v = parseMoney(row[spentKey]);
-                    if (Number.isFinite(v)) totalUSD += Math.abs(v);
-                });
+                    if (campIdx === -1) {
+                        for (let j = 0; j < row.length; j++) {
+                            const cell = normalizeText(row[j]);
+                            if (campIdx === -1 && campaignAliases.some(a => cell.includes(a))) campIdx = j;
+                        }
+                    }
+                    if (costIdx === -1) {
+                        for (let j = 0; j < row.length; j++) {
+                            const cell = normalizeText(row[j]);
+                            if (costIdx === -1 && costAliases.some(a => cell.includes(a))) costIdx = j;
+                        }
+                    }
+                    
+                    if (costIdx !== -1) {
+                        headerRowIndex = i;
+                        campaignColIndex = campIdx;
+                        costColIndex = costIdx;
+                        break;
+                    }
+                }
 
-                appState.ads.facebookUSD = totalUSD;
+                if (headerRowIndex === -1 || costColIndex === -1) return;
+
+                let sumFallback = 0;
+                let explicitTotal = 0;
+                let foundExplicitTotal = false;
+
+                for (let i = headerRowIndex + 1; i < aoa.length; i++) {
+                    const row = aoa[i];
+                    if (!Array.isArray(row) || row.length === 0) continue;
+
+                    const costVal = row[costColIndex];
+                    const v = parseMoney(costVal);
+                    
+                    let isTotalRow = false;
+                    if (campaignColIndex !== -1 && row[campaignColIndex]) {
+                        const campaign = normalizeText(row[campaignColIndex]);
+                        isTotalRow = campaign.startsWith('total of') ||
+                                     campaign.startsWith('totales') ||
+                                     campaign.startsWith('total') ||
+                                     campaign.includes('total results') ||
+                                     campaign.includes('resultados totales');
+                    } else {
+                        const joined = normalizeText(row.join(' '));
+                        isTotalRow = joined.includes('total of') || 
+                                     joined.includes('total results') || 
+                                     joined.includes('resultados totales');
+                    }
+
+                    if (isTotalRow) {
+                        if (Number.isFinite(v) && v !== 0) {
+                            explicitTotal = Math.abs(v);
+                            foundExplicitTotal = true;
+                        }
+                    } else {
+                        if (Number.isFinite(v) && v !== 0) {
+                            sumFallback += Math.abs(v);
+                        }
+                    }
+                }
+
+                const totalUSD = foundExplicitTotal ? explicitTotal : sumFallback;
+
+                if (platform === 'facebook') {
+                    appState.ads.facebookUSD = totalUSD;
+                } else {
+                    appState.ads.tiktokUSD = totalUSD;
+                }
+                
                 updateAdsReportCard();
                 updateRestaCard();
                 saveState();
@@ -5119,59 +5254,12 @@ function processScheduledSavings() {
             }
         }
 
+        function extractFacebookSpentFromBuffer(arrayBuffer) {
+            extractAdsSpentFromBuffer(arrayBuffer, 'facebook');
+        }
+
         function extractTikTokSpentFromBuffer(arrayBuffer) {
-            try {
-                const data = new Uint8Array(arrayBuffer);
-                const wb = XLSX.read(data, { type: 'array' });
-                const ws = wb.Sheets[wb.SheetNames[0]];
-                const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
-
-                let totalUSD = 0;
-                let foundTotalRow = false;
-                let sumFallback = 0;
-                rows.forEach((row) => {
-                    const keys = Object.keys(row);
-                    if (keys.length === 0) return;
-
-                    const campaignKey = findKeyByAliases(keys, ['campaign name', 'campaign', 'nombre de campana', 'nombre campana']);
-                    const costKey = findKeyByAliases(keys, ['cost', 'spend', 'amount spent', 'gasto', 'importe gastado']);
-                    if (!costKey) return;
-
-                    const v = parseMoney(row[costKey]);
-                    if (Number.isFinite(v) && v !== 0) {
-                        sumFallback += Math.abs(v);
-                    }
-
-                    if (campaignKey) {
-                        const campaign = normalizeText(row[campaignKey]);
-                        const isTotalRow =
-                            campaign.startsWith('total of') ||
-                            campaign.startsWith('total') ||
-                            campaign.includes('total results') ||
-                            campaign.includes('resultados totales');
-                        if (isTotalRow && Number.isFinite(v)) {
-                            totalUSD = Math.abs(v);
-                            foundTotalRow = true;
-                        }
-                    } else {
-                        const joined = normalizeText(Object.values(row).join(' '));
-                        if ((joined.includes('total of') || joined.includes('total results') || joined.includes('resultados totales')) && Number.isFinite(v)) {
-                            totalUSD = Math.abs(v);
-                            foundTotalRow = true;
-                        }
-                    }
-                });
-
-                // Si no aparece fila total, usar suma de costos como respaldo.
-                if (!foundTotalRow) totalUSD = sumFallback;
-
-                appState.ads.tiktokUSD = totalUSD;
-                updateAdsReportCard();
-                updateRestaCard();
-                saveState();
-            } catch (_) {
-                // no-op
-            }
+            extractAdsSpentFromBuffer(arrayBuffer, 'tiktok');
         }
 
         bindFileStatus('fileTiktok', 'stTiktok');
@@ -5417,11 +5505,11 @@ function processScheduledSavings() {
         }
 
         async function fetchUploadedFileBuffer(fileName) {
-            const direct = await fetch('/uploads/' + encodeURIComponent(fileName));
-            if (direct.ok) {
-                return { arrayBuffer: await direct.arrayBuffer(), resolvedName: fileName };
-            }
-
+            // Se asume que el backend expone los archivos en la ruta /api/uploads/ o que podemos
+            // forzar la descarga o que están en /uploads/ pero el nombre real tiene el prefijo numérico (timestamp).
+            // Por lo tanto, el acceso directo (/uploads/NombreOriginal) casi siempre fallará.
+            // Para asegurarnos, consultamos /api/files/list y usamos el candidate en su lugar.
+            
             const listResp = await fetch('/api/files/list');
             if (!listResp.ok) return null;
             const payload = await listResp.json();
@@ -5436,6 +5524,8 @@ function processScheduledSavings() {
                 .sort((a, b) => new Date(b.modified || 0) - new Date(a.modified || 0))[0];
 
             if (!candidate) return null;
+            
+            // Candidate.name es el nombre real en el disco, ej. "1776077869457-AvaShop_1-Campaign_Report.xlsx"
             const fallback = await fetch('/uploads/' + encodeURIComponent(candidate.name));
             if (!fallback.ok) return null;
             return { arrayBuffer: await fallback.arrayBuffer(), resolvedName: candidate.name };
