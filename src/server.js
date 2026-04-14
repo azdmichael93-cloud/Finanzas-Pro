@@ -101,107 +101,32 @@ app.post('/chat', async (req, res) => {
 
             // FINANZAS PERSONALES
             if (c.salarios !== undefined) {
-                systemPrompt += '\n\n💰 INGRESOS (Salarios):';
-                systemPrompt += `\n- Total mensual: ${fmt(c.salarios)}`;
-                if (c.salariosDetails && c.salariosDetails.length > 0) {
-                    c.salariosDetails.forEach((s, i) => {
-                        systemPrompt += `\n  ${i+1}. ${s.desc || 'Ingreso'} - ${fmt(s.monto)} (Día ${s.day})`;
-                    });
-                }
+                systemPrompt += '\n\n💰 INGRESOS: ' + fmt(c.salarios);
             }
-
             if (c.gastosFijos !== undefined) {
-                systemPrompt += '\n\n📌 GASTOS FIJOS:';
-                systemPrompt += `\n- Total mensual: ${fmt(c.gastosFijos)}`;
-                if (c.gastosFijosDetails && c.gastosFijosDetails.length > 0) {
-                    c.gastosFijosDetails.forEach((g, i) => {
-                        systemPrompt += `\n  ${i+1}. ${g.desc || 'Gasto'} - ${fmt(g.monto)} (Día ${g.day})`;
-                    });
-                }
+                systemPrompt += '\n📌 GASTOS FIJOS: ' + fmt(c.gastosFijos);
             }
-
             if (c.ahorros !== undefined) {
-                systemPrompt += '\n\n🏦 AHORROS:';
-                systemPrompt += `\n- Total: ${fmt(c.ahorros)}`;
-                if (c.ahorrosDetails && c.ahorrosDetails.length > 0) {
-                    c.ahorrosDetails.forEach((a, i) => {
-                        systemPrompt += `\n  ${i+1}. ${a.desc || 'Ahorro'} - ${fmt(a.monto)} (${a.type || 'Mensual'})`;
-                    });
-                }
+                systemPrompt += '\n🏦 AHORROS: ' + fmt(c.ahorros);
             }
-
             if (c.bancos !== undefined) {
-                systemPrompt += '\n\n🏛️ CUENTAS BANCARIAS:';
-                systemPrompt += `\n- Total saldo: ${fmt(c.bancos)}`;
-                if (c.bancosDetails && c.bancosDetails.length > 0) {
-                    c.bancosDetails.forEach((b, i) => {
-                        systemPrompt += `\n  ${i+1}. ${b.name} (${b.type || 'Ahorros'}): ${fmt(b.balance)}`;
-                    });
-                }
+                systemPrompt += '\n🏛️ BANCOS: ' + fmt(c.bancos);
             }
-
             if (c.prestamos !== undefined) {
-                systemPrompt += '\n\n💳 PRÉSTAMOS/CRÉDITOS:';
-                systemPrompt += `\n- Total adeudado: ${fmt(c.prestamos)}`;
-                if (c.prestamosDetails && c.prestamosDetails.length > 0) {
-                    c.prestamosDetails.forEach((p, i) => {
-                        systemPrompt += `\n  ${i+1}. ${p.name}: Aprobado ${fmt(p.approved)}, Pendiente ${fmt(p.owed)} (Corte día ${p.cutDay}, Pago día ${p.payDay})`;
-                    });
-                }
+                systemPrompt += '\n💳 PRÉSTAMOS: ' + fmt(c.prestamos);
             }
 
-            if (c.deudasInformal !== undefined) {
-                systemPrompt += '\n\n🤝 DEUDAS INFORMALES:';
-                systemPrompt += `\n- Total pendiente: ${fmt(c.deudasInformal)}`;
-                if (c.deudasInformalDetails && c.deudasInformalDetails.length > 0) {
-                    c.deudasInformalDetails.forEach((d, i) => {
-                        systemPrompt += `\n  ${i+1}. ${d.name}: ${fmt(d.monto)} - ${d.desc || 'Sin descripción'}`;
-                    });
-                }
-            }
-
-            if (c.deudores !== undefined) {
-                systemPrompt += '\n\n👥 DEUDORES (金钱 prestado):';
-                systemPrompt += `\n- Total pendiente: ${fmt(c.deudores)}`;
-                if (c.deudoresDetails && c.deudoresDetails.length > 0) {
-                    c.deudoresDetails.forEach((d, i) => {
-                        systemPrompt += `\n  ${i+1}. ${d.name}: ${fmt(d.monto)} - ${d.desc || 'Sin descripción'}`;
-                    });
-                }
-            }
-
-            if (c.egresosManuales !== undefined) {
-                systemPrompt += '\n\n💸 EGRESOS MANUALES:';
-                if (c.egresosManualesDetails && c.egresosManualesDetails.length > 0) {
-                    c.egresosManualesDetails.forEach((e, i) => {
-                        systemPrompt += `\n  ${i+1}. ${e.desc || 'Egreso'}: ${fmt(e.monto)} (${e.tipo || 'General'})`;
-                    });
-                } else {
-                    systemPrompt += '\n  Sin egresos registrados';
-                }
-            }
-
-            if (c.ads !== undefined) {
-                systemPrompt += '\n\n📢 GASTOS PUBLICITARIOS:';
-                systemPrompt += `\n- Facebook Ads: ${fmtUSD(c.ads.facebookUSD)}`;
-                systemPrompt += `\n- TikTok Ads: ${fmtUSD(c.ads.tiktokUSD)}`;
-                systemPrompt += `\n- Total en RD$: ${fmt(c.ads.totalRD)}`;
-            }
-
-            // ECOMMERCE - EFFI
+            // Effi
             if (c.effi) {
                 const e = c.effi;
-                const g = (e.recaudo||0) - (e.compra||0) - (e.fleteCon||0) - (e.fleteDev||0) - (e.fleteSin||0) - (e.comisionRetiro||0) - (e.fulfillment||0);
-                systemPrompt += '\n\n🛒 EFFI COMMERCE:';
-                systemPrompt += `\n- Recaudo: ${fmt(e.recaudo)} | Compra: ${fmt(e.compra)} | Ganancia: ${fmt(g)}`;
-                systemPrompt += `\n- Fulfillment: ${fmt(e.fulfillment)} | Flete: ${fmt(e.fleteCon)}`;
+                const g = (e.recaudo||0) - (e.compra||0) - (e.fleteCon||0) - (e.fleteDev||0);
+                systemPrompt += '\n\n🛒 EFFI: ' + fmt(e.recaudo) + ' | Ganancia: ' + fmt(g);
             }
 
-            // TRANSPORTE
+            // Transporte
             if (c.transporte) {
                 const t = c.transporte;
-                systemPrompt += '\n\n🚚 TRANSPORTE:';
-                systemPrompt += `\n- Total: ${t.totalOrdenes} | Entregadas: ${t.entregadas} | Devoluciones: ${t.devoluciones}`;
+                systemPrompt += '\n🚚 TRANSPORTE: ' + t.totalOrdenes + ' órdenes';
             }
             
             systemPrompt += '\n═══════════════════════════════════════════════════════';
@@ -211,189 +136,12 @@ app.post('/chat', async (req, res) => {
             systemPrompt += '\n💰 FINANZAS PERSONALES';
             systemPrompt += '\n═══════════════════════════════════════════════════════';
             
-            if (c.salarios !== undefined) {
-                systemPrompt += '\n\n📈 Ingresos: ' + fmt(c.salarios);
-                if (c.salariosDetails && c.salariosDetails.length > 0) {
-                    systemPrompt += '\nDetalle:';
-                    c.salariosDetails.forEach((s) => {
-                        systemPrompt += `\n- ${s.desc}: ${fmt(s.monto)}`;
-                    });
-                }
-            }
+            if (c.salarios !== undefined) systemPrompt += '\n📈 Ingresos: ' + fmt(c.salarios);
+            if (c.gastosFijos !== undefined) systemPrompt += '\n📉 Gastos: ' + fmt(c.gastosFijos);
+            if (c.ahorros !== undefined) systemPrompt += '\n🏦 Ahorros: ' + fmt(c.ahorros);
             
-            if (c.gastosFijos !== undefined) {
-                systemPrompt += '\n\n📉 Gastos Fijos: ' + fmt(c.gastosFijos);
-            }
-            
-            if (c.ahorros !== undefined) {
-                systemPrompt += '\n\n🏦 Ahorros: ' + fmt(c.ahorros);
-            }
-            
-            if (c.bancos !== undefined) {
-                systemPrompt += '\n\n🏛️ Cuentas: ' + fmt(c.bancos);
-            }
-            
-            if (c.prestamos !== undefined) {
-                systemPrompt += '\n\n💳 Préstamos: ' + fmt(c.prestamos);
-            }
-            
-            const balance = (c.salarios || 0) - (c.gastosFijos || 0) - (c.ahorros || 0);
-            systemPrompt += '\n\n💵 Balance disponible: ' + fmt(balance);
             systemPrompt += '\n═══════════════════════════════════════════════════════';
         }
-    }
-
-        // FINANZAS PERSONALES
-        if (c.salarios !== undefined) {
-            systemPrompt += '\n\n💰 INGRESOS (Salarios):';
-            systemPrompt += `\n- Total mensual: ${fmt(c.salarios)}`;
-            if (c.salariosDetails && c.salariosDetails.length > 0) {
-                c.salariosDetails.forEach((s, i) => {
-                    systemPrompt += `\n  ${i+1}. ${s.desc || 'Ingreso'} - ${fmt(s.monto)} (Día ${s.day})`;
-                });
-            }
-        }
-
-        if (c.gastosFijos !== undefined) {
-            systemPrompt += '\n\n📌 GASTOS FIJOS:';
-            systemPrompt += `\n- Total mensual: ${fmt(c.gastosFijos)}`;
-            if (c.gastosFijosDetails && c.gastosFijosDetails.length > 0) {
-                c.gastosFijosDetails.forEach((g, i) => {
-                    systemPrompt += `\n  ${i+1}. ${g.desc || 'Gasto'} - ${fmt(g.monto)} (Día ${g.day})`;
-                });
-            }
-        }
-
-        if (c.ahorros !== undefined) {
-            systemPrompt += '\n\n🏦 AHORROS:';
-            systemPrompt += `\n- Total: ${fmt(c.ahorros)}`;
-            if (c.ahorrosDetails && c.ahorrosDetails.length > 0) {
-                c.ahorrosDetails.forEach((a, i) => {
-                    systemPrompt += `\n  ${i+1}. ${a.desc || 'Ahorro'} - ${fmt(a.monto)} (${a.type || 'Mensual'})`;
-                });
-            }
-        }
-
-        if (c.bancos !== undefined) {
-            systemPrompt += '\n\n🏛️ CUENTAS BANCARIAS:';
-            systemPrompt += `\n- Total saldo: ${fmt(c.bancos)}`;
-            if (c.bancosDetails && c.bancosDetails.length > 0) {
-                c.bancosDetails.forEach((b, i) => {
-                    systemPrompt += `\n  ${i+1}. ${b.name} (${b.type || 'Ahorros'}): ${fmt(b.balance)}`;
-                });
-            }
-        }
-
-        if (c.prestamos !== undefined) {
-            systemPrompt += '\n\n💳 PRÉSTAMOS/CRÉDITOS:';
-            systemPrompt += `\n- Total adeudado: ${fmt(c.prestamos)}`;
-            if (c.prestamosDetails && c.prestamosDetails.length > 0) {
-                c.prestamosDetails.forEach((p, i) => {
-                    systemPrompt += `\n  ${i+1}. ${p.name}: Aprobado ${fmt(p.approved)}, Pendiente ${fmt(p.owed)} (Corte día ${p.cutDay}, Pago día ${p.payDay})`;
-                });
-            }
-        }
-
-        if (c.deudasInformal !== undefined) {
-            systemPrompt += '\n\n🤝 DEUDAS INFORMALES:';
-            systemPrompt += `\n- Total pendiente: ${fmt(c.deudasInformal)}`;
-            if (c.deudasInformalDetails && c.deudasInformalDetails.length > 0) {
-                c.deudasInformalDetails.forEach((d, i) => {
-                    systemPrompt += `\n  ${i+1}. ${d.name}: ${fmt(d.monto)} - ${d.desc || 'Sin descripción'}`;
-                });
-            }
-        }
-
-        if (c.deudores !== undefined) {
-            systemPrompt += '\n\n👥 DEUDORES (金钱 prestado):';
-            systemPrompt += `\n- Total pendiente: ${fmt(c.deudores)}`;
-            if (c.deudoresDetails && c.deudoresDetails.length > 0) {
-                c.deudoresDetails.forEach((d, i) => {
-                    systemPrompt += `\n  ${i+1}. ${d.name}: ${fmt(d.monto)} - ${d.desc || 'Sin descripción'}`;
-                });
-            }
-        }
-
-        if (c.egresosManuales !== undefined) {
-            systemPrompt += '\n\n💸 EGRESOS MANUALES:';
-            if (c.egresosManualesDetails && c.egresosManualesDetails.length > 0) {
-                c.egresosManualesDetails.forEach((e, i) => {
-                    systemPrompt += `\n  ${i+1}. ${e.desc || 'Egreso'}: ${fmt(e.monto)} (${e.tipo || 'General'})`;
-                });
-            } else {
-                systemPrompt += '\n  Sin egresos registrados';
-            }
-        }
-
-        if (c.gastosPersonales !== undefined) {
-            systemPrompt += '\n\n👤 GASTOS PERSONALES:';
-            if (c.gastosPersonalesDetails && c.gastosPersonalesDetails.length > 0) {
-                c.gastosPersonalesDetails.forEach((g, i) => {
-                    systemPrompt += `\n  ${i+1}. ${g.desc}: ${fmt(g.monto)}`;
-                });
-            } else {
-                systemPrompt += '\n  Sin gastos personales registrados';
-            }
-        }
-
-        if (c.ads !== undefined) {
-            systemPrompt += '\n\n📢 GASTOS PUBLICITARIOS:';
-            systemPrompt += `\n- Facebook Ads: ${fmtUSD(c.ads.facebookUSD)}`;
-            systemPrompt += `\n- TikTok Ads: ${fmtUSD(c.ads.tiktokUSD)}`;
-            systemPrompt += `\n- Total en RD$ (${fmt(c.ads.rate || 57)}): ${fmt(c.ads.totalRD)}`;
-            if (c.adsManualDetails && c.adsManualDetails.length > 0) {
-                systemPrompt += '\n- Gastos manuales:';
-                c.adsManualDetails.forEach((a, i) => {
-                    systemPrompt += `\n  ${i+1}. ${a.desc}: ${fmt(a.monto)}`;
-                });
-            }
-        }
-
-        // ECOMMERCE - EFFI
-        if (c.effi) {
-            const e = c.effi;
-            const g = (e.recaudo||0) - (e.compra||0) - (e.fleteCon||0) - (e.fleteDev||0) - (e.fleteSin||0) - (e.comisionRetiro||0) - (e.fulfillment||0);
-            systemPrompt += '\n\n🛒 EFFI COMMERCE:';
-            systemPrompt += `\n- Recaudo ventas: ${fmt(e.recaudo)}`;
-            systemPrompt += `\n- Compra mercancía: ${fmt(e.compra)}`;
-            systemPrompt += `\n- Flete con recaudo: ${fmt(e.fleteCon)}`;
-            systemPrompt += `\n- Flete devolución: ${fmt(e.fleteDev)}`;
-            systemPrompt += `\n- Flete sin recaudo: ${fmt(e.fleteSin)}`;
-            systemPrompt += `\n- Fulfillment: ${fmt(e.fulfillment)}`;
-            systemPrompt += `\n- Retiro: ${fmt(e.retiro)}`;
-            systemPrompt += `\n- Comisión retiro: ${fmt(e.comisionRetiro)}`;
-            systemPrompt += `\n- Indemnización: ${fmt(e.indemnizacion)}`;
-            systemPrompt += `\n- Débito revertido: ${fmt(e.debitoRevertido)}`;
-            systemPrompt += `\n- 💵 GANANCIA ESTIMADA: ${fmt(g)}`;
-        }
-
-        // TRANSPORTE
-        if (c.transporte) {
-            const t = c.transporte;
-            const pE = t.totalOrdenes > 0 ? ((t.entregadas/t.totalOrdenes)*100).toFixed(2) : '0.00';
-            const pD = t.totalOrdenes > 0 ? ((t.devoluciones/t.totalOrdenes)*100).toFixed(2) : '0.00';
-            systemPrompt += '\n\n🚚 TRANSPORTE/LOGÍSTICA:';
-            systemPrompt += `\n- Total órdenes: ${t.totalOrdenes}`;
-            systemPrompt += `\n- Entregadas: ${t.entregadas} (${pE}%)`;
-            systemPrompt += `\n- Devoluciones: ${t.devoluciones} (${pD}%)`;
-            systemPrompt += `\n- En tránsito: ${t.enTransito}`;
-            systemPrompt += `\n- En reparto: ${t.enReparto}`;
-            systemPrompt += `\n- Con novedad: ${t.novedad}`;
-        }
-
-        // RESUMEN FINAL
-        systemPrompt += '\n\n═══════════════════════════════════════════════════════';
-        systemPrompt += '\n📈 ANÁLISIS INTEGRAL:';
-        
-        // Calcular balance general
-        const totalIngresos = (c.salarios || 0) + (c.effi?.recaudo || 0);
-        const totalGastos = (c.gastosFijos || 0) + (c.egresosManuales || 0) + (c.ads?.totalRD || 0) + (c.gastosPersonales || 0);
-        const balance = totalIngresos - totalGastos;
-        
-        systemPrompt += `\n- Ingresos totales: ${fmt(totalIngresos)}`;
-        systemPrompt += `\n- Gastos totales: ${fmt(totalGastos)}`;
-        systemPrompt += `\n- Balance: ${fmt(balance)}`;
-        systemPrompt += '\n═══════════════════════════════════════════════════════';
     }
 
     const googleKey    = process.env.GOOGLE_AI_KEY;

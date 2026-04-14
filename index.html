@@ -4377,7 +4377,7 @@
             const userId = getCurrentUserId();
             return userId ? `${APP_KEY_BASE}_${userId}` : `${APP_KEY_BASE}_shared`;
         }
-        const appState = {
+        let appState = {
             exchangeRate: 58,
             bancoMonto: 0,
             egresosManuales: [],
@@ -4506,12 +4506,13 @@
                         // Restaurar los datos de Transporte
                         if (saved.processedTotals.transporteTotals) {
                             Object.assign(transporteTotals, saved.processedTotals.transporteTotals);
-                            document.getElementById('stDevolucionOrigen').innerText = String(transporteTotals.devolucion);
-                            document.getElementById('stEnTransito').innerText = String(transporteTotals.transito);
-                            document.getElementById('stEntregadaDestino').innerText = String(transporteTotals.entregada);
-                            document.getElementById('stEnReparto').innerText = String(transporteTotals.reparto);
-                            document.getElementById('stNovedad').innerText = String(transporteTotals.novedad);
-                            document.getElementById('stTotalOrdenes').innerText = String(transporteTotals.totalOrdenes);
+                            document.getElementById('stGenerada').innerText = String(transporteTotals.generada || 0);
+                            document.getElementById('stDevolucionOrigen').innerText = String(transporteTotals.devolucion || 0);
+                            document.getElementById('stEnTransito').innerText = String(transporteTotals.transito || 0);
+                            document.getElementById('stEntregadaDestino').innerText = String(transporteTotals.entregada || 0);
+                            document.getElementById('stEnReparto').innerText = String(transporteTotals.reparto || 0);
+                            document.getElementById('stNovedad').innerText = String(transporteTotals.novedad || 0);
+                            document.getElementById('stTotalOrdenes').innerText = String(transporteTotals.totalOrdenes || 0);
                         }
 
                         updateResultadoOperativoCard();
@@ -5778,12 +5779,97 @@ function processScheduledSavings() {
             return Number.isFinite(n) ? n : 0;
         }
 
-        function extractDevolucionAOrigenFromTransporteBuffer(arrayBuffer) {
+        async function extractDevolucionAOrigenFromTransporteBuffer(arrayBuffer) {
+            console.log('📊 Procesando archivo de Transporte...');
             try {
-                const data = new Uint8Array(arrayBuffer);
+                // Validar que el arrayBuffer no esté vacío
+                if (!arrayBuffer || arrayBuffer.byteLength === 0) {
+                    console.warn('Archivo de transporte vacío');
+                    throw new Error('Archivo vacío');
+                }
+
+                // Detectar tipo de archivo
+                const bytes = new Uint8Array(arrayBuffer);
+                const header = Array.from(bytes.slice(0, 8));
+                
+                console.log('📄 Bytes del archivo:', header, 'Length:', arrayBuffer.byteLength);
+                
+                // Verificar si es un archivo Excel válido (PK = ZIP header)
+                const isZip = header[0] === 0x50 && header[1] === 0x4B; // PK
+                
+                if (!isZip) {
+                    console.warn('⚠️ El archivo no parece ser un Excel (.xlsx). Probablemente sea .xls o CSV');
+                    // Intentar como CSV
+                    try {
+                        const text = new TextDecoder('utf-8').decode(bytes);
+                        const lines = text.split('\n').filter(l => l.trim());
+                        console.log('📄 Detectado como texto/CSV, líneas:', lines.length);
+                        // Procesar como CSV simple
+                        if (lines.length < 2) throw new Error('Archivo sin datos');
+                        
+                        const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+                        const rows = [];
+                        for (let i = 1; i < lines.length; i++) {
+                            const cols = lines[i].split(',').map(c => c.trim().replace(/"/g, ''));
+                            const row = {};
+                            headers.forEach((h, idx) => row[h] = cols[idx] || '');
+                            rows.push(row);
+                        }
+                        
+                        let countGenerada = 0, countTransito = 0, countReparto = 0, countEntregada = 0, countNovedad = 0, count = 0, totalOrdenes = 0;
+                        rows.forEach((row) => {
+                            const estado = normalizeText(row['Estado global guía inicial'] || row['Estado'] || '');
+                            if (estado) totalOrdenes += 1;
+                            if (estado.includes('generada') || estado.includes('generado')) countGenerada += 1;
+                            if (estado.includes('en transito') || estado.includes('transito')) countTransito += 1;
+                            if (estado.includes('entregada a destino') || estado.includes('entregad')) countEntregada += 1;
+                            if (estado.includes('en reparto') || estado.includes('reparto')) countReparto += 1;
+                            if (estado.includes('novedad')) countNovedad += 1;
+                            if (estado.includes('devolucion a origen') || estado.includes('devolucion')) count += 1;
+                        });
+                        
+                        document.getElementById('stGenerada').innerText = String(countGenerada);
+                        document.getElementById('stEnTransito').innerText = String(countTransito);
+                        document.getElementById('stEnReparto').innerText = String(countReparto);
+                        document.getElementById('stEntregadaDestino').innerText = String(countEntregada);
+                        document.getElementById('stNovedad').innerText = String(countNovedad);
+                        document.getElementById('stDevolucionOrigen').innerText = String(count);
+                        document.getElementById('stTotalOrdenes').innerText = String(totalOrdenes);
+
+                        transporteTotals.generada = countGenerada;
+                        transporteTotals.devolucion = count;
+                        transporteTotals.transito = countTransito;
+                        transporteTotals.entregada = countEntregada;
+                        transporteTotals.reparto = countReparto;
+                        transporteTotals.novedad = countNovedad;
+                        transporteTotals.totalOrdenes = totalOrdenes;
+
+                        console.log('✅ Transporte procesado como CSV');
+                        updateResumenPremium();
+                        return;
+                    } catch (csvErr) {
+                        console.error('Error procesando como CSV:', csvErr);
+                        throw new Error('Archivo no válido para transporte');
+                    }
+                }
+                
                 const workbook = new ExcelJS.Workbook();
-                workbook.xlsx.load(data);
+                await new Promise((resolve, reject) => {
+                    workbook.xlsx.load(bytes).then(resolve).catch(reject);
+                });
+                
+                if (workbook.worksheetCount === 0) {
+                    console.warn('El archivo no tiene hojas');
+                    throw new Error('Sin hojas de cálculo');
+                }
+                
                 const ws = workbook.getWorksheet(1);
+                if (!ws) {
+                    console.warn('No se pudo acceder a la hoja 1');
+                    throw new Error('Hoja no encontrada');
+                }
+                
+                console.log('✅ Archivo Excel válido, procesando filas...');
                 // Get headers from first row
                 const headerRow = ws.getRow(1);
                 const headers = [];
@@ -5835,15 +5921,18 @@ function processScheduledSavings() {
                 transporteTotals.novedad = countNovedad;
                 transporteTotals.totalOrdenes = totalOrdenes;
 
+                console.log('✅ Transporte procesado correctamente');
                 updateResumenPremium();
+                saveState(); // Guardar datos procesados
             } catch (_) {
-                document.getElementById('stGenerada').innerText = 'error';
-                document.getElementById('stEnTransito').innerText = 'error';
-                document.getElementById('stEnReparto').innerText = 'error';
-                document.getElementById('stEntregadaDestino').innerText = 'error';
-                document.getElementById('stNovedad').innerText = 'error';
-                document.getElementById('stDevolucionOrigen').innerText = 'error';
-                document.getElementById('stTotalOrdenes').innerText = 'error';
+                console.error('Error extracting transporte data:', _);
+                document.getElementById('stGenerada').innerText = '--';
+                document.getElementById('stEnTransito').innerText = '--';
+                document.getElementById('stEnReparto').innerText = '--';
+                document.getElementById('stEntregadaDestino').innerText = '--';
+                document.getElementById('stNovedad').innerText = '--';
+                document.getElementById('stDevolucionOrigen').innerText = '--';
+                document.getElementById('stTotalOrdenes').innerText = '--';
             }
         }
 
@@ -5858,15 +5947,105 @@ function processScheduledSavings() {
             reader.readAsArrayBuffer(file);
         }
 
-        function extractCompraMercanciaFromEffiBuffer(arrayBuffer) {
+        async function extractCompraMercanciaFromEffiBuffer(arrayBuffer) {
+            console.log('📊 Procesando archivo de Effi...');
             try {
-                // El archivo Effi viene como HTML .xls, lo leemos en latin1 para no perder acentos
-                const rawText = new TextDecoder('iso-8859-1').decode(new Uint8Array(arrayBuffer));
-                const normalizedText = rawText.replace(/>([-]?\d+),(\d{2})<\/td>/g, '>$1.$2</td>');
+                // Verificar si es un archivo Excel válido (ZIP header)
+                const bytes = new Uint8Array(arrayBuffer);
+                const header = Array.from(bytes.slice(0, 8));
+                const isZip = header[0] === 0x50 && header[1] === 0x4B; // PK
+                
+                let workbook;
+                
+                if (!isZip) {
+                    // No es un xlsx válido - intentar como HTML (formato antiguo de Effi)
+                    console.log('⚠️ Archivo Effi no es xlsx válido, procesando como HTML...');
+                    const rawText = new TextDecoder('iso-8859-1').decode(bytes);
+                    const normalizedText = rawText.replace(/>([-]?\d+),(\d{2})<\/td>/g, '>$1.$2</td>');
+                    
+                    // Verificar si parece HTML
+                    if (normalizedText.includes('<!DOCTYPE') || normalizedText.includes('<html') || normalizedText.includes('<table')) {
+                        console.log('📄 Detectado como HTML de Effi');
+                        
+                        // Parsear como HTML simple
+                        const tableMatch = normalizedText.match(/<table[^>]*>([\s\S]*?)<\/table>/i);
+                        if (!tableMatch) throw new Error('No se encontró tabla en el HTML');
+                        
+                        const tableHtml = tableMatch[1];
+                        const rowMatches = tableHtml.match(/<tr[^>]*>([\s\S]*?)<\/tr>/gi);
+                        
+                        if (!rowMatches || rowMatches.length < 2) {
+                            throw new Error('Tabla sin datos');
+                        }
+                        
+                        // Extraer headers de la primera fila
+                        const headerCells = rowMatches[0].match(/<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/gi);
+                        const headers = headerCells ? headerCells.map(c => c.replace(/<[^>]+>/g, '').trim()) : [];
+                        console.log('📄 Headers HTML Effi:', headers);
+                        
+                        const rows = [];
+                        for (let i = 1; i < rowMatches.length; i++) {
+                            const cellMatches = rowMatches[i].match(/<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/gi);
+                            if (cellMatches) {
+                                const rowData = {};
+                                headers.forEach((h, idx) => {
+                                    const cellText = cellMatches[idx] ? cellMatches[idx].replace(/<[^>]+>/g, '').trim() : '';
+                                    rowData[h] = cellText;
+                                });
+                                rows.push(rowData);
+                            }
+                        }
+                        
+                        console.log('✅ Procesado HTML de Effi, filas:', rows.length);
+                        
+                        let totalCompra = 0, totalFleteCon = 0, totalFleteDev = 0, totalFleteSin = 0, totalRecaudo = 0, totalFulfillment = 0, totalRetiro = 0, totalComisionRetiro = 0, totalIndemnizacion = 0, totalDebitoRevertido = 0;
+                        
+                        rows.forEach((row) => {
+                            const tipo = normalizeText(row['Tipo de movimiento'] || row['tipo'] || '');
+                            const valor = parseMoney(row['Valor movimiento'] || row['valor'] || row['Monto'] || 0);
+                            
+                            if (tipo.includes('compra de')) totalCompra += valor;
+                            else if (tipo.includes('flete credito con recaudo')) totalFleteCon += valor;
+                            else if (tipo.includes('flete credito devoluci')) totalFleteDev += valor;
+                            else if (tipo.includes('flete credito sin recaudo')) totalFleteSin += valor;
+                            else if (tipo.includes('recaudo de venta')) totalRecaudo += valor;
+                            else if (tipo.includes('fulfillment')) totalFulfillment += valor;
+                            else if (tipo.includes('retiro de dinero de cuenta')) totalRetiro += valor;
+                            else if (tipo.includes('comision local por retiro')) totalComisionRetiro += valor;
+                            else if (tipo.includes('indemnizacion')) totalIndemnizacion += valor;
+                            else if (tipo.includes('debito revertido')) totalDebitoRevertido += valor;
+                        });
+                        
+                        effiTotals.compra = Math.abs(totalCompra);
+                        effiTotals.fleteCon = Math.abs(totalFleteCon);
+                        effiTotals.fleteDev = Math.abs(totalFleteDev);
+                        effiTotals.fleteSin = Math.abs(totalFleteSin);
+                        effiTotals.recaudo = Math.abs(totalRecaudo);
+                        effiTotals.fulfillment = Math.abs(totalFulfillment);
+                        effiTotals.retiro = Math.abs(totalRetiro);
+                        effiTotals.comisionRetiro = Math.abs(totalComisionRetiro);
+                        effiTotals.indemnizacion = Math.abs(totalIndemnizacion);
+                        effiTotals.debitoRevertido = Math.abs(totalDebitoRevertido);
+
+                        console.log('✅ Effi procesado correctamente desde HTML');
+                        updateResultadoOperativoCard();
+                        saveState();
+                        return;
+                    } else {
+                        throw new Error('Formato de archivo no reconocido');
+                    }
+                }
+                
+                // Es un xlsx válido
+                const normalizedText = new TextDecoder('iso-8859-1').decode(bytes);
  
-                const workbook = new ExcelJS.Workbook();
-                workbook.xlsx.load(normalizedText);
+                workbook = new ExcelJS.Workbook();
+                await new Promise((resolve, reject) => {
+                    workbook.xlsx.load(normalizedText).then(resolve).catch(reject);
+                });
                  
+                console.log('✅ Effi workbook cargado, hojas:', workbook.worksheetCount);
+                  
                 // Intentar con Sheet1 primero, luego Sheet2 si está vacío
                 let ws = workbook.getWorksheet(1);
                 // Get headers from first row
@@ -5875,6 +6054,7 @@ function processScheduledSavings() {
                 headerRow.eachCell({ includeEmpty: true }, (cell, colNumber) => {
                     headers.push(cell.value ? String(cell.value).trim() : '');
                 });
+                console.log('📄 Headers Effi:', headers);
                 const rows = [];
                 // Start from row 2 (skip header)
                 ws.eachRow({ includeEmpty: true, rowStart: 2 }, (row, rowNumber) => {
@@ -5977,15 +6157,18 @@ function processScheduledSavings() {
                 effiTotals.indemnizacion = Math.abs(totalIndemnizacion);
                 effiTotals.debitoRevertido = Math.abs(totalDebitoRevertido);
 
+                console.log('✅ Effi procesado correctamente');
                 updateResultadoOperativoCard();
+                saveState(); // Guardar datos procesados
             } catch (_) {
-                document.getElementById('mvCompra').innerText = 'error';
-                document.getElementById('mvFleteCon').innerText = 'error';
-                document.getElementById('mvFleteDev').innerText = 'error';
-                document.getElementById('mvFleteSin').innerText = 'error';
-                document.getElementById('mvRecaudo').innerText = 'error';
-                document.getElementById('mvFulfillment').innerText = 'error';
-                document.getElementById('mvRetiro').innerText = 'error';
+                console.error('Error extracting Effi data:', _);
+                document.getElementById('mvCompra').innerText = '--';
+                document.getElementById('mvFleteCon').innerText = '--';
+                document.getElementById('mvFleteDev').innerText = '--';
+                document.getElementById('mvFleteSin').innerText = '--';
+                document.getElementById('mvRecaudo').innerText = '--';
+                document.getElementById('mvFulfillment').innerText = '--';
+                document.getElementById('mvRetiro').innerText = '--';
 
                 effiTotals.compra = 0;
                 effiTotals.fleteCon = 0;
@@ -6009,11 +6192,13 @@ function processScheduledSavings() {
             return null;
         }
 
-        function extractAdsSpentFromBuffer(arrayBuffer, platform) {
+        async function extractAdsSpentFromBuffer(arrayBuffer, platform) {
             try {
                 const data = new Uint8Array(arrayBuffer);
                 const workbook = new ExcelJS.Workbook();
-                workbook.xlsx.load(data);
+                await new Promise((resolve, reject) => {
+                    workbook.xlsx.load(data).then(resolve).catch(reject);
+                });
                 const ws = workbook.getWorksheet(1);
                 
                 const aoa = [];
