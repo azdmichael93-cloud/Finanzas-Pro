@@ -59,23 +59,189 @@ app.get('/healthz', (_req, res) => res.sendStatus(200));
 app.post('/chat', async (req, res) => {
     const message = String(req.body.message || '').trim();
     const context = req.body.context || null;
+    const userRole = req.body.userRole || 'user';
     if (!message) return res.status(400).json({ response: 'Mensaje vacío.' });
 
-    let systemPrompt =
-        'Eres "Finanzas AI", asistente inteligente de la app Finanzas Pro de 2Nexora, ' +
-        'para gestión de e-commerce y finanzas personales en República Dominicana. ' +
-        'Respondes en español, de forma concisa y útil. Trabajas con RD$ y US$. ' +
-        'Cuando el usuario pregunta por análisis, calcula con los datos disponibles. ' +
-        'Tienes acceso completo a TODOS los datos financieros del usuario, puedes consultarlos y analizarlos. ' +
-        'Usa texto plano con saltos de línea, sin markdown con asteriscos ni almohadillas.';
+    let systemPrompt;
+    
+    if (userRole === 'admin') {
+        // Admin tiene acceso completo a todos los datos
+        systemPrompt =
+            'Eres "Finanzas AI", asistente inteligente de la app Finanzas Pro de 2Nexora, ' +
+            'para gestión de e-commerce y finanzas personales en República Dominicana. ' +
+            'Respondes en español, de forma concisa y útil. Trabajas con RD$ y US$. ' +
+            'Tienes acceso TOTAL y completo a TODOS los datos financieros del sistema (admin), ' +
+            'incluyendo: Effi Commerce, Transporte, Gastos Publicitarios, Finanzas Personales, ' +
+            'Cuentas Bancarias, Préstamos, Deudas, Deudores, Egresos Manuales y más. ' +
+            'Puedes analizar y comparar datos de todas las áreas. ' +
+            'Usa texto plano con saltos de línea, sin markdown con asteriscos ni almohadillas.';
+    } else {
+        // Usuario regular solo tiene acceso a Finanzas Personales
+        systemPrompt =
+            'Eres "Finanzas AI", asistente inteligente de la app Finanzas Pro de 2Nexora, ' +
+            'para gestión de finanzas personales en República Dominicana. ' +
+            'Respondes en español, de forma concisa y útil. Trabajas con RD$ y US$. ' +
+            'Solo tienes acceso a la sección de FINANZAS PERSONALES del usuario. ' +
+            'No puedes acceder a datos de e-commerce (Effi), Transporte, ni Gastos Publicitarios. ' +
+            'Ayudas al usuario a gestionar sus ingresos, gastos fijos, ahorros, cuentas bancarias, ' +
+            'préstamos y deudas personales. ' +
+            'Usa texto plano con saltos de línea, sin markdown con asteriscos ni almohadillas.';
+    }
 
     if (context && typeof context === 'object') {
         const fmt = (n) => 'RD$ ' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         const fmtUSD = (n) => '$ ' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         const c = context;
-        systemPrompt += '\n\n═══════════════════════════════════════════════════════';
-        systemPrompt += '\n📊 RESUMEN COMPLETO DE FINANZAS DEL USUARIO';
-        systemPrompt += '\n═══════════════════════════════════════════════════════';
+        
+        if (userRole === 'admin') {
+            // Admin ve TODO
+            systemPrompt += '\n\n═══════════════════════════════════════════════════════';
+            systemPrompt += '\n📊 RESUMEN COMPLETO - MODO ADMINISTRADOR';
+            systemPrompt += '\n═══════════════════════════════════════════════════════';
+
+            // FINANZAS PERSONALES
+            if (c.salarios !== undefined) {
+                systemPrompt += '\n\n💰 INGRESOS (Salarios):';
+                systemPrompt += `\n- Total mensual: ${fmt(c.salarios)}`;
+                if (c.salariosDetails && c.salariosDetails.length > 0) {
+                    c.salariosDetails.forEach((s, i) => {
+                        systemPrompt += `\n  ${i+1}. ${s.desc || 'Ingreso'} - ${fmt(s.monto)} (Día ${s.day})`;
+                    });
+                }
+            }
+
+            if (c.gastosFijos !== undefined) {
+                systemPrompt += '\n\n📌 GASTOS FIJOS:';
+                systemPrompt += `\n- Total mensual: ${fmt(c.gastosFijos)}`;
+                if (c.gastosFijosDetails && c.gastosFijosDetails.length > 0) {
+                    c.gastosFijosDetails.forEach((g, i) => {
+                        systemPrompt += `\n  ${i+1}. ${g.desc || 'Gasto'} - ${fmt(g.monto)} (Día ${g.day})`;
+                    });
+                }
+            }
+
+            if (c.ahorros !== undefined) {
+                systemPrompt += '\n\n🏦 AHORROS:';
+                systemPrompt += `\n- Total: ${fmt(c.ahorros)}`;
+                if (c.ahorrosDetails && c.ahorrosDetails.length > 0) {
+                    c.ahorrosDetails.forEach((a, i) => {
+                        systemPrompt += `\n  ${i+1}. ${a.desc || 'Ahorro'} - ${fmt(a.monto)} (${a.type || 'Mensual'})`;
+                    });
+                }
+            }
+
+            if (c.bancos !== undefined) {
+                systemPrompt += '\n\n🏛️ CUENTAS BANCARIAS:';
+                systemPrompt += `\n- Total saldo: ${fmt(c.bancos)}`;
+                if (c.bancosDetails && c.bancosDetails.length > 0) {
+                    c.bancosDetails.forEach((b, i) => {
+                        systemPrompt += `\n  ${i+1}. ${b.name} (${b.type || 'Ahorros'}): ${fmt(b.balance)}`;
+                    });
+                }
+            }
+
+            if (c.prestamos !== undefined) {
+                systemPrompt += '\n\n💳 PRÉSTAMOS/CRÉDITOS:';
+                systemPrompt += `\n- Total adeudado: ${fmt(c.prestamos)}`;
+                if (c.prestamosDetails && c.prestamosDetails.length > 0) {
+                    c.prestamosDetails.forEach((p, i) => {
+                        systemPrompt += `\n  ${i+1}. ${p.name}: Aprobado ${fmt(p.approved)}, Pendiente ${fmt(p.owed)} (Corte día ${p.cutDay}, Pago día ${p.payDay})`;
+                    });
+                }
+            }
+
+            if (c.deudasInformal !== undefined) {
+                systemPrompt += '\n\n🤝 DEUDAS INFORMALES:';
+                systemPrompt += `\n- Total pendiente: ${fmt(c.deudasInformal)}`;
+                if (c.deudasInformalDetails && c.deudasInformalDetails.length > 0) {
+                    c.deudasInformalDetails.forEach((d, i) => {
+                        systemPrompt += `\n  ${i+1}. ${d.name}: ${fmt(d.monto)} - ${d.desc || 'Sin descripción'}`;
+                    });
+                }
+            }
+
+            if (c.deudores !== undefined) {
+                systemPrompt += '\n\n👥 DEUDORES (金钱 prestado):';
+                systemPrompt += `\n- Total pendiente: ${fmt(c.deudores)}`;
+                if (c.deudoresDetails && c.deudoresDetails.length > 0) {
+                    c.deudoresDetails.forEach((d, i) => {
+                        systemPrompt += `\n  ${i+1}. ${d.name}: ${fmt(d.monto)} - ${d.desc || 'Sin descripción'}`;
+                    });
+                }
+            }
+
+            if (c.egresosManuales !== undefined) {
+                systemPrompt += '\n\n💸 EGRESOS MANUALES:';
+                if (c.egresosManualesDetails && c.egresosManualesDetails.length > 0) {
+                    c.egresosManualesDetails.forEach((e, i) => {
+                        systemPrompt += `\n  ${i+1}. ${e.desc || 'Egreso'}: ${fmt(e.monto)} (${e.tipo || 'General'})`;
+                    });
+                } else {
+                    systemPrompt += '\n  Sin egresos registrados';
+                }
+            }
+
+            if (c.ads !== undefined) {
+                systemPrompt += '\n\n📢 GASTOS PUBLICITARIOS:';
+                systemPrompt += `\n- Facebook Ads: ${fmtUSD(c.ads.facebookUSD)}`;
+                systemPrompt += `\n- TikTok Ads: ${fmtUSD(c.ads.tiktokUSD)}`;
+                systemPrompt += `\n- Total en RD$: ${fmt(c.ads.totalRD)}`;
+            }
+
+            // ECOMMERCE - EFFI
+            if (c.effi) {
+                const e = c.effi;
+                const g = (e.recaudo||0) - (e.compra||0) - (e.fleteCon||0) - (e.fleteDev||0) - (e.fleteSin||0) - (e.comisionRetiro||0) - (e.fulfillment||0);
+                systemPrompt += '\n\n🛒 EFFI COMMERCE:';
+                systemPrompt += `\n- Recaudo: ${fmt(e.recaudo)} | Compra: ${fmt(e.compra)} | Ganancia: ${fmt(g)}`;
+                systemPrompt += `\n- Fulfillment: ${fmt(e.fulfillment)} | Flete: ${fmt(e.fleteCon)}`;
+            }
+
+            // TRANSPORTE
+            if (c.transporte) {
+                const t = c.transporte;
+                systemPrompt += '\n\n🚚 TRANSPORTE:';
+                systemPrompt += `\n- Total: ${t.totalOrdenes} | Entregadas: ${t.entregadas} | Devoluciones: ${t.devoluciones}`;
+            }
+            
+            systemPrompt += '\n═══════════════════════════════════════════════════════';
+        } else {
+            // Usuario regular solo ve finanzas personales
+            systemPrompt += '\n\n═══════════════════════════════════════════════════════';
+            systemPrompt += '\n💰 FINANZAS PERSONALES';
+            systemPrompt += '\n═══════════════════════════════════════════════════════';
+            
+            if (c.salarios !== undefined) {
+                systemPrompt += '\n\n📈 Ingresos: ' + fmt(c.salarios);
+                if (c.salariosDetails && c.salariosDetails.length > 0) {
+                    systemPrompt += '\nDetalle:';
+                    c.salariosDetails.forEach((s) => {
+                        systemPrompt += `\n- ${s.desc}: ${fmt(s.monto)}`;
+                    });
+                }
+            }
+            
+            if (c.gastosFijos !== undefined) {
+                systemPrompt += '\n\n📉 Gastos Fijos: ' + fmt(c.gastosFijos);
+            }
+            
+            if (c.ahorros !== undefined) {
+                systemPrompt += '\n\n🏦 Ahorros: ' + fmt(c.ahorros);
+            }
+            
+            if (c.bancos !== undefined) {
+                systemPrompt += '\n\n🏛️ Cuentas: ' + fmt(c.bancos);
+            }
+            
+            if (c.prestamos !== undefined) {
+                systemPrompt += '\n\n💳 Préstamos: ' + fmt(c.prestamos);
+            }
+            
+            const balance = (c.salarios || 0) - (c.gastosFijos || 0) - (c.ahorros || 0);
+            systemPrompt += '\n\n💵 Balance disponible: ' + fmt(balance);
+            systemPrompt += '\n═══════════════════════════════════════════════════════';
+        }
+    }
 
         // FINANZAS PERSONALES
         if (c.salarios !== undefined) {

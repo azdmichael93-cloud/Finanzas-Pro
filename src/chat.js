@@ -429,10 +429,15 @@
 
         try {
             const context = buildFinancialContext();
+            
+            // Obtener el rol del usuario
+            const isAdmin = sessionStorage.getItem('is_admin') === 'true';
+            const userRole = isAdmin ? 'admin' : 'user';
+            
             const res = await fetch('/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: text, context })
+                body: JSON.stringify({ message: text, context, userRole })
             });
 
             if (!res.ok) throw new Error('HTTP ' + res.status);
