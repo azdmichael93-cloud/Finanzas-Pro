@@ -493,11 +493,12 @@
     function buildFinancialContext() {
         /* appState, effiTotals y transporteTotals son globales del index.html */
         const ctx = {};
+        const isAdmin = sessionStorage.getItem('is_admin') === 'true';
 
         if (typeof appState !== 'undefined') {
             const fp = appState.finanzasPersonales || {};
             
-            // Totales
+            // Siempre incluir finanzas personales (disponible para todos)
             ctx.salarios        = sum(fp.salarios, 'monto');
             ctx.gastosFijos     = sum(fp.gastosFijos, 'monto');
             ctx.ahorros         = sum(fp.ahorros, 'monto');
@@ -512,67 +513,72 @@
             ctx.bancosDetails          = fp.cuentasBancarias || [];
             ctx.prestamosDetails       = fp.prestamos || [];
             ctx.deudasInformalDetails  = fp.deudasInformales || [];
-        }
+            
+            // Solo admins ven estos datos
+            if (isAdmin) {
+                // Egresos manuales
+                if (appState.egresosManuales) {
+                    ctx.egresosManuales = sum(appState.egresosManuales, 'monto');
+                    ctx.egresosManualesDetails = appState.egresosManuales;
+                }
 
-        // Egresos manuales
-        if (typeof appState !== 'undefined' && appState.egresosManuales) {
-            ctx.egresosManuales = sum(appState.egresosManuales, 'monto');
-            ctx.egresosManualesDetails = appState.egresosManuales;
-        }
+                // Gastos personales
+                if (appState.gastosPersonales) {
+                    ctx.gastosPersonales = sum(appState.gastosPersonales, 'monto');
+                    ctx.gastosPersonalesDetails = appState.gastosPersonales;
+                }
 
-        // Gastos personales
-        if (typeof appState !== 'undefined' && appState.gastosPersonales) {
-            ctx.gastosPersonales = sum(appState.gastosPersonales, 'monto');
-            ctx.gastosPersonalesDetails = appState.gastosPersonales;
-        }
+                // Deudores
+                if (appState.deudores) {
+                    ctx.deudores = sum(appState.deudores, 'monto');
+                    ctx.deudoresDetails = appState.deudores;
+                }
 
-        // Deudores
-        if (typeof appState !== 'undefined' && appState.deudores) {
-            ctx.deudores = sum(appState.deudores, 'monto');
-            ctx.deudoresDetails = appState.deudores;
-        }
+                // Ads - SOLO ADMIN
+                if (typeof adsTotals !== 'undefined' && adsTotals) {
+                    ctx.ads = {
+                        facebookUSD: adsTotals.facebookUSD || 0,
+                        tiktokUSD: adsTotals.tiktokUSD || 0,
+                        totalRD: adsTotals.totalRD || 0,
+                        rate: adsTotals.rate || 57
+                    };
+                }
+                
+                // Ads manuales
+                if (typeof appState !== 'undefined' && appState.manualAds) {
+                    ctx.ads = ctx.ads || {};
+                    ctx.ads.manualAdsDetails = appState.manualAds;
+                    ctx.ads.totalRD = (ctx.ads.totalRD || 0) + sum(appState.manualAds, 'monto');
+                }
 
-        // Ads
-        if (typeof adsTotals !== 'undefined' && adsTotals) {
-            ctx.ads = {
-                facebookUSD: adsTotals.facebookUSD || 0,
-                tiktokUSD: adsTotals.tiktokUSD || 0,
-                totalRD: adsTotals.totalRD || 0,
-                rate: adsTotals.rate || 57
-            };
-        }
-        
-        // Ads manuales
-        if (typeof appState !== 'undefined' && appState.manualAds) {
-            ctx.ads = ctx.ads || {};
-            ctx.ads.manualAdsDetails = appState.manualAds;
-            ctx.ads.totalRD = (ctx.ads.totalRD || 0) + sum(appState.manualAds, 'monto');
-        }
+                // Effi - SOLO ADMIN
+                if (typeof effiTotals !== 'undefined' && effiTotals) {
+                    ctx.effi = {
+                        compra:         effiTotals.compra         || 0,
+                        recaudo:        effiTotals.recaudo        || 0,
+                        fleteCon:       effiTotals.fleteCon       || 0,
+                        fleteDev:       effiTotals.fleteDev        || 0,
+                        fleteSin:       effiTotals.fleteSin       || 0,
+                        retiro:         effiTotals.retiro         || 0,
+                        comisionRetiro: effiTotals.comisionRetiro || 0,
+                        fulfillment:    effiTotals.fulfillment    || 0,
+                        indemnizacion:  effiTotals.indemnizacion  || 0,
+                        debitoRevertido: effiTotals.debitoRevertido || 0,
+                    };
+                }
 
-        if (typeof effiTotals !== 'undefined' && effiTotals) {
-            ctx.effi = {
-                compra:         effiTotals.compra         || 0,
-                recaudo:        effiTotals.recaudo        || 0,
-                fleteCon:       effiTotals.fleteCon       || 0,
-                fleteDev:       effiTotals.fleteDev        || 0,
-                fleteSin:       effiTotals.fleteSin       || 0,
-                retiro:         effiTotals.retiro         || 0,
-                comisionRetiro: effiTotals.comisionRetiro || 0,
-                fulfillment:    effiTotals.fulfillment    || 0,
-                indemnizacion:  effiTotals.indemnizacion  || 0,
-                debitoRevertido: effiTotals.debitoRevertido || 0,
-            };
-        }
-
-        if (typeof transporteTotals !== 'undefined' && transporteTotals) {
-            ctx.transporte = {
-                totalOrdenes: transporteTotals.totalOrdenes || 0,
-                entregadas:   transporteTotals.entregada    || 0,
-                devoluciones: transporteTotals.devolucion   || 0,
-                enTransito:   transporteTotals.transito     || 0,
-                enReparto:    transporteTotals.reparto      || 0,
-                novedad:      transporteTotals.novedad      || 0,
-            };
+                // Transporte - SOLO ADMIN
+                if (typeof transporteTotals !== 'undefined' && transporteTotals) {
+                    ctx.transporte = {
+                        totalOrdenes: transporteTotals.totalOrdenes || 0,
+                        entregadas:   transporteTotals.entregada    || 0,
+                        devoluciones: transporteTotals.devolucion   || 0,
+                        enTransito:   transporteTotals.transito     || 0,
+                        enReparto:    transporteTotals.reparto      || 0,
+                        novedad:      transporteTotals.novedad      || 0,
+                    };
+                }
+            }
         }
 
         return ctx;
