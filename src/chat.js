@@ -330,10 +330,7 @@
             <div id="chatbot-messages"></div>
 
             <div id="chatbot-suggestions">
-                <button class="cb-suggestion" data-q="¿Cuál es mi ganancia este período?">💰 Ganancia</button>
-                <button class="cb-suggestion" data-q="¿Cuánto debo en préstamos?">💳 Deudas</button>
-                <button class="cb-suggestion" data-q="¿Cómo están mis ahorros?">🐷 Ahorros</button>
-                <button class="cb-suggestion" data-q="Analiza mis devoluciones de Effi">📦 Effi</button>
+                <!-- Las sugerencias se cargan dinámicamente según el rol -->
             </div>
 
             <div id="chatbot-input-area">
@@ -364,6 +361,40 @@
     /* ── ESTADO ──────────────────────────────────────────────────────── */
     let isOpen    = false;
     let isLoading = false;
+
+    /* ── SUGERENCIAS SEGÚN ROL ─────────────────────────────────────────── */
+    function loadSuggestions() {
+        const isAdmin = sessionStorage.getItem('is_admin') === 'true';
+        const suggContainer = document.getElementById('chatbot-suggestions');
+        
+        if (isAdmin) {
+            // Admin tiene todas las sugerencias
+            suggContainer.innerHTML = `
+                <button class="cb-suggestion" data-q="¿Cuál es mi ganancia este período?">💰 Ganancia</button>
+                <button class="cb-suggestion" data-q="¿Cuánto debo en préstamos?">💳 Deudas</button>
+                <button class="cb-suggestion" data-q="¿Cómo están mis ahorros?">🐷 Ahorros</button>
+                <button class="cb-suggestion" data-q="Analiza mis devoluciones de Effi">📦 Effi</button>
+                <button class="cb-suggestion" data-q="Estado de mis guías de transporte">🚚 Transporte</button>
+                <button class="cb-suggestion" data-g="Resumen completo de finanzas">📊 Resumen Total</button>
+            `;
+        } else {
+            // Usuario regular solo ve finanzas personales
+            suggContainer.innerHTML = `
+                <button class="cb-suggestion" data-q="¿Cuál es mi balance mensual?">💰 Mi Balance</button>
+                <button class="cb-suggestion" data-q="¿Cuánto debo en préstamos?">💳 Mis Deudas</button>
+                <button class="cb-suggestion" data-q="¿Cómo están mis ahorros?">🐷 Mis Ahorros</button>
+                <button class="cb-suggestion" data-q="Resumen de mis finanzas personales">📊 Mi Resumen</button>
+            `;
+        }
+        
+        // Re-attach event listeners
+        suggContainer.querySelectorAll('.cb-suggestion').forEach(btn => {
+            btn.addEventListener('click', () => {
+                input.value = btn.dataset.q;
+                sendMessage();
+            });
+        });
+    }
 
     /* ── SALUDO INICIAL ──────────────────────────────────────────────── */
     addMessage('bot',

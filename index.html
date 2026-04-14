@@ -3664,6 +3664,11 @@
                     }
                     updateSystemStatus();
                     loadState(); // cargar datos tras login
+                    
+                    // Actualizar sugerencias del chatbot según rol
+                    if (typeof loadSuggestions === 'function') {
+                        loadSuggestions();
+                    }
                 } else {
                     const errorData = await resp.json();
                     errorEl.innerText = errorData.message || "Credenciales incorrectas";
@@ -3682,6 +3687,15 @@
             sessionStorage.removeItem('username');
             sessionStorage.removeItem('is_admin');
             sessionStorage.removeItem('last_sync_at');
+            
+            // Limpiar estado y sugerencias del chatbot
+            appState = {};
+            saveState();
+            
+            if (typeof loadSuggestions === 'function') {
+                loadSuggestions();
+            }
+            
             if (window.__systemHealthInterval) {
                 clearInterval(window.__systemHealthInterval);
                 window.__systemHealthInterval = null;
