@@ -1466,8 +1466,11 @@
             </div>
             
              <nav class="nav-center">
-                <button class="menu-btn active" data-view="dashboardReal" onclick="switchView('dashboardReal', this)"><i class="fa-solid fa-house-chimney"></i> Dashboard Real</button>
-                <button class="menu-btn" data-view="dashboard" onclick="switchView('dashboard', this)"><i class="fa-solid fa-chart-line"></i> Panel Effi Commerce</button>
+                <button class="menu-btn" data-view="dashboardReal" onclick="switchView('dashboardReal', this)"><i class="fa-solid fa-house-chimney"></i> Dashboard Real</button>
+                <div class="nav-group">
+                    <button class="menu-btn" data-view="dashboard" onclick="switchView('dashboard', this)"><i class="fa-solid fa-chart-line"></i> Panel Effi Commerce</button>
+                    <button class="menu-btn sub-menu-btn" data-view="filtroArticulo" onclick="switchView('filtroArticulo', this)"><i class="fa-solid fa-filter"></i> Filtro por Artículo</button>
+                </div>
                 <button class="menu-btn" data-view="uploads" onclick="switchView('uploads', this)"><i class="fa-solid fa-cloud-arrow-up"></i> Cargar Archivo</button>
                 <button class="menu-btn" data-view="cardPersonal" onclick="switchView('cardPersonal', this)"><i class="fa-solid fa-credit-card"></i> Gastos personales</button>
                 <button class="menu-btn" data-view="deudores" onclick="switchView('deudores', this)"><i class="fa-solid fa-hand-holding-dollar"></i> Deudores & Gracias</button>
@@ -1541,11 +1544,119 @@
             </div>
         </section>
 
+        <section id="filtroArticulo" class="view">
+            <div class="panel" style="max-width: 960px; margin: 0 auto;">
+                <div class="premium-modal-card">
+                     <div class="premium-modal-header" style="padding-bottom: 0;">
+                         <div class="premium-modal-icon" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1)); border-color: rgba(255, 215, 0, 0.3); color: #ffd700;">
+                             <i class="fa-solid fa-box-open"></i>
+                         </div>
+                         <h3>Filtro por Artículo</h3>
+                         <p>Toca un artículo de la lista: las métricas se calculan al instante y se muestran en una tarjeta modal</p>
+                     </div>
+                     <div style="display: flex; flex-wrap: wrap; gap: 24px; padding: 16px 24px 28px; align-items: flex-start;">
+                         <div style="flex: 1 1 280px; min-width: 0;">
+                             <h4 style="color: #ffd700; margin: 0 0 12px;">📦 Artículos vendidos (reportes)</h4>
+                             <div id="articuloListContainerView" style="max-height: min(560px, 70vh); overflow-y: auto; background: rgba(10, 26, 54, 0.55); border-radius: 12px; padding: 10px; border: 1px solid rgba(57, 215, 255, 0.15);">
+                             </div>
+                         </div>
+                         <div style="flex: 1 1 240px; min-width: 0;">
+                             <div style="background: rgba(10, 26, 54, 0.35); border-radius: 12px; padding: 20px; border: 1px dashed rgba(57, 215, 255, 0.28); color: #9fc2ff; line-height: 1.65;">
+                                 <p style="margin: 0 0 10px;"><strong style="color: #fff;">Cómo ver resultados</strong></p>
+                                 <p style="margin: 0; font-size: 14px;">Los nombres salen de Effi y transporte. Al elegir uno, no hace falta pulsar «Analizar»: se abre el detalle en una ventana flotante.</p>
+                                 <p style="margin: 14px 0 0; font-size: 12px; opacity: 0.85;">Sincroniza primero tus archivos en <strong style="color: #39d7ff;">Cargar Archivo</strong> si la lista está vacía.</p>
+                             </div>
+                             <input type="hidden" id="articuloFilterInputView" value="">
+                             <datalist id="articulosDatalist"></datalist>
+                         </div>
+                     </div>
+                </div>
+            </div>
+        </section>
+
+        <div id="articuloMetricasOverlay" class="premium-modal-overlay" aria-hidden="true">
+            <div class="premium-modal-container" style="max-width: 560px; max-height: 92vh; overflow-y: auto;">
+                <button type="button" class="premium-modal-close" onclick="closeArticuloMetricasModal()" aria-label="Cerrar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="premium-modal-header" style="padding-bottom: 10px;">
+                    <div class="premium-modal-icon" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1)); border-color: rgba(255, 215, 0, 0.3); color: #ffd700;">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                    <h3 id="articuloMetricasTitulo" style="word-break: break-word; font-size: 1.1rem;">📊 Resultados del artículo</h3>
+                    <p id="articuloMetricasSubtitulo" style="font-size: 13px; opacity: 0.9; margin-bottom: 0;">Métricas según reportes cargados</p>
+                </div>
+                <div id="articuloFilterResultsView" style="padding: 0 4px 12px;">
+                    <div class="articulo-stats-view" style="display: block;">
+                        <h4 style="color: #ffd700; margin-bottom: 16px;">📊 Resultados del Artículo</h4>
+                        <div class="articulo-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div class="articulo-stat" style="background: rgba(10, 26, 54, 0.6); border: 1px solid rgba(57, 215, 255, 0.2); border-radius: 10px; padding: 12px;">
+                                <span style="font-size: 11px; color: #9fc2ff;">Guía Generada</span>
+                                <span id="afvGuiaGenerada" style="font-size: 20px; font-weight: 800; color: #39d7ff;">0</span>
+                            </div>
+                            <div class="articulo-stat" style="background: rgba(10, 26, 54, 0.6); border: 1px solid rgba(57, 215, 255, 0.2); border-radius: 10px; padding: 12px;">
+                                <span style="font-size: 11px; color: #9fc2ff;">Guía en Reparto</span>
+                                <span id="afvGuiaReparto" style="font-size: 20px; font-weight: 800; color: #39d7ff;">0</span>
+                            </div>
+                            <div class="articulo-stat" style="background: rgba(10, 26, 54, 0.6); border: 1px solid rgba(255, 93, 93, 0.2); border-radius: 10px; padding: 12px;">
+                                <span style="font-size: 11px; color: #9fc2ff;">Novedades</span>
+                                <span id="afvNovedades" style="font-size: 20px; font-weight: 800; color: #ff5d5d;">0</span>
+                            </div>
+                            <div class="articulo-stat" style="background: rgba(10, 26, 54, 0.6); border: 1px solid rgba(125, 255, 184, 0.2); border-radius: 10px; padding: 12px;">
+                                <span style="font-size: 11px; color: #9fc2ff;">Total Guías</span>
+                                <span id="afvTotalGuias" style="font-size: 20px; font-weight: 800; color: #7dffb8;">0</span>
+                            </div>
+                            <div class="articulo-stat" style="background: rgba(10, 26, 54, 0.6); border: 1px solid rgba(255, 93, 93, 0.2); border-radius: 10px; padding: 12px;">
+                                <span style="font-size: 11px; color: #9fc2ff;">Total Devoluciones</span>
+                                <span id="afvDevoluciones" style="font-size: 20px; font-weight: 800; color: #ff5d5d;">0</span>
+                            </div>
+                            <div class="articulo-stat" style="background: rgba(10, 26, 54, 0.6); border: 1px solid rgba(125, 255, 184, 0.2); border-radius: 10px; padding: 12px;">
+                                <span style="font-size: 11px; color: #9fc2ff;">Ventas Entregadas</span>
+                                <span id="afvVentasEntregadas" style="font-size: 20px; font-weight: 800; color: #7dffb8;">0</span>
+                            </div>
+                            <div class="articulo-stat" style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.05)); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 10px; padding: 15px;">
+                                <span style="font-size: 12px; color: #ffd700;">Publicidad & Herramientas</span>
+                                <span id="afvPublicidades" style="font-size: 24px; font-weight: 900; color: #ffd700;">RD$ 0,00</span>
+                            </div>
+                            <div class="articulo-stat" style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(57, 215, 255, 0.15), rgba(57, 215, 255, 0.05)); border: 1px solid rgba(57, 215, 255, 0.3); border-radius: 10px; padding: 15px;">
+                                <span style="font-size: 12px; color: #39d7ff;">Porcentaje de Entrega</span>
+                                <span id="afvPorcentajeEntrega" style="font-size: 28px; font-weight: 900; color: #39d7ff;">0%</span>
+                            </div>
+                            <div class="articulo-stat" style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(125, 255, 184, 0.15), rgba(125, 255, 184, 0.05)); border: 1px solid rgba(125, 255, 184, 0.3); border-radius: 10px; padding: 15px;">
+                                <span style="font-size: 12px; color: #7dffb8;">Costo por Resultado</span>
+                                <span id="afvCostoResultado" style="font-size: 24px; font-weight: 900; color: #7dffb8;">RD$ 0,00</span>
+                            </div>
+                            <div class="articulo-stat" style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1)); border: 1px solid rgba(255, 215, 0, 0.4); border-radius: 10px; padding: 18px;">
+                                <span style="font-size: 14px; color: #ffd700;">GANANCIAS</span>
+                                <span id="afvGanancias" style="font-size: 32px; font-weight: 900; color: #ffd700;">RD$ 0,00</span>
+                                <span id="afvPorcentajeGanancias" style="font-size: 16px; color: #7dffb8; margin-top: 4px; display: block;">% de Ganancia: 0%</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px; padding: 12px; background: rgba(10, 26, 54, 0.4); border-radius: 8px; border: 1px solid rgba(57, 215, 255, 0.15);">
+                            <h5 style="margin: 0 0 8px; color: #39d7ff; font-size: 12px;">Desglose de Costos</h5>
+                            <div style="font-size: 12px; color: #9fc2ff; line-height: 1.8;">
+                                <div><span>Compra mercancía dropshipping a proveedor:</span> <span id="afvCompra" style="color: #fff;">RD$ 0,00</span></div>
+                                <div><span>Flete crédito con recaudo:</span> <span id="afvFleteCon" style="color: #fff;">RD$ 0,00</span></div>
+                                <div><span>Flete crédito devolución:</span> <span id="afvFleteDev" style="color: #fff;">RD$ 0,00</span></div>
+                                <div><span>Flete crédito sin recaudo:</span> <span id="afvFleteSin" style="color: #fff;">RD$ 0,00</span></div>
+                                <div><span>Servicio de Fulfillment:</span> <span id="afvFulfillment" style="color: #fff;">RD$ 0,00</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="premium-modal-footer" style="padding-top: 0;">
+                    <button type="button" class="premium-btn-secondary" onclick="closeArticuloMetricasModal()" style="width: 100%;">Cerrar</button>
+                </div>
+            </div>
+        </div>
+
         <section id="dashboard" class="view">
             <div class="panel">
                 <div class="dashboard-layout">
                     <div class="dashboard-main-col">
-                        <h3>2Nexora Finanzas Pro App - Dashboard</h3>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <h3>2Nexora Finanzas Pro App - Dashboard</h3>
+                        </div>
                         <p style="margin-top:0;color:#cfe3ff;"></p>
 
                     <div class="cards-wrapper">
@@ -3323,6 +3434,110 @@
     }
     </style>
 
+     <!-- Premium Artículo Filter Modal -->
+     <div id="articuloFilterOverlay" class="premium-modal-overlay">
+         <div class="premium-modal-container" style="display: flex; max-width: 900px;">
+             <!-- Lista lateral de artículos -->
+             <div class="articulo-sidebar" style="width: 280px; border-right: 1px solid rgba(57, 215, 255, 0.2);">
+                 <div style="padding: 20px; background: rgba(10, 26, 54, 0.6); border-radius: 18px 0 0 18px;">
+                     <h4 style="color: #ffd700; margin: 0 0 16px; text-align: center;">📦 Artículos Disponibles</h4>
+                     <div id="articuloListContainer" style="max-height: 400px; overflow-y: auto;">
+                         <!-- Lista de artículos se generará dinámicamente -->
+                     </div>
+                 </div>
+             </div>
+             
+             <!-- Contenido principal del modal -->
+             <div style="flex: 1; padding: 20px;">
+            <button class="premium-modal-close" onclick="closeArticuloFilterModal()" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="premium-modal-header">
+                <div class="premium-modal-icon" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1)); border-color: rgba(255, 215, 0, 0.3); color: #ffd700;">
+                    <i class="fa-solid fa-box-open"></i>
+                </div>
+                <h3>Filtrar por Artículo</h3>
+                <p>Ingresa el nombre del artículo para analizar solo sus métricas</p>
+            </div>
+            <form class="premium-modal-form" onsubmit="event.preventDefault(); applyArticuloFilter();">
+                <div class="premium-form-group full-width">
+                    <label for="articuloFilterInput">Nombre del Artículo</label>
+                    <input id="articuloFilterInput" type="text" class="premium-input" placeholder="Ej: 1776077869457-Camiseta Oversize">
+                </div>
+                <button type="submit" class="premium-btn-warning" style="width: 100%;">
+                    <i class="fa-solid fa-filter"></i> Aplicar Filtro
+                </button>
+            </form>
+            <div class="premium-modal-content" id="articuloFilterResults">
+                <div class="articulo-stats" style="display: none;">
+                    <h4 style="color: #ffd700; margin-bottom: 16px;">📊 Resultados del Artículo</h4>
+                    <div class="articulo-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div class="articulo-stat" style="background: rgba(10, 26, 54, 0.6); border: 1px solid rgba(57, 215, 255, 0.2); border-radius: 10px; padding: 12px;">
+                            <span style="font-size: 11px; color: #9fc2ff;">Guía Generada</span>
+                            <span id="afGuiaGenerada" style="font-size: 20px; font-weight: 800; color: #39d7ff;">0</span>
+                        </div>
+                        <div class="articulo-stat" style="background: rgba(10, 26, 54, 0.6); border: 1px solid rgba(57, 215, 255, 0.2); border-radius: 10px; padding: 12px;">
+                            <span style="font-size: 11px; color: #9fc2ff;">Guía en Reparto</span>
+                            <span id="afGuiaReparto" style="font-size: 20px; font-weight: 800; color: #39d7ff;">0</span>
+                        </div>
+                        <div class="articulo-stat" style="background: rgba(10, 26, 54, 0.6); border: 1px solid rgba(255, 93, 93, 0.2); border-radius: 10px; padding: 12px;">
+                            <span style="font-size: 11px; color: #9fc2ff;">Novedades</span>
+                            <span id="afNovedades" style="font-size: 20px; font-weight: 800; color: #ff5d5d;">0</span>
+                        </div>
+                        <div class="articulo-stat" style="background: rgba(10, 26, 54, 0.6); border: 1px solid rgba(125, 255, 184, 0.2); border-radius: 10px; padding: 12px;">
+                            <span style="font-size: 11px; color: #9fc2ff;">Total Guías</span>
+                            <span id="afTotalGuias" style="font-size: 20px; font-weight: 800; color: #7dffb8;">0</span>
+                        </div>
+                        <div class="articulo-stat" style="background: rgba(10, 26, 54, 0.6); border: 1px solid rgba(255, 93, 93, 0.2); border-radius: 10px; padding: 12px;">
+                            <span style="font-size: 11px; color: #9fc2ff;">Total Devoluciones</span>
+                            <span id="afDevoluciones" style="font-size: 20px; font-weight: 800; color: #ff5d5d;">0</span>
+                        </div>
+                        <div class="articulo-stat" style="background: rgba(10, 26, 54, 0.6); border: 1px solid rgba(125, 255, 184, 0.2); border-radius: 10px; padding: 12px;">
+                            <span style="font-size: 11px; color: #9fc2ff;">Ventas Entregadas</span>
+                            <span id="afVentasEntregadas" style="font-size: 20px; font-weight: 800; color: #7dffb8;">0</span>
+                        </div>
+                        <div class="articulo-stat" style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.05)); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 10px; padding: 15px;">
+                            <span style="font-size: 12px; color: #ffd700;">Publicidad & Herramientas</span>
+                            <span id="afPublicidades" style="font-size: 24px; font-weight: 900; color: #ffd700;">RD$ 0,00</span>
+                        </div>
+                        <div class="articulo-stat" style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(57, 215, 255, 0.15), rgba(57, 215, 255, 0.05)); border: 1px solid rgba(57, 215, 255, 0.3); border-radius: 10px; padding: 15px;">
+                            <span style="font-size: 12px; color: #39d7ff;">Porcentaje de Entrega</span>
+                            <span id="afPorcentajeEntrega" style="font-size: 28px; font-weight: 900; color: #39d7ff;">0%</span>
+                        </div>
+                        <div class="articulo-stat" style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(125, 255, 184, 0.15), rgba(125, 255, 184, 0.05)); border: 1px solid rgba(125, 255, 184, 0.3); border-radius: 10px; padding: 15px;">
+                            <span style="font-size: 12px; color: #7dffb8;">Costo por Resultado</span>
+                            <span id="afCostoResultado" style="font-size: 24px; font-weight: 900; color: #7dffb8;">RD$ 0,00</span>
+                        </div>
+                        <div class="articulo-stat" style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1)); border: 1px solid rgba(255, 215, 0, 0.4); border-radius: 10px; padding: 18px;">
+                            <span style="font-size: 14px; color: #ffd700;">GANANCIAS</span>
+                            <span id="afGanancias" style="font-size: 32px; font-weight: 900; color: #ffd700;">RD$ 0,00</span>
+                            <span id="afPorcentajeGanancias" style="font-size: 16px; color: #7dffb8; margin-top: 4px; display: block;">% de Ganancia: 0%</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 16px; padding: 12px; background: rgba(10, 26, 54, 0.4); border-radius: 8px; border: 1px solid rgba(57, 215, 255, 0.15);">
+                        <h5 style="margin: 0 0 8px; color: #39d7ff; font-size: 12px;">Desglose de Costos</h5>
+                        <div style="font-size: 12px; color: #9fc2ff; line-height: 1.8;">
+                            <div><span>Compra mercancía dropshipping a proveedor:</span> <span id="afCompra" style="color: #fff;">RD$ 0,00</span></div>
+                            <div><span>Flete crédito con recaudo:</span> <span id="afFleteCon" style="color: #fff;">RD$ 0,00</span></div>
+                            <div><span>Flete crédito devolución:</span> <span id="afFleteDev" style="color: #fff;">RD$ 0,00</span></div>
+                            <div><span>Flete crédito sin recaudo:</span> <span id="afFleteSin" style="color: #fff;">RD$ 0,00</span></div>
+                            <div><span>Servicio de Fulfillment:</span> <span id="afFulfillment" style="color: #fff;">RD$ 0,00</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="articuloNoData" style="text-align: center; padding: 30px; color: #9fc2ff;">
+                    <i class="fa-solid fa-box-open" style="font-size: 40px; margin-bottom: 12px; opacity: 0.5;"></i>
+                    <p>Selecciona un artículo para ver sus métricas</p>
+                </div>
+             </div>
+             <!-- End of main content -->
+         </div>
+         <div class="premium-modal-footer">
+             <button class="premium-btn-secondary" onclick="closeArticuloFilterModal()">Cerrar</button>
+         </div>
+     </div>
+
     <script>
     // Premium Modal Functions
     function openEgresosModal() {
@@ -3433,6 +3648,27 @@
     </div>
 
     <style>
+    .nav-group {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    .sub-menu-btn {
+        padding-left: 40px !important;
+        font-size: 13px !important;
+        background: rgba(0, 0, 0, 0.2) !important;
+        border-left: 2px solid transparent;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .sub-menu-btn:hover {
+        background: rgba(57, 215, 255, 0.05) !important;
+        border-left: 2px solid #39d7ff;
+    }
+    .sub-menu-btn.active {
+        background: rgba(57, 215, 255, 0.1) !important;
+        border-left: 2px solid #39d7ff;
+        color: #39d7ff;
+    }
     .premium-btn-danger {
         padding: 12px 24px;
         border-radius: 10px;
@@ -3478,8 +3714,383 @@
             }
 
             overlay.classList.add('active');
+        }
+
+        // Artículo Filter Modal Functions
+        let articuloFilterData = {
+            nombre: '',
+            guiaGenerada: 0,
+            guiaTransito: 0,
+            guiaReparto: 0,
+            entregadaDestino: 0,
+            novedades: 0,
+            totalGuias: 0,
+            devoluciones: 0,
+            ventasEntregadas: 0,
+            facebookAds: 0,
+            tiktokAds: 0,
+            publicidades: 0,
+            porcentajeEntrega: 0,
+            costoResultado: 0,
+            ganancias: 0,
+            porcentajeGanancias: 0,
+            compra: 0,
+            fleteCon: 0,
+            fleteDev: 0,
+            fleteSin: 0,
+            fulfillment: 0,
+            recaudo: 0
+        };
+
+        function openArticuloFilterModal() {
+            document.getElementById('articuloFilterOverlay').classList.add('active');
+            document.body.classList.add('no-scroll');
+            populateArticuloList(); // Actualizar lista de artículos al abrir el modal
+        }
+
+        function closeArticuloFilterModal() {
+            document.getElementById('articuloFilterOverlay').classList.remove('active');
+            document.body.classList.remove('no-scroll');
+        }
+
+        function openArticuloMetricasModal() {
+            const ov = document.getElementById('articuloMetricasOverlay');
+            if (!ov) return;
+            ov.classList.add('active');
+            ov.setAttribute('aria-hidden', 'false');
             document.body.classList.add('no-scroll');
         }
+
+        function closeArticuloMetricasModal() {
+            const ov = document.getElementById('articuloMetricasOverlay');
+            if (!ov) return;
+            ov.classList.remove('active');
+            ov.setAttribute('aria-hidden', 'true');
+            const other = document.getElementById('articuloFilterOverlay');
+            if (!other || !other.classList.contains('active')) {
+                document.body.classList.remove('no-scroll');
+            }
+        }
+
+        function setArticuloMetricasModalTitle(nombreArticulo) {
+            const t = document.getElementById('articuloMetricasTitulo');
+            const s = document.getElementById('articuloMetricasSubtitulo');
+            if (t) t.textContent = nombreArticulo || 'Resultados del artículo';
+            if (s) s.textContent = 'Métricas según reportes cargados (Effi, transporte, ads)';
+        }
+
+        // Funciones para la lista lateral de artículos
+        function populateArticuloList() {
+            const container = document.getElementById('articuloListContainer');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const articulos = appState.articulosDisponibles || [];
+            
+            if (articulos.length === 0) {
+                const noItems = document.createElement('div');
+                noItems.style.padding = '20px';
+                noItems.style.textAlign = 'center';
+                noItems.style.color = '#9fc2ff';
+                noItems.innerHTML = '<p>No hay artículos disponibles<br><small>Cargue reportes primero</small></p>';
+                container.appendChild(noItems);
+                return;
+            }
+            
+            // Ordenar alfabéticamente
+            articulos.sort().forEach(articulo => {
+                const item = document.createElement('div');
+                item.style.padding = '12px 16px';
+                item.style.margin = '4px 0';
+                item.style.background = 'rgba(10, 26, 54, 0.4)';
+                item.style.borderRadius = '8px';
+                item.style.cursor = 'pointer';
+                item.style.borderLeft = '3px solid transparent';
+                item.style.transition = 'all 0.2s ease';
+                item.style.fontSize = '14px';
+                item.style.color = '#fff';
+                item.style.whiteSpace = 'nowrap';
+                item.style.overflow = 'hidden';
+                item.style.textOverflow = 'ellipsis';
+                
+                item.innerHTML = `<strong>${articulo}</strong>`;
+                
+                // Hover effect
+                item.onmouseover = () => {
+                    item.style.background = 'rgba(10, 26, 54, 0.6)';
+                    item.style.borderLeftColor = '#39d7ff';
+                };
+                
+                item.onmouseout = () => {
+                    item.style.background = 'rgba(10, 26, 54, 0.4)';
+                    item.style.borderLeftColor = 'transparent';
+                };
+                
+                // Click handler
+                item.onclick = () => {
+                    // Remover selección previa
+                    document.querySelectorAll('#articuloListContainer div').forEach(el => {
+                        el.style.fontWeight = 'normal';
+                        el.style.background = 'rgba(10, 26, 54, 0.4)';
+                    });
+                    
+                    // Seleccionar este artículo
+                    item.style.fontWeight = 'bold';
+                    item.style.background = 'rgba(57, 215, 255, 0.2)';
+                    item.style.borderLeftColor = '#39d7ff';
+                    
+                    // Establecer en el campo de entrada y aplicar filtro
+                    const input = document.getElementById('articuloFilterInput');
+                    if (input) {
+                        input.value = articulo;
+                        input.dispatchEvent(new Event('input'));
+                    }
+                    
+                    const inputView = document.getElementById('articuloFilterInputView');
+                    if (inputView) {
+                        inputView.value = articulo;
+                        inputView.dispatchEvent(new Event('input'));
+                    }
+                    
+                    articuloFilterData.nombre = articulo;
+                    reprocessAllFilesForFilter().then(() => {
+                        fillArticuloFilterMetricsUi('modal');
+                        showAlert(`Métricas actualizadas para: ${articulo}`, 'success');
+                    });
+                };
+                
+                container.appendChild(item);
+            });
+        }
+        
+        // Función para poblar la lista de artículos en la vista principal
+        function populateArticuloListView() {
+            const container = document.getElementById('articuloListContainerView');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const articulos = appState.articulosDisponibles || [];
+            
+            if (articulos.length === 0) {
+                const noItems = document.createElement('div');
+                noItems.style.padding = '12px';
+                noItems.style.textAlign = 'center';
+                noItems.style.color = '#9fc2ff';
+                noItems.style.fontSize = '13px';
+                noItems.innerHTML = '<p>No hay artículos disponibles</p>';
+                container.appendChild(noItems);
+                return;
+            }
+            
+            // Ordenar alfabéticamente
+            articulos.sort().forEach(articulo => {
+                const item = document.createElement('div');
+                item.style.padding = '8px 12px';
+                item.style.margin = '2px 0';
+                item.style.background = 'rgba(10, 26, 54, 0.3)';
+                item.style.borderRadius = '6px';
+                item.style.cursor = 'pointer';
+                item.style.borderLeft = '2px solid transparent';
+                item.style.transition = 'all 0.15s ease';
+                item.style.fontSize = '13px';
+                item.style.color = '#fff';
+                item.style.whiteSpace = 'nowrap';
+                item.style.overflow = 'hidden';
+                item.style.textOverflow = 'ellipsis';
+                
+                item.innerHTML = `<strong>${articulo}</strong>`;
+                
+                // Hover effect
+                item.onmouseover = () => {
+                    item.style.background = 'rgba(10, 26, 54, 0.5)';
+                    item.style.borderLeftColor = '#39d7ff';
+                };
+                
+                item.onmouseout = () => {
+                    item.style.background = 'rgba(10, 26, 54, 0.3)';
+                    item.style.borderLeftColor = 'transparent';
+                };
+                
+                // Click handler
+                item.onclick = () => {
+                    // Remover selección previa
+                    document.querySelectorAll('#articuloListContainerView div').forEach(el => {
+                        el.style.fontWeight = 'normal';
+                        el.style.background = 'rgba(10, 26, 54, 0.3)';
+                    });
+                    
+                    // Seleccionar este artículo
+                    item.style.fontWeight = 'bold';
+                    item.style.background = 'rgba(57, 215, 255, 0.15)';
+                    item.style.borderLeftColor = '#39d7ff';
+                    
+                    // Establecer en el campo de entrada y aplicar filtro
+                    const inputView = document.getElementById('articuloFilterInputView');
+                    if (inputView) {
+                        inputView.value = articulo;
+                        inputView.dispatchEvent(new Event('input'));
+                    }
+                    
+                    const input = document.getElementById('articuloFilterInput');
+                    if (input) {
+                        input.value = articulo;
+                        input.dispatchEvent(new Event('input'));
+                    }
+                    
+                     articuloFilterData.nombre = articulo;
+                     reprocessAllFilesForFilter().then(() => {
+                         fillArticuloFilterMetricsUi('view');
+                         setArticuloMetricasModalTitle(articulo);
+                         openArticuloMetricasModal();
+                     });
+                };
+                
+                container.appendChild(item);
+            });
+        }
+
+        function populateArticulosDatalist() {
+            const datalist = document.getElementById('articulosDatalist');
+            if (!datalist) return;
+            
+            datalist.innerHTML = '';
+            
+            const articulos = appState.articulosDisponibles || [];
+            
+            if (articulos.length === 0) {
+                const opt = document.createElement('option');
+                opt.value = 'Sube un reporte para ver artículos';
+                datalist.appendChild(opt);
+                return;
+            }
+            
+            // Ordenar alfabéticamente
+            articulos.sort().forEach(art => {
+                const opt = document.createElement('option');
+                opt.value = art;
+                datalist.appendChild(opt);
+            });
+        }
+
+        /** which: 'modal' (ids af*) o 'view' (ids afv*) — usa articuloFilterData tras reprocessAllFilesForFilter */
+        function fillArticuloFilterMetricsUi(which) {
+            const prefix = which === 'modal' ? 'af' : 'afv';
+            const tasaCambio = parseFloat(document.getElementById('exchangeRate')?.value || 58);
+            const {
+                guiaGenerada, guiaReparto, novedades, totalGuias, devoluciones, ventasEntregadas,
+                compra, fleteCon, fleteDev, fleteSin, fulfillment, recaudo,
+                facebookAds, tiktokAds
+            } = articuloFilterData;
+
+            const totalOrdenes = transporteTotals.totalOrdenes || 0;
+            const pctEntrega = totalOrdenes > 0 ? ((ventasEntregadas / totalOrdenes) * 100).toFixed(2) : 0;
+            const costoResult = recaudo - compra;
+            const ganancias = recaudo - compra - fleteCon - fleteDev - fleteSin - fulfillment;
+            const pctGanancia = recaudo > 0 ? ((ganancias / recaudo) * 100).toFixed(2) : 0;
+            const totalAdsArticulo = (facebookAds + tiktokAds) * tasaCambio;
+
+            const set = (suffix, text) => {
+                const el = document.getElementById(prefix + suffix);
+                if (el) el.innerText = text;
+            };
+            set('GuiaGenerada', guiaGenerada);
+            set('GuiaReparto', guiaReparto);
+            set('Novedades', novedades);
+            set('TotalGuias', totalGuias);
+            set('Devoluciones', devoluciones);
+            set('VentasEntregadas', ventasEntregadas);
+            set('Publicidades', formatRD(totalAdsArticulo));
+            set('PorcentajeEntrega', pctEntrega + '%');
+            set('CostoResultado', formatRD(costoResult));
+            set('Ganancias', formatRD(ganancias));
+            set('PorcentajeGanancias', '% de Ganancia: ' + pctGanancia + '%');
+            set('Compra', formatRD(compra));
+            set('FleteCon', formatRD(fleteCon));
+            set('FleteDev', formatRD(fleteDev));
+            set('FleteSin', formatRD(fleteSin));
+            set('Fulfillment', formatRD(fulfillment));
+
+            if (which === 'modal') {
+                const statsEl = document.querySelector('#articuloFilterResults .articulo-stats');
+                const noDataEl = document.getElementById('articuloNoData');
+                if (statsEl) statsEl.style.display = 'block';
+                if (noDataEl) noDataEl.style.display = 'none';
+            } else {
+                const statsEl = document.querySelector('#articuloMetricasOverlay #articuloFilterResultsView .articulo-stats-view');
+                if (statsEl) statsEl.style.display = 'block';
+            }
+        }
+
+        function applyArticuloFilterView() {
+            const articulo = document.getElementById('articuloFilterInputView').value.trim();
+            if (!articulo) {
+                showAlert('Por favor, selecciona un artículo de la lista.', 'error');
+                return;
+            }
+            articuloFilterData.nombre = articulo;
+            reprocessAllFilesForFilter().then(() => {
+                fillArticuloFilterMetricsUi('view');
+                setArticuloMetricasModalTitle(articulo);
+                openArticuloMetricasModal();
+            });
+        }
+
+        function applyArticuloFilter() {
+            const articulo = document.getElementById('articuloFilterInput').value.trim();
+            if (!articulo) {
+                showAlert('Por favor ingresa un nombre de artículo', 'error');
+                return;
+            }
+            articuloFilterData.nombre = articulo;
+            reprocessAllFilesForFilter().then(() => {
+                fillArticuloFilterMetricsUi('modal');
+                showAlert('Filtro aplicado correctamente', 'success');
+            });
+        }
+
+        async function reprocessAllFilesForFilter() {
+            // Reprocesar los archivos en memoria para recalcular las métricas del artículo seleccionado
+            if (appState.files.effi?.b64) {
+                await extractCompraMercanciaFromEffiBuffer(base64ToBuffer(appState.files.effi.b64));
+            }
+            if (appState.files.transporte?.b64) {
+                await extractDevolucionAOrigenFromTransporteBuffer(base64ToBuffer(appState.files.transporte.b64));
+            }
+            if (appState.files.facebook?.b64) {
+                await extractAdsSpentFromBuffer(base64ToBuffer(appState.files.facebook.b64), 'facebook');
+            }
+            if (appState.files.tiktok?.b64) {
+                await extractAdsSpentFromBuffer(base64ToBuffer(appState.files.tiktok.b64), 'tiktok');
+            }
+        }
+
+        // Cerrar modales de artículo con ESC (métricas encima del filtro legacy)
+        document.addEventListener('keydown', function(e) {
+            if (e.key !== 'Escape') return;
+            const metricasOv = document.getElementById('articuloMetricasOverlay');
+            if (metricasOv && metricasOv.classList.contains('active')) {
+                closeArticuloMetricasModal();
+                return;
+            }
+            const articuloOverlay = document.getElementById('articuloFilterOverlay');
+            if (articuloOverlay && articuloOverlay.classList.contains('active')) {
+                closeArticuloFilterModal();
+            }
+        });
+
+        document.getElementById('articuloFilterOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeArticuloFilterModal();
+            }
+        });
+
+        document.getElementById('articuloMetricasOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeArticuloMetricasModal();
+            }
+        });
 
         // Premium Confirm Modal Functions
         let confirmCallback = null;
@@ -4176,8 +4787,16 @@
             document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
             targetView.classList.add('active');
             if (btn) btn.classList.add('active');
+            if (id !== 'filtroArticulo') {
+                const m = document.getElementById('articuloMetricasOverlay');
+                if (m && m.classList.contains('active')) closeArticuloMetricasModal();
+            }
             if (id === 'systemStatus') {
                 updateSystemStatus();
+            }
+            if (id === 'filtroArticulo') {
+                populateArticulosDatalist();
+                populateArticuloListView();
             }
         }
 
@@ -5575,6 +6194,8 @@ function processScheduledSavings() {
                 () => {
                     appState.files = {};
                     appState.ads = { facebookUSD: 0, tiktokUSD: 0 };
+                    appState.articulosDisponibles = [];
+                    resetArticuloFilterData();
                     
                     document.getElementById('fileTransporte').value = '';
                     document.getElementById('fileEffi').value = '';
@@ -5613,6 +6234,9 @@ function processScheduledSavings() {
                     updateResumenPremium();
                     updateRestaCard();
                     restoreStatusLabels();
+                    populateArticulosDatalist();
+                    populateArticuloListView();
+                    populateArticuloList();
                     
                     saveState();
                     
@@ -5691,6 +6315,90 @@ function processScheduledSavings() {
                 .toLowerCase()
                 .normalize('NFD')
                 .replace(/[\u0300-\u036f]/g, '');
+        }
+
+        const ARTICULO_ROW_KEYS = ['Contenido', 'Articulo', 'Artículo', 'Producto', 'Nombre articulo', 'Nombre del articulo', 'Descripción', 'Descripcion', 'Nombre del producto', 'SKU', 'Item'];
+
+        function cellToPlainString(val) {
+            if (val == null || val === '') return '';
+            if (typeof val === 'string') return val;
+            if (typeof val === 'number' || typeof val === 'boolean') return String(val);
+            if (typeof val === 'object') {
+                if (val.richText && Array.isArray(val.richText)) {
+                    return val.richText.map(function (t) { return (t && t.text) || ''; }).join('');
+                }
+                if (val.text != null) return String(val.text);
+            }
+            return String(val);
+        }
+
+        function stripQtyPrefix(s) {
+            var t = cellToPlainString(s)
+                .replace(/^\s*\d+\s*\*\s*/i, '')
+                .replace(/^\s*\d+\s+x\s+/i, '')
+                .replace(/\.\s*$/, '')
+                .trim();
+            return t;
+        }
+
+        /** Misma referencia de producto aunque transporte tenga «1 * …» y Effi solo el nombre corto */
+        function articulosCoinciden(seleccionado, filaValor) {
+            var a = stripQtyPrefix(seleccionado);
+            var b = stripQtyPrefix(filaValor);
+            if (!a || !b) return false;
+            var na = normalizeText(a);
+            var nb = normalizeText(b);
+            if (na === nb) return true;
+            var minIncl = 8;
+            if (na.length >= minIncl && nb.length >= minIncl && (na.indexOf(nb) !== -1 || nb.indexOf(na) !== -1)) {
+                return true;
+            }
+            return false;
+        }
+
+        function getArticuloNombreFromRow(row) {
+            if (!row || typeof row !== 'object') return '';
+            var k, t;
+            for (var i = 0; i < ARTICULO_ROW_KEYS.length; i++) {
+                k = ARTICULO_ROW_KEYS[i];
+                if (row[k] == null || row[k] === '') continue;
+                t = cellToPlainString(row[k]).trim();
+                if (t) return t;
+            }
+            for (k in row) {
+                if (!Object.prototype.hasOwnProperty.call(row, k)) continue;
+                var kl = normalizeText(k);
+                if ((kl.indexOf('articulo') !== -1 || kl.indexOf('producto') !== -1 || kl.indexOf('contenido') !== -1 || kl.indexOf('descripcion') !== -1 || kl.indexOf('item') !== -1) && row[k] != null) {
+                    t = cellToPlainString(row[k]).trim();
+                    if (t) return t;
+                }
+            }
+            return '';
+        }
+
+        function resetArticuloFilterData() {
+            articuloFilterData.nombre = '';
+            articuloFilterData.guiaGenerada = 0;
+            articuloFilterData.guiaTransito = 0;
+            articuloFilterData.guiaReparto = 0;
+            articuloFilterData.entregadaDestino = 0;
+            articuloFilterData.novedades = 0;
+            articuloFilterData.totalGuias = 0;
+            articuloFilterData.devoluciones = 0;
+            articuloFilterData.ventasEntregadas = 0;
+            articuloFilterData.facebookAds = 0;
+            articuloFilterData.tiktokAds = 0;
+            articuloFilterData.publicidades = 0;
+            articuloFilterData.porcentajeEntrega = 0;
+            articuloFilterData.costoResultado = 0;
+            articuloFilterData.ganancias = 0;
+            articuloFilterData.porcentajeGanancias = 0;
+            articuloFilterData.compra = 0;
+            articuloFilterData.fleteCon = 0;
+            articuloFilterData.fleteDev = 0;
+            articuloFilterData.fleteSin = 0;
+            articuloFilterData.fulfillment = 0;
+            articuloFilterData.recaudo = 0;
         }
 
         function formatRD(value) {
@@ -5816,17 +6524,46 @@ function processScheduledSavings() {
                             rows.push(row);
                         }
                         
-                        let countGenerada = 0, countTransito = 0, countReparto = 0, countEntregada = 0, countNovedad = 0, count = 0, totalOrdenes = 0;
-                        rows.forEach((row) => {
-                            const estado = normalizeText(row['Estado global guía inicial'] || row['Estado'] || '');
-                            if (estado) totalOrdenes += 1;
-                            if (estado.includes('generada') || estado.includes('generado')) countGenerada += 1;
-                            if (estado.includes('en transito') || estado.includes('transito')) countTransito += 1;
-                            if (estado.includes('entregada a destino') || estado.includes('entregad')) countEntregada += 1;
-                            if (estado.includes('en reparto') || estado.includes('reparto')) countReparto += 1;
-                            if (estado.includes('novedad')) countNovedad += 1;
-                            if (estado.includes('devolucion a origen') || estado.includes('devolucion')) count += 1;
-                        });
+                         let countGenerada = 0, countTransito = 0, countReparto = 0, countEntregada = 0, countNovedad = 0, count = 0, totalOrdenes = 0;
+                         const articulosSet = new Set(appState.articulosDisponibles || []);
+                         
+                         // Initialize article-specific counters for filtering
+                         let articuloGenerada = 0, articuloTransito = 0, articuloReparto = 0, articuloEntregada = 0, articuloNovedad = 0, articuloDevolucion = 0;
+
+                         rows.forEach((row) => {
+                             const artName = getArticuloNombreFromRow(row);
+                             if (artName) articulosSet.add(artName);
+
+                             const esArticuloSeleccionado = articuloFilterData.nombre && artName &&
+                                 articulosCoinciden(articuloFilterData.nombre, artName);
+
+                             const estado = normalizeText(row['Estado global guía inicial'] || row['Estado'] || '');
+                             if (estado) totalOrdenes += 1;
+                             if (estado.includes('generada') || estado.includes('generado')) {
+                                 countGenerada += 1;
+                                 if (esArticuloSeleccionado) articuloGenerada += 1;
+                             }
+                             if (estado.includes('en transito') || estado.includes('transito')) {
+                                 countTransito += 1;
+                                 if (esArticuloSeleccionado) articuloTransito += 1;
+                             }
+                             if (estado.includes('entregada a destino') || estado.includes('entregad')) {
+                                 countEntregada += 1;
+                                 if (esArticuloSeleccionado) articuloEntregada += 1;
+                             }
+                             if (estado.includes('en reparto') || estado.includes('reparto')) {
+                                 countReparto += 1;
+                                 if (esArticuloSeleccionado) articuloReparto += 1;
+                             }
+                             if (estado.includes('novedad')) {
+                                 countNovedad += 1;
+                                 if (esArticuloSeleccionado) articuloNovedad += 1;
+                             }
+                             if (estado.includes('devolucion a origen') || estado.includes('devolucion')) {
+                                 count += 1;
+                                 if (esArticuloSeleccionado) articuloDevolucion += 1;
+                             }
+                         });
                         
                         document.getElementById('stGenerada').innerText = String(countGenerada);
                         document.getElementById('stEnTransito').innerText = String(countTransito);
@@ -5836,17 +6573,32 @@ function processScheduledSavings() {
                         document.getElementById('stDevolucionOrigen').innerText = String(count);
                         document.getElementById('stTotalOrdenes').innerText = String(totalOrdenes);
 
-                        transporteTotals.generada = countGenerada;
-                        transporteTotals.devolucion = count;
-                        transporteTotals.transito = countTransito;
-                        transporteTotals.entregada = countEntregada;
-                        transporteTotals.reparto = countReparto;
-                        transporteTotals.novedad = countNovedad;
-                        transporteTotals.totalOrdenes = totalOrdenes;
-
-                        console.log('✅ Transporte procesado como CSV');
-                        updateResumenPremium();
-                        return;
+                         transporteTotals.generada = countGenerada;
+                         transporteTotals.devolucion = count;
+                         transporteTotals.transito = countTransito;
+                         transporteTotals.entregada = countEntregada;
+                         transporteTotals.reparto = countReparto;
+                         transporteTotals.novedad = countNovedad;
+                         transporteTotals.totalOrdenes = totalOrdenes;
+                         
+                         // Store article-specific totals for filtering
+                         articuloFilterData.guiaGenerada = articuloGenerada;
+                         articuloFilterData.guiaTransito = articuloTransito;
+                         articuloFilterData.guiaReparto = articuloReparto;
+                         articuloFilterData.entregadaDestino = articuloEntregada;
+                         articuloFilterData.novedades = articuloNovedad;
+                         articuloFilterData.totalGuias = articuloGenerada + articuloTransito + articuloReparto + articuloNovedad + articuloDevolucion + articuloEntregada;
+                         articuloFilterData.devoluciones = articuloDevolucion;
+                         articuloFilterData.ventasEntregadas = articuloEntregada;
+                        
+                         appState.articulosDisponibles = Array.from(articulosSet);
+                         populateArticulosDatalist();
+                         populateArticuloListView(); // Actualizar la nueva lista en la vista principal
+ 
+console.log('✅ Transporte procesado como CSV');
+console.log('📦 Artículos disponibles:', appState.articulosDisponibles);
+updateResumenPremium();
+                         return;
                     } catch (csvErr) {
                         console.error('Error procesando como CSV:', csvErr);
                         throw new Error('Archivo no válido para transporte');
@@ -5887,23 +6639,52 @@ function processScheduledSavings() {
                     rows.push(rowData);
                 });
 
-                let countGenerada = 0;
-                let countTransito = 0;
-                let countReparto = 0;
-                let countEntregada = 0;
-                let countNovedad = 0;
-                let count = 0; // Devolucion
-                let totalOrdenes = 0;
-                rows.forEach((row) => {
-                    const estado = normalizeText(row['Estado global guía inicial'] || '');
-                    if (estado) totalOrdenes += 1;
-                    if (estado.includes('generada') || estado.includes('generado')) countGenerada += 1;
-                    if (estado.includes('en transito') || estado.includes('transito')) countTransito += 1;
-                    if (estado.includes('entregada a destino') || estado.includes('entregad')) countEntregada += 1;
-                    if (estado.includes('en reparto') || estado.includes('reparto')) countReparto += 1;
-                    if (estado.includes('novedad')) countNovedad += 1;
-                    if (estado.includes('devolucion a origen') || estado.includes('devolucion')) count += 1;
-                });
+                 let countGenerada = 0;
+                 let countTransito = 0;
+                 let countReparto = 0;
+                 let countEntregada = 0;
+                 let countNovedad = 0;
+                 let count = 0; // Devolucion
+                 let totalOrdenes = 0;
+                 const articulosSet = new Set(appState.articulosDisponibles || []);
+                 
+                 // Initialize article-specific counters for filtering
+                 let articuloGenerada = 0, articuloTransito = 0, articuloReparto = 0, articuloEntregada = 0, articuloNovedad = 0, articuloDevolucion = 0;
+
+                 rows.forEach((row) => {
+                     const artName = getArticuloNombreFromRow(row);
+                     if (artName) articulosSet.add(artName);
+
+                     const estado = normalizeText(row['Estado global guía inicial'] || '');
+                     const esArticuloSeleccionado = articuloFilterData.nombre && artName &&
+                         articulosCoinciden(articuloFilterData.nombre, artName);
+
+                     if (estado) totalOrdenes += 1;
+                     if (estado.includes('generada') || estado.includes('generado')) {
+                         countGenerada += 1;
+                         if (esArticuloSeleccionado) articuloGenerada += 1;
+                     }
+                     if (estado.includes('en transito') || estado.includes('transito')) {
+                         countTransito += 1;
+                         if (esArticuloSeleccionado) articuloTransito += 1;
+                     }
+                     if (estado.includes('entregada a destino') || estado.includes('entregad')) {
+                         countEntregada += 1;
+                         if (esArticuloSeleccionado) articuloEntregada += 1;
+                     }
+                     if (estado.includes('en reparto') || estado.includes('reparto')) {
+                         countReparto += 1;
+                         if (esArticuloSeleccionado) articuloReparto += 1;
+                     }
+                     if (estado.includes('novedad')) {
+                         countNovedad += 1;
+                         if (esArticuloSeleccionado) articuloNovedad += 1;
+                     }
+                     if (estado.includes('devolucion a origen') || estado.includes('devolucion')) {
+                         count += 1;
+                         if (esArticuloSeleccionado) articuloDevolucion += 1;
+                     }
+                 });
 
                 document.getElementById('stGenerada').innerText = String(countGenerada);
                 document.getElementById('stEnTransito').innerText = String(countTransito);
@@ -5920,10 +6701,14 @@ function processScheduledSavings() {
                 transporteTotals.reparto = countReparto;
                 transporteTotals.novedad = countNovedad;
                 transporteTotals.totalOrdenes = totalOrdenes;
-
-                console.log('✅ Transporte procesado correctamente');
-                updateResumenPremium();
-                saveState(); // Guardar datos procesados
+                
+                 appState.articulosDisponibles = Array.from(articulosSet);
+                 populateArticulosDatalist();
+                 populateArticuloListView(); // Actualizar la nueva lista en la vista principal
+ 
+                 console.log('✅ Transporte procesado correctamente');
+                 updateResumenPremium();
+                 saveState(); // Guardar datos procesados
             } catch (_) {
                 console.error('Error extracting transporte data:', _);
                 document.getElementById('stGenerada').innerText = '--';
@@ -5998,22 +6783,49 @@ function processScheduledSavings() {
                         
                         console.log('✅ Procesado HTML de Effi, filas:', rows.length);
                         
-                        let totalCompra = 0, totalFleteCon = 0, totalFleteDev = 0, totalFleteSin = 0, totalRecaudo = 0, totalFulfillment = 0, totalRetiro = 0, totalComisionRetiro = 0, totalIndemnizacion = 0, totalDebitoRevertido = 0;
-                        
-                        rows.forEach((row) => {
-                            const tipo = normalizeText(row['Tipo de movimiento'] || row['tipo'] || '');
-                            const valor = parseMoney(row['Valor movimiento'] || row['valor'] || row['Monto'] || 0);
-                            
-                            if (tipo.includes('compra de')) totalCompra += valor;
-                            else if (tipo.includes('flete credito con recaudo')) totalFleteCon += valor;
-                            else if (tipo.includes('flete credito devoluci')) totalFleteDev += valor;
-                            else if (tipo.includes('flete credito sin recaudo')) totalFleteSin += valor;
-                            else if (tipo.includes('recaudo de venta')) totalRecaudo += valor;
-                            else if (tipo.includes('fulfillment')) totalFulfillment += valor;
-                            else if (tipo.includes('retiro de dinero de cuenta')) totalRetiro += valor;
-                            else if (tipo.includes('comision local por retiro')) totalComisionRetiro += valor;
-                            else if (tipo.includes('indemnizacion')) totalIndemnizacion += valor;
-                            else if (tipo.includes('debito revertido')) totalDebitoRevertido += valor;
+                         let totalCompra = 0, totalFleteCon = 0, totalFleteDev = 0, totalFleteSin = 0, totalRecaudo = 0, totalFulfillment = 0, totalRetiro = 0, totalComisionRetiro = 0, totalIndemnizacion = 0, totalDebitoRevertido = 0;
+                         const articulosSet = new Set(appState.articulosDisponibles || []);
+                         
+                         // Initialize article-specific totals for filtering
+                         let articuloCompra = 0, articuloFleteCon = 0, articuloFleteDev = 0, articuloFleteSin = 0, articuloRecaudo = 0, articuloFulfillment = 0;
+                         
+                         rows.forEach((row) => {
+                             const artName = getArticuloNombreFromRow(row);
+                             if (artName) articulosSet.add(artName);
+
+                             const tipo = normalizeText(row['Tipo de movimiento'] || row['tipo'] || '');
+                             const valor = parseMoney(row['Valor movimiento'] || row['valor'] || row['Monto'] || 0);
+                             
+                             const esArticuloSeleccionado = articuloFilterData.nombre && artName &&
+                                 articulosCoinciden(articuloFilterData.nombre, artName);
+                             
+                             if (tipo.includes('compra de')) {
+                                 totalCompra += valor;
+                                 if (esArticuloSeleccionado) articuloCompra += valor;
+                             } else if (tipo.includes('flete credito con recaudo')) {
+                                 totalFleteCon += valor;
+                                 if (esArticuloSeleccionado) articuloFleteCon += valor;
+                             } else if (tipo.includes('flete credito devoluci')) {
+                                 totalFleteDev += valor;
+                                 if (esArticuloSeleccionado) articuloFleteDev += valor;
+                             } else if (tipo.includes('flete credito sin recaudo')) {
+                                 totalFleteSin += valor;
+                                 if (esArticuloSeleccionado) articuloFleteSin += valor;
+                             } else if (tipo.includes('recaudo de venta')) {
+                                 totalRecaudo += valor;
+                                 if (esArticuloSeleccionado) articuloRecaudo += valor;
+                             } else if (tipo.includes('fulfillment')) {
+                                 totalFulfillment += valor;
+                                 if (esArticuloSeleccionado) articuloFulfillment += valor;
+                             } else if (tipo.includes('retiro de dinero de cuenta')) {
+                                 totalRetiro += valor;
+                             } else if (tipo.includes('comision local por retiro')) {
+                                 totalComisionRetiro += valor;
+                             } else if (tipo.includes('indemnizacion')) {
+                                 totalIndemnizacion += valor;
+                             } else if (tipo.includes('debito revertido')) {
+                                 totalDebitoRevertido += valor;
+                             }
                         });
                         
                         effiTotals.compra = Math.abs(totalCompra);
@@ -6027,10 +6839,21 @@ function processScheduledSavings() {
                         effiTotals.indemnizacion = Math.abs(totalIndemnizacion);
                         effiTotals.debitoRevertido = Math.abs(totalDebitoRevertido);
 
-                        console.log('✅ Effi procesado correctamente desde HTML');
-                        updateResultadoOperativoCard();
-                        saveState();
-                        return;
+                        articuloFilterData.compra = Math.abs(articuloCompra);
+                        articuloFilterData.fleteCon = Math.abs(articuloFleteCon);
+                        articuloFilterData.fleteDev = Math.abs(articuloFleteDev);
+                        articuloFilterData.fleteSin = Math.abs(articuloFleteSin);
+                        articuloFilterData.recaudo = Math.abs(articuloRecaudo);
+                        articuloFilterData.fulfillment = Math.abs(articuloFulfillment);
+
+                         appState.articulosDisponibles = Array.from(articulosSet);
+                         populateArticulosDatalist();
+                         populateArticuloListView(); // Actualizar la nueva lista en la vista principal
+ 
+                         console.log('✅ Effi procesado correctamente desde HTML');
+                         updateResultadoOperativoCard();
+                         saveState();
+                         return;
                     } else {
                         throw new Error('Formato de archivo no reconocido');
                     }
@@ -6097,43 +6920,60 @@ function processScheduledSavings() {
                     console.log('Primera fila ejemplo:', rows[0]);
                 }
 
-                let totalCompra = 0;
-                let totalFleteCon = 0;
-                let totalFleteDev = 0;
-                let totalFleteSin = 0;
-                let totalRecaudo = 0;
-                let totalFulfillment = 0;
-                let totalRetiro = 0;
-                let totalComisionRetiro = 0;
-                let totalIndemnizacion = 0;
-                let totalDebitoRevertido = 0;
-                
-                rows.forEach((row) => {
-                    const tipo = normalizeText(row['Tipo de movimiento'] || '');
-                    const valor = parseMoney(row['Valor movimiento']);
+                 let totalCompra = 0;
+                 let totalFleteCon = 0;
+                 let totalFleteDev = 0;
+                 let totalFleteSin = 0;
+                 let totalRecaudo = 0;
+                 let totalFulfillment = 0;
+                 let totalRetiro = 0;
+                 let totalComisionRetiro = 0;
+                 let totalIndemnizacion = 0;
+                 let totalDebitoRevertido = 0;
+                 
+                 // Initialize article-specific totals for filtering
+                 let articuloCompra = 0, articuloFleteCon = 0, articuloFleteDev = 0, articuloFleteSin = 0, articuloRecaudo = 0, articuloFulfillment = 0;
+                 
+                 const articulosSet = new Set(appState.articulosDisponibles || []);
 
-                    if (tipo.includes('compra de')) {
-                        totalCompra += valor;
-                    } else if (tipo.includes('flete credito con recaudo')) {
-                        totalFleteCon += valor;
-                    } else if (tipo.includes('flete credito devoluci')) {
-                        totalFleteDev += valor;
-                    } else if (tipo.includes('flete credito sin recaudo')) {
-                        totalFleteSin += valor;
-                    } else if (tipo.includes('recaudo de venta')) {
-                        totalRecaudo += valor;
-                    } else if (tipo.includes('fulfillment')) {
-                        totalFulfillment += valor;
-                    } else if (tipo.includes('retiro de dinero de cuenta')) {
-                        totalRetiro += valor;
-                    } else if (tipo.includes('comision local por retiro')) {
-                        totalComisionRetiro += valor;
-                    } else if (tipo.includes('indemnizacion')) {
-                        totalIndemnizacion += valor;
-                    } else if (tipo.includes('debito revertido')) {
-                        totalDebitoRevertido += valor;
-                    }
-                });
+                 rows.forEach((row) => {
+                     const artName = getArticuloNombreFromRow(row);
+                     if (artName) articulosSet.add(artName);
+
+                     const tipo = normalizeText(row['Tipo de movimiento'] || '');
+                     const valor = parseMoney(row['Valor movimiento']);
+                     
+                     const esArticuloSeleccionado = articuloFilterData.nombre && artName &&
+                         articulosCoinciden(articuloFilterData.nombre, artName);
+
+                     if (tipo.includes('compra de')) {
+                         totalCompra += valor;
+                         if (esArticuloSeleccionado) articuloCompra += valor;
+                     } else if (tipo.includes('flete credito con recaudo')) {
+                         totalFleteCon += valor;
+                         if (esArticuloSeleccionado) articuloFleteCon += valor;
+                     } else if (tipo.includes('flete credito devoluci')) {
+                         totalFleteDev += valor;
+                         if (esArticuloSeleccionado) articuloFleteDev += valor;
+                     } else if (tipo.includes('flete credito sin recaudo')) {
+                         totalFleteSin += valor;
+                         if (esArticuloSeleccionado) articuloFleteSin += valor;
+                     } else if (tipo.includes('recaudo de venta')) {
+                         totalRecaudo += valor;
+                         if (esArticuloSeleccionado) articuloRecaudo += valor;
+                     } else if (tipo.includes('fulfillment')) {
+                         totalFulfillment += valor;
+                         if (esArticuloSeleccionado) articuloFulfillment += valor;
+                     } else if (tipo.includes('retiro de dinero de cuenta')) {
+                         totalRetiro += valor;
+                     } else if (tipo.includes('comision local por retiro')) {
+                         totalComisionRetiro += valor;
+                     } else if (tipo.includes('indemnizacion')) {
+                         totalIndemnizacion += valor;
+                     } else if (tipo.includes('debito revertido')) {
+                         totalDebitoRevertido += valor;
+                     }
+                 });
 
                 document.getElementById('mvCompra').innerText = formatRD(totalCompra);
                 document.getElementById('mvFleteCon').innerText = formatRD(totalFleteCon);
@@ -6157,9 +6997,20 @@ function processScheduledSavings() {
                 effiTotals.indemnizacion = Math.abs(totalIndemnizacion);
                 effiTotals.debitoRevertido = Math.abs(totalDebitoRevertido);
 
-                console.log('✅ Effi procesado correctamente');
-                updateResultadoOperativoCard();
-                saveState(); // Guardar datos procesados
+                articuloFilterData.compra = Math.abs(articuloCompra);
+                articuloFilterData.fleteCon = Math.abs(articuloFleteCon);
+                articuloFilterData.fleteDev = Math.abs(articuloFleteDev);
+                articuloFilterData.fleteSin = Math.abs(articuloFleteSin);
+                articuloFilterData.recaudo = Math.abs(articuloRecaudo);
+                articuloFilterData.fulfillment = Math.abs(articuloFulfillment);
+
+                 appState.articulosDisponibles = Array.from(articulosSet);
+                 populateArticulosDatalist();
+                 populateArticuloListView(); // Actualizar la nueva lista en la vista principal
+ 
+                 console.log('✅ Effi procesado correctamente');
+                 updateResultadoOperativoCard();
+                 saveState(); // Guardar datos procesados
             } catch (_) {
                 console.error('Error extracting Effi data:', _);
                 document.getElementById('mvCompra').innerText = '--';
@@ -6214,13 +7065,16 @@ function processScheduledSavings() {
                 let campaignColIndex = -1;
                 let costColIndex = -1;
 
-                const campaignAliases = platform === 'facebook' 
-                    ? ['nombre de la campana', 'campaign name'] 
-                    : ['campaign name', 'campaign', 'nombre de campana', 'nombre campana', 'ad group name'];
-                    
-                const costAliases = platform === 'facebook'
-                    ? ['importe gastado usd', 'importe gastado', 'amount spent usd', 'amount spent']
-                    : ['cost', 'spend', 'amount spent', 'gasto', 'importe gastado'];
+                 const campaignAliases = platform === 'facebook' 
+                     ? ['nombre de la campana', 'campaign name'] 
+                     : ['campaign name', 'campaign', 'nombre de campana', 'nombre campana', 'ad group name'];
+                 
+                 const costAliases = platform === 'facebook'
+                     ? ['importe gastado usd', 'importe gastado', 'amount spent usd', 'amount spent']
+                     : ['cost', 'spend', 'amount spent', 'gasto', 'importe gastado'];
+                     
+                 // Article/product column aliases for filtering
+                 const articuloAliases = ['articulo', 'artículo', 'producto', 'item', 'descripcion', 'description', 'nombre del producto', 'product name'];
 
                 for (let i = 0; i < aoa.length; i++) {
                     const row = aoa[i];
@@ -6258,51 +7112,78 @@ function processScheduledSavings() {
 
                 if (headerRowIndex === -1 || costColIndex === -1) return;
 
-                let sumFallback = 0;
-                let explicitTotal = 0;
-                let foundExplicitTotal = false;
+                 const headerCellsAds = aoa[headerRowIndex];
+                 let articuloColIndexAds = -1;
+                 if (headerCellsAds && headerCellsAds.length) {
+                     for (let hj = 0; hj < headerCellsAds.length; hj++) {
+                         const hcell = normalizeText(String(headerCellsAds[hj] || ''));
+                         if (articuloAliases.some(function (a) { return hcell === a || hcell.indexOf(a) !== -1; })) {
+                             articuloColIndexAds = hj;
+                             break;
+                         }
+                     }
+                 }
 
-                for (let i = headerRowIndex + 1; i < aoa.length; i++) {
-                    const row = aoa[i];
-                    if (!Array.isArray(row) || row.length === 0) continue;
+                 let sumFallback = 0;
+                 let explicitTotal = 0;
+                 let foundExplicitTotal = false;
+                 
+                 let articuloAdSpend = 0;
 
-                    const costVal = row[costColIndex];
-                    const v = parseMoney(costVal);
-                    
-                    let isTotalRow = false;
-                    if (campaignColIndex !== -1 && row[campaignColIndex]) {
-                        const campaign = normalizeText(row[campaignColIndex]);
-                        isTotalRow = campaign.startsWith('total of') ||
-                                     campaign.startsWith('totales') ||
-                                     campaign.startsWith('total') ||
-                                     campaign.includes('total results') ||
-                                     campaign.includes('resultados totales');
-                    } else {
-                        const joined = normalizeText(row.join(' '));
-                        isTotalRow = joined.includes('total of') || 
-                                     joined.includes('total results') || 
-                                     joined.includes('resultados totales');
-                    }
+                 for (let i = headerRowIndex + 1; i < aoa.length; i++) {
+                     const row = aoa[i];
+                     if (!Array.isArray(row) || row.length === 0) continue;
 
-                    if (isTotalRow) {
-                        if (Number.isFinite(v) && v !== 0) {
-                            explicitTotal = Math.abs(v);
-                            foundExplicitTotal = true;
-                        }
-                    } else {
-                        if (Number.isFinite(v) && v !== 0) {
-                            sumFallback += Math.abs(v);
-                        }
-                    }
-                }
+                     const costVal = row[costColIndex];
+                     const v = parseMoney(costVal);
+                     
+                     const filaArticuloAds = articuloColIndexAds !== -1 ? row[articuloColIndexAds] : '';
+                     const filaAdsStr = cellToPlainString(filaArticuloAds).trim();
+                     const esArticuloSeleccionadoAds = articuloFilterData.nombre && filaAdsStr &&
+                         articulosCoinciden(articuloFilterData.nombre, filaAdsStr);
+                     
+                     let isTotalRow = false;
+                     if (campaignColIndex !== -1 && row[campaignColIndex]) {
+                         const campaign = normalizeText(row[campaignColIndex]);
+                         isTotalRow = campaign.startsWith('total of') ||
+                                      campaign.startsWith('totales') ||
+                                      campaign.startsWith('total') ||
+                                      campaign.includes('total results') ||
+                                      campaign.includes('resultados totales');
+                     } else {
+                         const joined = normalizeText(row.join(' '));
+                         isTotalRow = joined.includes('total of') || 
+                                      joined.includes('total results') || 
+                                      joined.includes('resultados totales');
+                     }
 
-                const totalUSD = foundExplicitTotal ? explicitTotal : sumFallback;
+                     if (isTotalRow) {
+                         if (Number.isFinite(v) && v !== 0) {
+                             explicitTotal = Math.abs(v);
+                             foundExplicitTotal = true;
+                         }
+                     } else {
+                         if (Number.isFinite(v) && v !== 0) {
+                             sumFallback += Math.abs(v);
+                             // Add to article-specific spending if this row matches the selected article
+                             if (esArticuloSeleccionadoAds) {
+                                 articuloAdSpend += Math.abs(v);
+                             }
+                         }
+                     }
+                 }
 
-                if (platform === 'facebook') {
-                    appState.ads.facebookUSD = totalUSD;
-                } else {
-                    appState.ads.tiktokUSD = totalUSD;
-                }
+                 const totalUSD = foundExplicitTotal ? explicitTotal : sumFallback;
+
+                 if (platform === 'facebook') {
+                     appState.ads.facebookUSD = totalUSD;
+                     // Store article-specific Facebook ad spending
+                     articuloFilterData.facebookAds = articuloAdSpend;
+                 } else {
+                     appState.ads.tiktokUSD = totalUSD;
+                     // Store article-specific TikTok ad spending
+                     articuloFilterData.tiktokAds = articuloAdSpend;
+                 }
                 
                 updateAdsReportCard();
                 updateRestaCard();
