@@ -7,6 +7,7 @@ const sqlite3    = require('sqlite3').verbose();
 const bcrypt     = require('bcrypt');
 const saltRounds = 12;
 const rateLimit  = require('express-rate-limit');
+require('dotenv').config();
 
 const app  = express();
 const PORT = process.env.PORT || 10000;
@@ -15,8 +16,9 @@ const PORT = process.env.PORT || 10000;
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 
 /* ── CREDENCIALES ADMIN ─────────────────────────────────────────────── */
-const ADMIN_USERNAME = 'azdelmicha@gmail.com';
-const ADMIN_PASSWORD = 'SuperAdmin2026!';
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'azdelmicha@gmail.com';
+const ADMIN_PASSWORD = String(process.env.ADMIN_PASSWORD || '').trim();
+const ADMIN_PASSWORD_HASH = '$2b$12$u6v0lWi8BFhEn11pWgphGuykk/YiFT.HGF76w4KtllEU0f2NwOVv2';
 let adminUserId = null;
 
 /* ── PERSISTENCIA DE DATOS ──────────────────────────────────────────── */
@@ -50,6 +52,22 @@ const authLimiter = rateLimit({
 
 app.use('/api/register', authLimiter);
 app.use('/api/login', authLimiter);
+
+/* ── MIDDLEWARE DE AUTENTICACIÓN ────────────────────────────────────── */
+const authenticateToken = (req, res, next) => {
+    const authHeader = String(req.headers.authorization || '').trim();
+    const headerToken = authHeader.toLowerCase().startsWith('bearer ')
+        ? authHeader.slice(7).trim()
+        : authHeader;
+    const bodyToken = typeof req.body?.token === 'string' ? req.body.token.trim() : '';
+    const token = headerToken || bodyToken;
+    if (!token || !token.startsWith('session_token_pro_2026_')) {
+        return res.status(401).json({ success: false, message: 'Token inválido' });
+    }
+    const userId = token.replace('session_token_pro_2026_', '');
+    req.userId = userId;
+    next();
+};
 
 /* ── RUTAS ESTÁTICAS ────────────────────────────────────────────────── */
 app.get('/', (_req, res) => res.sendFile(path.join(PROJECT_ROOT, 'index.html')));
@@ -523,7 +541,7 @@ function buildOfflineResponse(message, ctx) {
 
 /* ── AUTENTICACIÓN ──────────────────────────────────────────────────── */
 app.post('/api/register', async (req, res) => {
-    const username = String(req.body.username || '').trim();
+    const username = String(req.body.username || '').trim().toLowerCase();
     const password = String(req.body.password || '');
     if (!username || !password) return res.status(400).json({ success: false, message: 'Usuario y contraseña requeridos' });
 
@@ -546,7 +564,7 @@ app.post('/api/register', async (req, res) => {
 });
 
 app.post('/api/login', async (req, res) => {
-    const username = String(req.body.username || '').trim();
+    const username = String(req.body.username || '').trim().toLowerCase();
     const password = String(req.body.password || '');
     if (!username || !password) return res.status(400).json({ success: false, message: 'Usuario y contraseña requeridos' });
 
@@ -560,10 +578,15 @@ app.post('/api/login', async (req, res) => {
                 return res.json({ success: true, token: `session_token_pro_2026_${user.id}`, user: { id: user.id, username: user.username, is_admin: !!user.is_admin } });
             }
         }
-        // Fallback to admin check (plain text comparison for admin credentials)
-        if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-            ensureAdminUser();
-            return res.json({ success: true, token: `session_token_pro_2026_${ADMIN_USERNAME}`, user: { id: 'admin', username: ADMIN_USERNAME, is_admin: true } });
+        // Fallback to admin check (.env password preferred, legacy hash supported)
+        if (username === ADMIN_USERNAME) {
+            const adminMatch = ADMIN_PASSWORD
+                ? password === ADMIN_PASSWORD
+                : await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
+            if (adminMatch) {
+                ensureAdminUser();
+                return res.json({ success: true, token: `session_token_pro_2026_${ADMIN_USERNAME}`, user: { id: 'admin', username: ADMIN_USERNAME, is_admin: true } });
+            }
         }
         res.status(401).json({ success: false, message: 'Credenciales incorrectas' });
     });
@@ -579,7 +602,9 @@ const db = new sqlite3.Database(DB_PATH, (err) => {
 
 async function ensureAdminUser() {
     try {
-        const adminPasswordHash = await bcrypt.hash(ADMIN_PASSWORD, saltRounds);
+        const adminPasswordHash = ADMIN_PASSWORD
+            ? await bcrypt.hash(ADMIN_PASSWORD, saltRounds)
+            : ADMIN_PASSWORD_HASH;
         db.get('SELECT id FROM users WHERE username = ?', [ADMIN_USERNAME], (err, row) => {
             if (err || row) { if (row) adminUserId = row.id; return; }
             db.run('INSERT INTO users (username, password, is_admin) VALUES (?, ?, 1)', [ADMIN_USERNAME, adminPasswordHash], function(e2) {
@@ -606,7 +631,7 @@ function isAdmin(userId) {
     return !!(adminUserId && Number(userId) === Number(adminUserId));
 }
 
-app.post('/api/state', (req, res) => {
+app.post('/api/state', authenticateToken, (req, res) => {
     const key    = getStateKey(req.query.userId);
     const state  = JSON.stringify(req.body || {});
     const mirror = isAdmin(req.query.userId) && key !== 'current_state';
@@ -618,7 +643,7 @@ app.post('/api/state', (req, res) => {
     });
 });
 
-app.get('/api/state', (req, res) => {
+app.get('/api/state', authenticateToken, (req, res) => {
     const key       = getStateKey(req.query.userId);
     const adminUser = isAdmin(req.query.userId);
     const parse = (row) => {
@@ -650,14 +675,14 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-app.post('/api/upload', upload.single('file'), (req, res) => {
+app.post('/api/upload', authenticateToken, upload.single('file'), (req, res) => {
     if (!req.file) return res.status(400).json({ error: 'No se recibió archivo.' });
     console.log('📁 Archivo guardado:', req.file.filename);
     res.json({ message: 'Archivo guardado', filename: req.file.filename });
 });
 
 // Listar archivos subidos — usado por autoLoadFile del cliente
-app.get('/api/files/list', (_req, res) => {
+app.get('/api/files/list', authenticateToken, (req, res) => {
     try {
         const files = fs.readdirSync(UPLOADS_DIR).map(name => {
             const stat = fs.statSync(path.join(UPLOADS_DIR, name));

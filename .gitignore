@@ -3,3 +3,4 @@ data/
 $_-REPORTES EFFI/
 *.xlsx
 *.xls
+.env

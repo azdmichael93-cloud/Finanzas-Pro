@@ -5,7 +5,12 @@ services:
     region: florida # us-east o frankfurt (eu-central)
     buildCommand: npm install
     startCommand: npm start
+    healthCheckPath: /healthz
     autoDeploy: true
+    disks:
+      - name: finanzas-data
+        mountPath: /data
+        sizeGB: 1
     envVars:
       - key: NODE_VERSION
         value: "20"
