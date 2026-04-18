@@ -243,7 +243,7 @@ app.post('/chat', async (req, res) => {
 
     if (openaiKey && !openaiKey.includes('your_')) {
         try {
-            console.log('📤 Intentando OpenAI...');
+            console.log('📤 Intentando OpenAI con clave:', openaiKey.slice(0, 20) + '...');
             const apiRes = await fetch('https://api.openai.com/v1/chat/completions', {
                 method: 'POST',
                 headers: {
@@ -260,20 +260,26 @@ app.post('/chat', async (req, res) => {
                     ]
                 })
             });
+            console.log('📨 OpenAI respondió con HTTP', apiRes.status);
             if (!apiRes.ok) {
                 const errBody = await apiRes.text().catch(() => '');
-                throw new Error(`OpenAI API ${apiRes.status}: ${errBody.slice(0, 200)}`);
+                const errMsg = `OpenAI API ${apiRes.status}: ${errBody.slice(0, 500)}`;
+                console.error('❌', errMsg);
+                throw new Error(errMsg);
             }
             const data = await apiRes.json();
             const text = data?.choices?.[0]?.message?.content?.trim() || '';
             if (!text) throw new Error('OpenAI: respuesta vacía');
-            console.log('🤖 Respondido por OpenAI');
+            console.log('🤖 Respondido por OpenAI exitosamente');
             return res.json({ response: text });
         } catch (err) {
-            console.error('❌ OpenAI error:', err.message, '— intentando siguiente proveedor');
+            console.error('❌ OpenAI error CAPTURADO:', err.message);
+            // Continúa al siguiente proveedor
         }
     } else if (openaiKey && openaiKey.includes('your_')) {
         console.warn('⚠️  OPENAI_API_KEY contiene "your_" — clave no configurada, saltando');
+    } else {
+        console.warn('⚠️  OPENAI_API_KEY no definida');
     }
 
     if (anthropicKey) {
