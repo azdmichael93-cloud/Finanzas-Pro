@@ -241,8 +241,9 @@ app.post('/chat', async (req, res) => {
         }
     }
 
-    if (openaiKey) {
+    if (openaiKey && !openaiKey.includes('your_')) {
         try {
+            console.log('📤 Intentando OpenAI...');
             const apiRes = await fetch('https://api.openai.com/v1/chat/completions', {
                 method: 'POST',
                 headers: {
@@ -271,6 +272,8 @@ app.post('/chat', async (req, res) => {
         } catch (err) {
             console.error('❌ OpenAI error:', err.message, '— intentando siguiente proveedor');
         }
+    } else if (openaiKey && openaiKey.includes('your_')) {
+        console.warn('⚠️  OPENAI_API_KEY contiene "your_" — clave no configurada, saltando');
     }
 
     if (anthropicKey) {
