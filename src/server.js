@@ -744,4 +744,44 @@ app.get('/api/files/list', authenticateToken, (req, res) => {
 });
 
 /* ── START ──────────────────────────────────────────────────────────── */
-app.listen(PORT, () => console.log(`🚀 Finanzas Pro corriendo en puerto ${PORT}`));
+app.listen(PORT, () => {
+    console.log(`🚀 Finanzas Pro corriendo en puerto ${PORT}`);
+
+    // ── Diagnóstico automático de IA al arrancar ───────────────────
+    const gKey = process.env.GOOGLE_AI_KEY;
+    const oKey = process.env.OPENAI_API_KEY;
+    const aKey = process.env.ANTHROPIC_API_KEY;
+
+    console.log('─── DIAGNÓSTICO DE IA ────────────────────────────────');
+    console.log('GOOGLE_AI_KEY  :', gKey  ? `presente (${gKey.slice(0,8)}...)` : '❌ NO DEFINIDA');
+    console.log('OPENAI_API_KEY :', oKey  && !oKey.includes('your_') ? `presente (${oKey.slice(0,8)}...)` : '❌ no configurada');
+    console.log('ANTHROPIC_KEY  :', aKey  && !aKey.includes('your_') ? `presente (${aKey.slice(0,8)}...)` : '❌ no configurada');
+
+    if (gKey) {
+        fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${gKey}`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ role: 'user', parts: [{ text: 'hola' }] }],
+                    generationConfig: { maxOutputTokens: 10 }
+                })
+            }
+        )
+        .then(async r => {
+            const body = await r.json();
+            if (r.ok) {
+                const reply = body?.candidates?.[0]?.content?.parts?.[0]?.text || '(sin texto)';
+                console.log('✅ GEMINI OK — respuesta de prueba:', reply.trim());
+            } else {
+                console.error(`❌ GEMINI ERROR ${r.status}: ${body?.error?.message || JSON.stringify(body).slice(0,300)}`);
+                console.error('💡 Verifica que la clave empiece con AIza y tenga la API "Generative Language" habilitada en Google Cloud.');
+            }
+        })
+        .catch(e => console.error('❌ GEMINI fetch error:', e.message));
+    } else {
+        console.warn('⚠️  Sin GOOGLE_AI_KEY — el bot usará modo offline.');
+    }
+    console.log('─────────────────────────────────────────────────────');
+});
