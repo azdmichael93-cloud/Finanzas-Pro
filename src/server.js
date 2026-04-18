@@ -73,6 +73,45 @@ const authenticateToken = (req, res, next) => {
 app.get('/', (_req, res) => res.sendFile(path.join(PROJECT_ROOT, 'index.html')));
 app.get('/healthz', (_req, res) => res.sendStatus(200));
 
+/* ── DIAGNÓSTICO DE IA (solo admin) ─────────────────────────────── */
+app.get('/api/test-ai', authenticateToken, async (req, res) => {
+    const googleKey = process.env.GOOGLE_AI_KEY;
+    const report = {
+        hasGoogleKey: !!googleKey,
+        hasOpenAIKey: !!process.env.OPENAI_API_KEY,
+        hasAnthropicKey: !!process.env.ANTHROPIC_API_KEY,
+        geminiStatus: null,
+        geminiError: null,
+    };
+    if (googleKey) {
+        try {
+            const apiRes = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${googleKey}`,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ role: 'user', parts: [{ text: 'di hola' }] }],
+                        generationConfig: { maxOutputTokens: 10 }
+                    })
+                }
+            );
+            const body = await apiRes.json();
+            if (!apiRes.ok) {
+                report.geminiStatus = apiRes.status;
+                report.geminiError = body?.error?.message || JSON.stringify(body).slice(0, 300);
+            } else {
+                report.geminiStatus = 200;
+                report.geminiReply = body?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '(empty)';
+            }
+        } catch (e) {
+            report.geminiStatus = 'fetch_error';
+            report.geminiError = e.message;
+        }
+    }
+    res.json(report);
+});
+
 /* ── CHATBOT IA ─────────────────────────────────────────────────────── */
 app.post('/chat', async (req, res) => {
     const message = String(req.body.message || '').trim();
@@ -167,6 +206,8 @@ app.post('/chat', async (req, res) => {
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
 
     // ── Prioridad: Gemini → OpenAI → Claude → Offline ─────────────
+    // Cada proveedor falla hacia el siguiente sin cortar la cadena
+
     if (googleKey) {
         try {
             const apiRes = await fetch(
@@ -185,15 +226,18 @@ app.post('/chat', async (req, res) => {
                     })
                 }
             );
-            if (!apiRes.ok) throw new Error('Gemini API ' + apiRes.status);
+            if (!apiRes.ok) {
+                const errBody = await apiRes.text().catch(() => '');
+                throw new Error(`Gemini API ${apiRes.status}: ${errBody.slice(0, 200)}`);
+            }
             const data = await apiRes.json();
             const text = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
             if (!text) throw new Error('Gemini: respuesta vacía');
             console.log('🤖 Respondido por Gemini');
             return res.json({ response: text });
         } catch (err) {
-            console.error('❌ Gemini error:', err.message, '— usando offline');
-            return res.json({ response: buildOfflineResponse(message, context) });
+            console.error('❌ Gemini error:', err.message, '— intentando siguiente proveedor');
+            // Continúa al siguiente proveedor en vez de irse offline
         }
     }
 
@@ -215,15 +259,17 @@ app.post('/chat', async (req, res) => {
                     ]
                 })
             });
-            if (!apiRes.ok) throw new Error('OpenAI API ' + apiRes.status);
+            if (!apiRes.ok) {
+                const errBody = await apiRes.text().catch(() => '');
+                throw new Error(`OpenAI API ${apiRes.status}: ${errBody.slice(0, 200)}`);
+            }
             const data = await apiRes.json();
             const text = data?.choices?.[0]?.message?.content?.trim() || '';
             if (!text) throw new Error('OpenAI: respuesta vacía');
             console.log('🤖 Respondido por OpenAI');
             return res.json({ response: text });
         } catch (err) {
-            console.error('❌ OpenAI error:', err.message, '— usando offline');
-            return res.json({ response: buildOfflineResponse(message, context) });
+            console.error('❌ OpenAI error:', err.message, '— intentando siguiente proveedor');
         }
     }
 
@@ -243,7 +289,10 @@ app.post('/chat', async (req, res) => {
                     messages: [{ role: 'user', content: message }]
                 })
             });
-            if (!apiRes.ok) throw new Error('Anthropic API ' + apiRes.status);
+            if (!apiRes.ok) {
+                const errBody = await apiRes.text().catch(() => '');
+                throw new Error(`Anthropic API ${apiRes.status}: ${errBody.slice(0, 200)}`);
+            }
             const data = await apiRes.json();
             const text = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('\n').trim();
             if (!text) throw new Error('Claude: respuesta vacía');
@@ -251,12 +300,11 @@ app.post('/chat', async (req, res) => {
             return res.json({ response: text });
         } catch (err) {
             console.error('❌ Claude error:', err.message, '— usando offline');
-            return res.json({ response: buildOfflineResponse(message, context) });
         }
     }
 
-    // Sin ninguna API key — modo offline
-    console.log('💡 Modo offline activo');
+    // Sin ninguna API key funcional — modo offline
+    console.log('💡 Modo offline activo (ninguna API respondió)');
     return res.json({ response: buildOfflineResponse(message, context) });
 });
 
