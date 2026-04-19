@@ -277,15 +277,14 @@
         .dashboard-layout {
             display: grid;
             grid-template-columns: minmax(0, 1fr) minmax(460px, 560px);
-            gap: 22px;
             align-items: start;
             justify-content: center;
         }
 
         .upload-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
             margin-top: 20px;
         }
         .upload-card {
@@ -1377,6 +1376,156 @@
             font-weight: 700;
             color: #7dffb8;
         }
+        .system-subnav {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0 18px;
+            flex-wrap: wrap;
+        }
+        .system-subbtn {
+            border: 1px solid rgba(0, 255, 255, 0.25);
+            background: rgba(6, 18, 38, 0.7);
+            color: #9fc2ff;
+            border-radius: 999px;
+            padding: 8px 16px;
+            font-weight: 800;
+            font-size: 12px;
+            cursor: pointer;
+            letter-spacing: .5px;
+            transition: all .2s ease;
+        }
+        .system-subbtn.active {
+            background: rgba(0, 255, 255, 0.16);
+            color: #ffffff;
+            border-color: rgba(0, 255, 255, 0.5);
+            box-shadow: 0 6px 18px rgba(0, 255, 255, 0.15);
+        }
+        .system-section {
+            display: none;
+        }
+        .system-section.active {
+            display: block;
+        }
+        .clients-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .clients-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .client-row {
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(6,18,38,0.66);
+            border-radius: 12px;
+            padding: 12px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+        }
+        .client-row-main {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .client-row-title {
+            color: #fff;
+            font-weight: 800;
+            font-size: 14px;
+            word-break: break-word;
+        }
+        .client-row-meta {
+            font-size: 12px;
+            color: #9fc2ff;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .client-row-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .mini-btn {
+            border: 1px solid rgba(255,255,255,0.18);
+            background: rgba(255,255,255,0.04);
+            color: #cfe3ff;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .mini-btn.warn {
+            border-color: rgba(255, 215, 0, 0.45);
+            color: #ffd700;
+        }
+        .mini-btn.danger {
+            border-color: rgba(255, 93, 93, 0.45);
+            color: #ff8f8f;
+        }
+        .client-editor {
+            margin-top: 18px;
+            border: 1px solid rgba(0,255,255,0.12);
+            background: rgba(6,18,38,0.66);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .client-editor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+        .client-editor label {
+            font-size: 12px;
+            color: #9fc2ff;
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+        .client-editor input,
+        .client-editor textarea {
+            width: 100%;
+            border: 1px solid rgba(255,255,255,0.16);
+            background: rgba(2,6,23,0.8);
+            color: #fff;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 13px;
+        }
+        .client-editor textarea {
+            min-height: 84px;
+            resize: vertical;
+        }
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            padding: 3px 9px;
+            font-size: 11px;
+            font-weight: 800;
+            border: 1px solid transparent;
+        }
+        .badge-pill.ok {
+            color: #7dffb8;
+            border-color: rgba(125,255,184,0.4);
+            background: rgba(125,255,184,0.12);
+        }
+        .badge-pill.warn {
+            color: #ffd700;
+            border-color: rgba(255,215,0,0.4);
+            background: rgba(255,215,0,0.12);
+        }
         
 /* Modal Sentiment Colors */
         .modal-salary { border-top: 5px solid #7dffb8; background: radial-gradient(circle at 0% 0%, rgba(125, 255, 184, 0.2), rgba(6, 18, 38, 0.95)); }
@@ -2387,7 +2536,7 @@
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                                 <h4 style="color: #ffd700; margin: 0; font-size: 16px;"><i class="fa-solid fa-brain"></i> Proyecciones de Ahorro</h4>
                             </div>
-                            <p style="font-size:12px; color:#a8c9ff; margin: 0 0 20px;">Calcula el total acumulado considerando el saldo actual más las proyecciones a final de año, 2 años y 5 años.</p>
+                            <p style="font-size:12px; color:#a8c9ff; margin: 0 0 20px;">Calcula el total acumulado considerando el saldo actual más los aportes desde el próximo mes hasta fin de año, 2 años y 5 años.</p>
                             
                             <div id="pAnnualProjectionsList" style="display: flex; flex-direction: column; gap: 15px;">
                                 <!-- Dynamic Projection Cards will be rendered here -->
@@ -2534,54 +2683,117 @@
                     <p style="font-size:12px; color:#7dffb8; text-transform:uppercase; letter-spacing:2px;">Última verificación: <span id="ssHealthStamp">--</span></p>
                 </div>
 
-                <div class="nav-actions" style="justify-content: flex-start; margin-bottom: 18px;">
-                    <span class="nav-actions-label">Respaldos:</span>
-                    <button class="action-btn export" onclick="exportData()"><i class="fa-solid fa-download"></i> Exportar</button>
-                    <button class="action-btn import" onclick="document.getElementById('importDataInput').click()"><i class="fa-solid fa-upload"></i> Importar</button>
-                    <button class="action-btn status" onclick="refreshApiHealthBadge()"><i class="fa-solid fa-rotate"></i> Actualizar Estado</button>
+                <div class="system-subnav">
+                    <button id="ssTabSystemBtn" class="system-subbtn active" onclick="switchSystemStatusTab('system')"><i class="fa-solid fa-server"></i> Sistema</button>
+                    <button id="ssTabClientsBtn" class="system-subbtn" onclick="switchSystemStatusTab('clients')"><i class="fa-solid fa-users"></i> Clientes</button>
                 </div>
 
-                <div class="system-status-grid">
-                    <div class="system-card">
-                        <h4>Sincronización</h4>
-                        <div class="metric-value" id="ssLastSync">--</div>
-                        <small>Hora local del último guardado exitoso.</small>
+                <div id="ssSystemSection" class="system-section active">
+                    <div class="nav-actions" style="justify-content: flex-start; margin-bottom: 18px;">
+                        <span class="nav-actions-label">Respaldos:</span>
+                        <button class="action-btn export" onclick="exportData()"><i class="fa-solid fa-download"></i> Exportar</button>
+                        <button class="action-btn import" onclick="document.getElementById('importDataInput').click()"><i class="fa-solid fa-upload"></i> Importar</button>
+                        <button class="action-btn status" onclick="refreshApiHealthBadge()"><i class="fa-solid fa-rotate"></i> Actualizar Estado</button>
                     </div>
-                    <div class="system-card">
-                        <h4>Tamaño del Estado</h4>
-                        <div class="metric-value" id="ssDataSize">--</div>
-                        <small>Incluye totales, archivos y proyecciones.</small>
+
+                    <div class="system-status-grid">
+                        <div class="system-card">
+                            <h4>Sincronización</h4>
+                            <div class="metric-value" id="ssLastSync">--</div>
+                            <small>Hora local del último guardado exitoso.</small>
+                        </div>
+                        <div class="system-card">
+                            <h4>Tamaño del Estado</h4>
+                            <div class="metric-value" id="ssDataSize">--</div>
+                            <small>Incluye totales, archivos y proyecciones.</small>
+                        </div>
+                        <div class="system-card">
+                            <h4>Archivos Montados</h4>
+                            <div class="metric-value" id="ssFilesLoaded">0</div>
+                            <small>Transporte, Effi, Ads y cargas manuales.</small>
+                        </div>
+                        <div class="system-card">
+                            <h4>Registros Clave</h4>
+                            <div class="metric-value" id="ssDeudores">0</div>
+                            <small>Deudores activos + gastos manuales.</small>
+                        </div>
                     </div>
-                    <div class="system-card">
-                        <h4>Archivos Montados</h4>
-                        <div class="metric-value" id="ssFilesLoaded">0</div>
-                        <small>Transporte, Effi, Ads y cargas manuales.</small>
+
+                    <div class="system-indicators">
+                        <div class="status-pill" id="ssApiStatus" data-state="warn">
+                            <strong>API Render</strong>
+                            <span>Verificando...</span>
+                            <small style="color:#9fc2ff; font-size:11px;">Salud del endpoint /healthz.</small>
+                        </div>
+                        <div class="status-pill" id="ssCacheStatus" data-state="ok">
+                            <strong>Sesión</strong>
+                            <span id="ssSessionUser">--</span>
+                            <small id="ssSessionRole" style="color:#9fc2ff; font-size:11px;">Rol - Estado local</small>
+                        </div>
                     </div>
-                    <div class="system-card">
-                        <h4>Registros Clave</h4>
-                        <div class="metric-value" id="ssDeudores">0</div>
-                        <small>Deudores activos + gastos manuales.</small>
+
+                    <div class="system-log">
+                        <h4>Bitácora rápida</h4>
+                        <ul id="ssRecentFiles">
+                            <li><span>Sin registros</span><span>--</span></li>
+                        </ul>
                     </div>
                 </div>
 
-                <div class="system-indicators">
-                    <div class="status-pill" id="ssApiStatus" data-state="warn">
-                        <strong>API Render</strong>
-                        <span>Verificando...</span>
-                        <small style="color:#9fc2ff; font-size:11px;">Salud del endpoint /healthz.</small>
+                <div id="ssClientsSection" class="system-section">
+                    <div class="clients-toolbar">
+                        <span class="nav-actions-label">Gestión de clientes registrados</span>
+                        <button class="action-btn status" onclick="loadAdminClients()"><i class="fa-solid fa-rotate"></i> Actualizar clientes</button>
                     </div>
-                    <div class="status-pill" id="ssCacheStatus" data-state="ok">
-                        <strong>Sesión</strong>
-                        <span id="ssSessionUser">--</span>
-                        <small id="ssSessionRole" style="color:#9fc2ff; font-size:11px;">Rol - Estado local</small>
-                    </div>
-                </div>
 
-                <div class="system-log">
-                    <h4>Bitácora rápida</h4>
-                    <ul id="ssRecentFiles">
-                        <li><span>Sin registros</span><span>--</span></li>
-                    </ul>
+                    <div class="clients-list" id="ssClientsList">
+                        <div class="egresos-empty">Cargando clientes...</div>
+                    </div>
+
+                    <div class="client-editor" id="ssClientEditor">
+                        <h4 style="margin:0 0 14px; color:#fff;">Detalle del cliente</h4>
+                        <div class="egresos-empty" id="ssClientEmpty">Selecciona un cliente para ver y editar sus datos.</div>
+                        <div id="ssClientFormWrap" style="display:none;">
+                            <div class="client-editor-grid">
+                                <div>
+                                    <label>ID</label>
+                                    <input id="ssClientId" type="text" readonly>
+                                </div>
+                                <div>
+                                    <label>Fecha de registro</label>
+                                    <input id="ssClientCreated" type="text" readonly>
+                                </div>
+                                <div>
+                                    <label>Usuario</label>
+                                    <input id="ssClientUsername" type="text">
+                                </div>
+                                <div>
+                                    <label>Nombre completo</label>
+                                    <input id="ssClientFullName" type="text">
+                                </div>
+                                <div>
+                                    <label>Teléfono</label>
+                                    <input id="ssClientPhone" type="text">
+                                </div>
+                                <div>
+                                    <label>Estado</label>
+                                    <input id="ssClientStatus" type="text" readonly>
+                                </div>
+                            </div>
+                            <div style="margin-top:12px;">
+                                <label style="font-size:12px; color:#9fc2ff; display:block; margin-bottom:6px; font-weight:700;">Notas</label>
+                                <textarea id="ssClientNotes"></textarea>
+                            </div>
+                            <div style="margin-top:12px;">
+                                <label style="font-size:12px; color:#9fc2ff; display:block; margin-bottom:6px; font-weight:700;">Motivo de suspensión</label>
+                                <textarea id="ssClientSuspReason" placeholder="Opcional"></textarea>
+                            </div>
+                            <div class="nav-actions" style="justify-content:flex-start; margin-top:14px;">
+                                <button class="action-btn status" onclick="saveSelectedClient()"><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button>
+                                <button class="action-btn" onclick="clearSelectedClient()"><i class="fa-solid fa-eraser"></i> Limpiar</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -4556,6 +4768,204 @@
             }
         }
 
+        function switchSystemStatusTab(tab = 'system') {
+            systemStatusTab = tab === 'clients' ? 'clients' : 'system';
+            const systemBtn = document.getElementById('ssTabSystemBtn');
+            const clientsBtn = document.getElementById('ssTabClientsBtn');
+            const systemSection = document.getElementById('ssSystemSection');
+            const clientsSection = document.getElementById('ssClientsSection');
+
+            if (systemBtn) systemBtn.classList.toggle('active', systemStatusTab === 'system');
+            if (clientsBtn) clientsBtn.classList.toggle('active', systemStatusTab === 'clients');
+            if (systemSection) systemSection.classList.toggle('active', systemStatusTab === 'system');
+            if (clientsSection) clientsSection.classList.toggle('active', systemStatusTab === 'clients');
+
+            if (systemStatusTab === 'clients') {
+                loadAdminClients();
+            }
+        }
+
+        function renderAdminClients() {
+            const listEl = document.getElementById('ssClientsList');
+            if (!listEl) return;
+            if (!adminClientsCache.length) {
+                listEl.innerHTML = '<div class="egresos-empty">No hay clientes registrados todavía.</div>';
+                return;
+            }
+
+            listEl.innerHTML = adminClientsCache.map(client => {
+                const role = Number(client.is_admin || 0) === 1 ? 'Admin' : 'Cliente';
+                const isSuspended = Number(client.suspended || 0) === 1;
+                const statusClass = isSuspended ? 'warn' : 'ok';
+                const statusLabel = isSuspended ? 'Suspendido' : 'Activo';
+                const safeUser = String(client.username || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                const safeName = String(client.full_name || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                return `
+                    <div class="client-row">
+                        <div class="client-row-main">
+                            <div class="client-row-title">${safeUser}</div>
+                            <div class="client-row-meta">
+                                <span>#${client.id}</span>
+                                <span>${role}</span>
+                                <span class="badge-pill ${statusClass}">${statusLabel}</span>
+                                <span>${safeName || 'Sin nombre registrado'}</span>
+                            </div>
+                        </div>
+                        <div class="client-row-actions">
+                            <button class="mini-btn" onclick="selectClientForEdit(${client.id})">Ver / Editar</button>
+                            <button class="mini-btn warn" onclick="toggleClientSuspend(${client.id})">${isSuspended ? 'Reactivar' : 'Suspender'}</button>
+                            <button class="mini-btn danger" onclick="deleteClient(${client.id})">Eliminar</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function clearSelectedClient() {
+            selectedClientId = null;
+            const emptyEl = document.getElementById('ssClientEmpty');
+            const formWrap = document.getElementById('ssClientFormWrap');
+            if (emptyEl) emptyEl.style.display = '';
+            if (formWrap) formWrap.style.display = 'none';
+        }
+
+        function fillClientEditor(client) {
+            selectedClientId = Number(client.id);
+            const emptyEl = document.getElementById('ssClientEmpty');
+            const formWrap = document.getElementById('ssClientFormWrap');
+            if (emptyEl) emptyEl.style.display = 'none';
+            if (formWrap) formWrap.style.display = 'block';
+
+            const statusText = Number(client.suspended || 0) === 1 ? 'Suspendido' : 'Activo';
+            document.getElementById('ssClientId').value = String(client.id || '');
+            document.getElementById('ssClientCreated').value = formatStatusDate(client.created_at || '');
+            document.getElementById('ssClientUsername').value = String(client.username || '');
+            document.getElementById('ssClientFullName').value = String(client.full_name || '');
+            document.getElementById('ssClientPhone').value = String(client.phone || '');
+            document.getElementById('ssClientStatus').value = statusText;
+            document.getElementById('ssClientNotes').value = String(client.notes || '');
+            document.getElementById('ssClientSuspReason').value = String(client.suspended_reason || '');
+        }
+
+        async function loadAdminClients() {
+            if (!isAdminUser()) return;
+            const listEl = document.getElementById('ssClientsList');
+            if (listEl) listEl.innerHTML = '<div class="egresos-empty">Cargando clientes...</div>';
+
+            try {
+                const response = await fetch('/api/admin/clients', { headers: getAuthHeaders() });
+                const data = await response.json();
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'No se pudo cargar la lista de clientes');
+                }
+                adminClientsCache = Array.isArray(data.clients) ? data.clients : [];
+                renderAdminClients();
+            } catch (err) {
+                console.error('loadAdminClients error:', err);
+                if (listEl) listEl.innerHTML = `<div class="egresos-empty">${err.message || 'Error cargando clientes'}</div>`;
+            }
+        }
+
+        async function selectClientForEdit(clientId) {
+            try {
+                const response = await fetch(`/api/admin/clients/${clientId}`, { headers: getAuthHeaders() });
+                const data = await response.json();
+                if (!response.ok || !data.success || !data.client) {
+                    throw new Error(data.message || 'No se pudo cargar el cliente');
+                }
+                fillClientEditor(data.client);
+            } catch (err) {
+                showAlert(err.message || 'No se pudo cargar el detalle del cliente', 'error');
+            }
+        }
+
+        async function saveSelectedClient() {
+            if (!selectedClientId) {
+                showAlert('Selecciona un cliente primero.', 'warning');
+                return;
+            }
+
+            const payload = {
+                username: String(document.getElementById('ssClientUsername').value || '').trim().toLowerCase(),
+                full_name: String(document.getElementById('ssClientFullName').value || '').trim(),
+                phone: String(document.getElementById('ssClientPhone').value || '').trim(),
+                notes: String(document.getElementById('ssClientNotes').value || '').trim(),
+                suspended_reason: String(document.getElementById('ssClientSuspReason').value || '').trim(),
+                suspended: String(document.getElementById('ssClientStatus').value || '').toLowerCase().includes('suspend') ? 1 : 0
+            };
+
+            if (!payload.username) {
+                showAlert('El usuario no puede estar vacío.', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/admin/clients/${selectedClientId}`, {
+                    method: 'PUT',
+                    headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'No se pudo guardar el cliente');
+                }
+                showAlert('Cliente actualizado correctamente.', 'success');
+                await loadAdminClients();
+                if (data.client) fillClientEditor(data.client);
+            } catch (err) {
+                showAlert(err.message || 'No se pudo guardar el cliente', 'error');
+            }
+        }
+
+        async function toggleClientSuspend(clientId) {
+            const client = adminClientsCache.find(c => Number(c.id) === Number(clientId));
+            const willSuspend = !(client && Number(client.suspended || 0) === 1);
+            const reason = willSuspend
+                ? String(prompt('Motivo de suspensión (opcional):') || '').trim()
+                : '';
+
+            try {
+                const response = await fetch(`/api/admin/clients/${clientId}/suspend`, {
+                    method: 'PATCH',
+                    headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+                    body: JSON.stringify({ suspended: willSuspend ? 1 : 0, reason })
+                });
+                const data = await response.json();
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'No se pudo actualizar estado');
+                }
+                showAlert(data.message || 'Estado actualizado', 'success');
+                await loadAdminClients();
+                if (selectedClientId && Number(selectedClientId) === Number(clientId)) {
+                    await selectClientForEdit(clientId);
+                }
+            } catch (err) {
+                showAlert(err.message || 'No se pudo actualizar estado', 'error');
+            }
+        }
+
+        function deleteClient(clientId) {
+            showConfirmModal('Eliminar cliente', 'Esta acción eliminará la cuenta del cliente. ¿Deseas continuar?', async () => {
+                try {
+                    const response = await fetch(`/api/admin/clients/${clientId}`, {
+                        method: 'DELETE',
+                        headers: getAuthHeaders()
+                    });
+                    const data = await response.json();
+                    if (!response.ok || !data.success) {
+                        throw new Error(data.message || 'No se pudo eliminar');
+                    }
+                    showAlert('Cliente eliminado.', 'success');
+                    if (Number(selectedClientId) === Number(clientId)) {
+                        clearSelectedClient();
+                    }
+                    await loadAdminClients();
+                } catch (err) {
+                    showAlert(err.message || 'No se pudo eliminar el cliente', 'error');
+                }
+            });
+        }
+
         function openSystemStatus() {
             if (!isAdminUser()) {
                 showAlert('Solo disponible para administradores.', 'warning');
@@ -4565,6 +4975,7 @@
             if (btn) {
                 switchView('systemStatus', btn);
                 updateSystemStatus();
+                switchSystemStatusTab(systemStatusTab);
             } else {
                 showAlert('Actualice la página para acceder al panel de estado.', 'error');
             }
@@ -4877,6 +5288,7 @@
             }
             if (id === 'systemStatus') {
                 updateSystemStatus();
+                switchSystemStatusTab(systemStatusTab);
             }
             if (id === 'filtroArticulo') {
                 populateArticulosDatalist();
@@ -5129,6 +5541,9 @@
             apiStatus: 'checking',
             lastChecked: null
         };
+        let systemStatusTab = 'system';
+        let adminClientsCache = [];
+        let selectedClientId = null;
 
         function ensureMeta() {
             if (!appState.meta) {
@@ -5726,6 +6141,11 @@ function processScheduledSavings() {
   }
 }
 
+                function getRemainingSavingsMonthsThisYear() {
+                    const currentMonth = new Date().getMonth() + 1;
+                    return Math.max(0, 11 - currentMonth);
+                }
+
         function renderPersonalPro() {
             const fp = appState.finanzasPersonales;
             
@@ -5865,10 +6285,7 @@ function processScheduledSavings() {
             }
 
             // 4. Proyección Anual (Nueva Estructura: Una tarjeta por ahorro activo)
-            const now = new Date();
-            const yearEnd = new Date(now.getFullYear(), 11, 31); // 31 de diciembre
-            const msPerMonth = 1000 * 60 * 60 * 24 * 30.44;
-            const monthsLeftThisYear = Math.max(0, (yearEnd - now) / msPerMonth);
+            const monthsLeftThisYear = getRemainingSavingsMonthsThisYear();
             let totalProjectedSavingsThisYear = 0;
 
             const annualList = document.getElementById('pAnnualProjectionsList');
@@ -7597,10 +8014,7 @@ updateResumenPremium();
             const resta = totalSal - totalExp;
             const disponible = totalSal - totalExp - totalSav;
             const proj = buildSfpProjectionContext(fp);
-            const now = new Date();
-            const yearEnd = new Date(now.getFullYear(), 11, 31);
-            const msPerMonth = 1000 * 60 * 60 * 24 * 30.44;
-            const monthsLeftThisYear = Math.max(0, (yearEnd - now) / msPerMonth);
+            const monthsLeftThisYear = getRemainingSavingsMonthsThisYear();
             const projectedSavingsThisYear = (fp.ahorros || []).reduce((acc, s) => {
                 const monto = Number(s.monto || 0);
                 const balanceActual = Number(s.currentBalance || 0);

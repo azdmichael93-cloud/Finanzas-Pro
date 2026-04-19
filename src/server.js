@@ -441,12 +441,15 @@ function buildOfflineResponse(message, ctx) {
     // ── Personal: Ahorros ─────────────────────────────────────────
     if (has('ahorro','ahorrar','ahorra','fondo','meta','proyeccion','proyección')) {
         const p = calcPersonal();
+        const currentMonth = new Date().getMonth() + 1;
+        const mesesRestantes = Math.max(0, 11 - currentMonth);
         const pctAho = p.sal > 0 ? (p.aho / p.sal * 100).toFixed(1) : '0.0';
         const meta6m  = p.aho * 6;
         const meta12m = p.aho * 12;
+        const metaRestoAno = p.aho * mesesRestantes;
         const recom   = p.sal > 0 ? p.sal * 0.20 : 0;
         const estadoAho = parseFloat(pctAho) >= 20 ? '✅ Excelente tasa de ahorro (+20%)' : parseFloat(pctAho) >= 10 ? '👍 Buena tasa de ahorro (10-20%)' : parseFloat(pctAho) > 0 ? '⚠️ Tasa de ahorro baja (menos del 10%)' : '🚨 No estás ahorrando actualmente';
-        return `🐷 AHORROS Y PROYECCIÓN\n• Ahorro mensual:       ${fmt(p.aho)}\n• % de tus ingresos:    ${pctAho}%\n• Proyección 6 meses:   ${fmt(meta6m)}\n• Proyección 12 meses:  ${fmt(meta12m)}\n• Ahorro ideal (20%):   ${fmt(recom)}\n\n${estadoAho}\n${p.aho < recom && p.sal > 0 ? `💡 Para llegar al 20% ideal, deberías ahorrar ${fmt(recom - p.aho)} adicionales al mes.` : p.aho >= recom ? '🎉 ¡Estás cumpliendo el objetivo de ahorro del 20%!' : ''}`;
+        return `🐷 AHORROS Y PROYECCIÓN\n• Ahorro mensual:       ${fmt(p.aho)}\n• % de tus ingresos:    ${pctAho}%\n• Resto del año:        ${fmt(metaRestoAno)} (${mesesRestantes} meses)\n• Proyección 6 meses:   ${fmt(meta6m)}\n• Proyección 12 meses:  ${fmt(meta12m)}\n• Ahorro ideal (20%):   ${fmt(recom)}\n\n${estadoAho}\n${p.aho < recom && p.sal > 0 ? `💡 Para llegar al 20% ideal, deberías ahorrar ${fmt(recom - p.aho)} adicionales al mes.` : p.aho >= recom ? '🎉 ¡Estás cumpliendo el objetivo de ahorro del 20%!' : ''}`;
     }
 
     // ── Personal: Deudas y préstamos ──────────────────────────────
@@ -628,6 +631,13 @@ app.post('/api/login', async (req, res) => {
     db.get('SELECT * FROM users WHERE username = ?', [username], async (err, user) => {
         if (err) return res.status(500).json({ success: false, message: 'Error interno' });
         if (user) {
+            if (Number(user.suspended || 0) === 1) {
+                const reason = String(user.suspended_reason || '').trim();
+                const msg = reason
+                    ? `Cuenta suspendida. Motivo: ${reason}`
+                    : 'Tu cuenta está suspendida. Contacta al administrador.';
+                return res.status(403).json({ success: false, message: msg });
+            }
             // Compare hashed password
             const passwordMatch = await bcrypt.compare(password, user.password);
             if (passwordMatch) {
@@ -654,7 +664,12 @@ const db = new sqlite3.Database(DB_PATH, (err) => {
     if (err) { console.error('❌ SQLite:', err); return; }
     console.log('✅ SQLite conectado en', DB_PATH);
     db.run(`CREATE TABLE IF NOT EXISTS app_state (id INTEGER PRIMARY KEY, key TEXT UNIQUE, value TEXT)`);
-    db.run(`CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL, is_admin BOOLEAN DEFAULT 0, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)`, (e) => { if (!e) ensureAdminUser(); });
+    db.run(`CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL, is_admin BOOLEAN DEFAULT 0, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)`, (e) => {
+        if (!e) {
+            ensureUsersSchema();
+            ensureAdminUser();
+        }
+    });
 });
 
 async function ensureAdminUser() {
@@ -686,6 +701,42 @@ function isAdmin(userId) {
     if (!userId) return false;
     if (String(userId) === 'admin' || String(userId) === ADMIN_USERNAME) return true;
     return !!(adminUserId && Number(userId) === Number(adminUserId));
+}
+
+function requireAdmin(req, res, next) {
+    if (!isAdmin(req.userId)) {
+        return res.status(403).json({ success: false, message: 'Acceso solo para administradores' });
+    }
+    next();
+}
+
+function ensureUsersSchema() {
+    const requiredColumns = [
+        { name: 'full_name', ddl: 'ALTER TABLE users ADD COLUMN full_name TEXT DEFAULT ""' },
+        { name: 'phone', ddl: 'ALTER TABLE users ADD COLUMN phone TEXT DEFAULT ""' },
+        { name: 'notes', ddl: 'ALTER TABLE users ADD COLUMN notes TEXT DEFAULT ""' },
+        { name: 'suspended', ddl: 'ALTER TABLE users ADD COLUMN suspended INTEGER DEFAULT 0' },
+        { name: 'suspended_reason', ddl: 'ALTER TABLE users ADD COLUMN suspended_reason TEXT DEFAULT ""' }
+    ];
+
+    db.all('PRAGMA table_info(users)', (err, columns) => {
+        if (err || !Array.isArray(columns)) {
+            console.error('❌ Error leyendo schema users:', err?.message || 'unknown');
+            return;
+        }
+        const existing = new Set(columns.map(col => col.name));
+        requiredColumns.forEach(col => {
+            if (!existing.has(col.name)) {
+                db.run(col.ddl, (alterErr) => {
+                    if (alterErr) {
+                        console.error(`❌ Error agregando columna ${col.name}:`, alterErr.message);
+                    } else {
+                        console.log(`✅ Columna users.${col.name} creada`);
+                    }
+                });
+            }
+        });
+    });
 }
 
 app.post('/api/state', authenticateToken, (req, res) => {
@@ -750,6 +801,163 @@ app.get('/api/files/list', authenticateToken, (req, res) => {
         console.error('❌ /api/files/list:', err.message);
         res.json({ files: [] });
     }
+});
+
+/* ── ADMIN: CLIENTES ──────────────────────────────────────────────── */
+app.get('/api/admin/clients', authenticateToken, requireAdmin, (_req, res) => {
+    const sql = `
+        SELECT
+            id,
+            username,
+            is_admin,
+            created_at,
+            COALESCE(full_name, '') AS full_name,
+            COALESCE(phone, '') AS phone,
+            COALESCE(notes, '') AS notes,
+            COALESCE(suspended, 0) AS suspended,
+            COALESCE(suspended_reason, '') AS suspended_reason
+        FROM users
+        ORDER BY datetime(created_at) DESC, id DESC
+    `;
+
+    db.all(sql, [], (err, rows) => {
+        if (err) return res.status(500).json({ success: false, message: 'Error cargando clientes' });
+        res.json({ success: true, clients: rows || [] });
+    });
+});
+
+app.get('/api/admin/clients/:id', authenticateToken, requireAdmin, (req, res) => {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) {
+        return res.status(400).json({ success: false, message: 'ID inválido' });
+    }
+
+    const sql = `
+        SELECT
+            id,
+            username,
+            is_admin,
+            created_at,
+            COALESCE(full_name, '') AS full_name,
+            COALESCE(phone, '') AS phone,
+            COALESCE(notes, '') AS notes,
+            COALESCE(suspended, 0) AS suspended,
+            COALESCE(suspended_reason, '') AS suspended_reason
+        FROM users
+        WHERE id = ?
+        LIMIT 1
+    `;
+
+    db.get(sql, [id], (err, row) => {
+        if (err) return res.status(500).json({ success: false, message: 'Error cargando cliente' });
+        if (!row) return res.status(404).json({ success: false, message: 'Cliente no encontrado' });
+        res.json({ success: true, client: row });
+    });
+});
+
+app.put('/api/admin/clients/:id', authenticateToken, requireAdmin, (req, res) => {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) {
+        return res.status(400).json({ success: false, message: 'ID inválido' });
+    }
+
+    db.get('SELECT * FROM users WHERE id = ?', [id], (findErr, current) => {
+        if (findErr) return res.status(500).json({ success: false, message: 'Error interno' });
+        if (!current) return res.status(404).json({ success: false, message: 'Cliente no encontrado' });
+
+        const username = String(req.body.username || current.username).trim().toLowerCase();
+        const fullName = String(req.body.full_name || '').trim();
+        const phone = String(req.body.phone || '').trim();
+        const notes = String(req.body.notes || '').trim();
+        const suspended = Number(req.body.suspended) === 1 ? 1 : 0;
+        const suspendedReason = String(req.body.suspended_reason || '').trim();
+
+        if (!username) {
+            return res.status(400).json({ success: false, message: 'El usuario es obligatorio' });
+        }
+
+        if (Number(current.is_admin || 0) === 1 && suspended === 1) {
+            return res.status(400).json({ success: false, message: 'No se puede suspender una cuenta administradora' });
+        }
+
+        const checkSql = 'SELECT id FROM users WHERE username = ? AND id != ? LIMIT 1';
+        db.get(checkSql, [username, id], (dupErr, dupRow) => {
+            if (dupErr) return res.status(500).json({ success: false, message: 'Error validando usuario' });
+            if (dupRow) return res.status(400).json({ success: false, message: 'Ese usuario ya está en uso' });
+
+            const updateSql = `
+                UPDATE users
+                SET
+                    username = ?,
+                    full_name = ?,
+                    phone = ?,
+                    notes = ?,
+                    suspended = ?,
+                    suspended_reason = ?
+                WHERE id = ?
+            `;
+            const updateParams = [username, fullName, phone, notes, suspended, suspendedReason, id];
+
+            db.run(updateSql, updateParams, function(updateErr) {
+                if (updateErr) return res.status(500).json({ success: false, message: 'No se pudo actualizar el cliente' });
+                if (!this.changes) return res.status(404).json({ success: false, message: 'Cliente no encontrado' });
+
+                db.get(
+                    `SELECT id, username, is_admin, created_at, COALESCE(full_name, '') AS full_name, COALESCE(phone, '') AS phone, COALESCE(notes, '') AS notes, COALESCE(suspended, 0) AS suspended, COALESCE(suspended_reason, '') AS suspended_reason FROM users WHERE id = ?`,
+                    [id],
+                    (_e2, updatedRow) => res.json({ success: true, message: 'Cliente actualizado', client: updatedRow || null })
+                );
+            });
+        });
+    });
+});
+
+app.patch('/api/admin/clients/:id/suspend', authenticateToken, requireAdmin, (req, res) => {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) {
+        return res.status(400).json({ success: false, message: 'ID inválido' });
+    }
+
+    const suspended = Number(req.body.suspended) === 1 ? 1 : 0;
+    const reason = String(req.body.reason || req.body.suspended_reason || '').trim();
+
+    db.get('SELECT id, is_admin FROM users WHERE id = ? LIMIT 1', [id], (err, user) => {
+        if (err) return res.status(500).json({ success: false, message: 'Error interno' });
+        if (!user) return res.status(404).json({ success: false, message: 'Cliente no encontrado' });
+        if (Number(user.is_admin || 0) === 1 && suspended === 1) {
+            return res.status(400).json({ success: false, message: 'No se puede suspender una cuenta administradora' });
+        }
+
+        db.run(
+            'UPDATE users SET suspended = ?, suspended_reason = ? WHERE id = ?',
+            [suspended, suspended ? reason : '', id],
+            function(updateErr) {
+                if (updateErr) return res.status(500).json({ success: false, message: 'No se pudo actualizar el estado' });
+                res.json({ success: true, message: suspended ? 'Cliente suspendido' : 'Cliente reactivado' });
+            }
+        );
+    });
+});
+
+app.delete('/api/admin/clients/:id', authenticateToken, requireAdmin, (req, res) => {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) {
+        return res.status(400).json({ success: false, message: 'ID inválido' });
+    }
+
+    db.get('SELECT id, is_admin FROM users WHERE id = ? LIMIT 1', [id], (findErr, row) => {
+        if (findErr) return res.status(500).json({ success: false, message: 'Error interno' });
+        if (!row) return res.status(404).json({ success: false, message: 'Cliente no encontrado' });
+        if (Number(row.is_admin || 0) === 1) {
+            return res.status(400).json({ success: false, message: 'No se puede eliminar una cuenta administradora' });
+        }
+
+        db.run('DELETE FROM users WHERE id = ?', [id], function(deleteErr) {
+            if (deleteErr) return res.status(500).json({ success: false, message: 'No se pudo eliminar el cliente' });
+            if (!this.changes) return res.status(404).json({ success: false, message: 'Cliente no encontrado' });
+            res.json({ success: true, message: 'Cliente eliminado' });
+        });
+    });
 });
 
 /* ── START ──────────────────────────────────────────────────────────── */
