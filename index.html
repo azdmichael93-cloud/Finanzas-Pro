@@ -2346,7 +2346,7 @@
                             <div class="split-card" style="margin: 0; border-color: #39d7ff; background: linear-gradient(180deg, rgba(57,215,255,0.08) 0%, rgba(57,215,255,0.02) 100%);">
                                 <div class="split-title" style="color: #39d7ff; font-size: 14px;">Análisis de Capacidad</div>
                                 <div style="margin-top: 10px;">
-                                    <div style="font-size: 12px; color: #9fc2ff;">Después de gastos:</div>
+                                    <div style="font-size: 12px; color: #9fc2ff;">Después de gastos y ahorros:</div>
                                     <div id="pRemainingAfterExpenses" style="font-size: 20px; font-weight: 800; color: #7dffb8;">RD$ 0,00</div>
                                 </div>
                             </div>
@@ -5814,11 +5814,12 @@ function processScheduledSavings() {
                     if (elNextAmount) elNextAmount.innerText = 'RD$ 0,00';
                 }
                 
-                // Restante después de gastos
+                // Restante después de gastos y ahorros
                 const elRemaining = document.getElementById('pRemainingAfterExpenses');
                 if (elRemaining) {
-                    const remaining = totalSal - totalExp;
-                    elRemaining.innerText = formatRD(remaining);
+                    const totalSav = (fp.ahorros || []).reduce((acc, x) => acc + Number(x.monto || 0), 0);
+                    const remaining = totalSal - totalExp - totalSav;
+                    elRemaining.innerText = formatRDSigned(remaining);
                     elRemaining.style.color = remaining >= 0 ? '#7dffb8' : '#ff5d5d';
                 }
             }
