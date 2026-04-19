@@ -7636,9 +7636,9 @@ updateResumenPremium();
                 elAhorros.previousElementSibling && (elAhorros.previousElementSibling.innerText = 'TOTAL AHORRADO');
             }
             if (elResta) {
-                elResta.innerText = formatRD(disponible);
+                elResta.innerText = formatRDSigned(disponible);
                 elResta.style.color = disponible >= 0 ? '#7dffb8' : '#ff5d5d';
-                elResta.previousElementSibling && (elResta.previousElementSibling.innerText = 'Dinero libre');
+                elResta.previousElementSibling && (elResta.previousElementSibling.innerText = disponible >= 0 ? 'Dinero libre' : 'Dinero libre (deficit)');
             }
             if (elGastosFijos) elGastosFijos.innerText = formatRD(totalExp);
             if (elCuentas) elCuentas.innerText = formatRD(totalBanks);
