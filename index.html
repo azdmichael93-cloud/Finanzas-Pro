@@ -3934,6 +3934,33 @@
         </div>
     </div>
 
+    <div id="suspendReasonOverlay" class="premium-modal-overlay">
+        <div class="premium-modal-container" style="max-width: 520px;">
+            <button class="premium-modal-close" onclick="closeSuspendReasonModal()" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="premium-modal-header">
+                <div class="premium-modal-icon" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1)); border-color: rgba(255, 215, 0, 0.3); color: #ffd700;">
+                    <i class="fa-solid fa-user-lock"></i>
+                </div>
+                <h3>Suspender cliente</h3>
+                <p>Motivo de suspensión (opcional)</p>
+            </div>
+            <div class="premium-modal-form">
+                <div class="premium-form-group full-width">
+                    <label for="suspendReasonInput">Motivo</label>
+                    <textarea id="suspendReasonInput" class="premium-input" rows="4" placeholder="Ejemplo: incumplimiento de políticas internas."></textarea>
+                </div>
+            </div>
+            <div class="premium-modal-footer" style="gap: 12px; justify-content: center;">
+                <button class="premium-btn-secondary" onclick="closeSuspendReasonModal()">Cancelar</button>
+                <button class="premium-btn-danger" onclick="confirmSuspendReason()">
+                    <i class="fa-solid fa-check"></i> Confirmar suspensión
+                </button>
+            </div>
+        </div>
+    </div>
+
     <style>
     .nav-group {
         display: flex;
@@ -4381,6 +4408,7 @@
 
         // Premium Confirm Modal Functions
         let confirmCallback = null;
+        let pendingSuspendClientId = null;
 
         function showConfirmModal(title, message, callback) {
             document.getElementById('confirmTitle').innerText = title;
@@ -4403,12 +4431,62 @@
             closeConfirmModal();
         }
 
+        function openSuspendReasonModal(clientId) {
+            pendingSuspendClientId = Number(clientId);
+            const overlay = document.getElementById('suspendReasonOverlay');
+            const input = document.getElementById('suspendReasonInput');
+            if (input) input.value = '';
+            if (overlay) overlay.classList.add('active');
+            document.body.classList.add('no-scroll');
+            if (input) setTimeout(() => input.focus(), 60);
+        }
+
+        function closeSuspendReasonModal() {
+            const overlay = document.getElementById('suspendReasonOverlay');
+            if (overlay) overlay.classList.remove('active');
+            document.body.classList.remove('no-scroll');
+            pendingSuspendClientId = null;
+        }
+
+        async function confirmSuspendReason() {
+            const clientId = pendingSuspendClientId;
+            const reason = String(document.getElementById('suspendReasonInput')?.value || '').trim();
+            closeSuspendReasonModal();
+            if (!clientId) return;
+            await applyClientSuspend(clientId, true, reason);
+        }
+
+        async function applyClientSuspend(clientId, suspended, reason = '') {
+            try {
+                const response = await fetch(`/api/admin/clients/${clientId}/suspend`, {
+                    method: 'PATCH',
+                    headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+                    body: JSON.stringify({ suspended: suspended ? 1 : 0, reason: reason || '' })
+                });
+                const data = await response.json();
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'No se pudo actualizar estado');
+                }
+                showAlert(data.message || 'Estado actualizado', 'success');
+                await loadAdminClients();
+                if (selectedClientId && Number(selectedClientId) === Number(clientId)) {
+                    await selectClientForEdit(clientId);
+                }
+            } catch (err) {
+                showAlert(err.message || 'No se pudo actualizar estado', 'error');
+            }
+        }
+
         // ESC key support for confirm modal
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 const confirmOverlay = document.getElementById('confirmOverlay');
                 if (confirmOverlay.classList.contains('active')) {
                     closeConfirmModal();
+                }
+                const suspendOverlay = document.getElementById('suspendReasonOverlay');
+                if (suspendOverlay && suspendOverlay.classList.contains('active')) {
+                    closeSuspendReasonModal();
                 }
             }
         });
@@ -4417,6 +4495,12 @@
         document.getElementById('confirmOverlay').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeConfirmModal();
+            }
+        });
+
+        document.getElementById('suspendReasonOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSuspendReasonModal();
             }
         });
 
@@ -4920,28 +5004,11 @@
         async function toggleClientSuspend(clientId) {
             const client = adminClientsCache.find(c => Number(c.id) === Number(clientId));
             const willSuspend = !(client && Number(client.suspended || 0) === 1);
-            const reason = willSuspend
-                ? String(prompt('Motivo de suspensión (opcional):') || '').trim()
-                : '';
-
-            try {
-                const response = await fetch(`/api/admin/clients/${clientId}/suspend`, {
-                    method: 'PATCH',
-                    headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
-                    body: JSON.stringify({ suspended: willSuspend ? 1 : 0, reason })
-                });
-                const data = await response.json();
-                if (!response.ok || !data.success) {
-                    throw new Error(data.message || 'No se pudo actualizar estado');
-                }
-                showAlert(data.message || 'Estado actualizado', 'success');
-                await loadAdminClients();
-                if (selectedClientId && Number(selectedClientId) === Number(clientId)) {
-                    await selectClientForEdit(clientId);
-                }
-            } catch (err) {
-                showAlert(err.message || 'No se pudo actualizar estado', 'error');
+            if (willSuspend) {
+                openSuspendReasonModal(clientId);
+                return;
             }
+            await applyClientSuspend(clientId, false, '');
         }
 
         function deleteClient(clientId) {
@@ -6301,9 +6368,11 @@ function processScheduledSavings() {
                         const contribucionMensual = Number(ahorro.monto || 0);
                         // currentBalance debe ser guardado/leído; si no existe, 0.
                         const balanceActual = Number(ahorro.currentBalance || 0);
-                        
-                        // Proyecciones (balance actual + lo que aportará en los meses indicados)
-                        const projThisYear = balanceActual + (contribucionMensual * monthsLeftThisYear);
+
+                        // Resto del año = solo aportes futuros (sin incluir saldo actual)
+                        const aporteRestoAno = contribucionMensual * monthsLeftThisYear;
+                        // Total estimado a diciembre sí incluye saldo actual + aportes restantes
+                        const projThisYear = balanceActual + aporteRestoAno;
                         const proj2Years = balanceActual + (contribucionMensual * 24);
                         const proj5Years = balanceActual + (contribucionMensual * 60);
                         totalProjectedSavingsThisYear += projThisYear;
@@ -6324,7 +6393,8 @@ function processScheduledSavings() {
                             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
                                 <div class="split-card" style="margin:0; border-color: rgba(255,215,0,0.3); background: rgba(255,215,0,0.05);">
                                     <div class="value-label" style="color: #ffd700; font-size:11px;">Resto del Año</div>
-                                    <div style="font-size: 18px; font-weight: 800; color: #fff; margin-top: 4px;">${formatRD(projThisYear)}</div>
+                                    <div style="font-size: 18px; font-weight: 800; color: #fff; margin-top: 4px;">${formatRD(aporteRestoAno)}</div>
+                                    <div style="font-size: 11px; color: #9fc2ff; margin-top: 6px;">Total estimado dic: ${formatRD(projThisYear)}</div>
                                 </div>
                                 <div class="split-card" style="margin:0; border-color: rgba(255,215,0,0.5); background: rgba(255,215,0,0.1);">
                                     <div class="value-label" style="color: #ffd700; font-size:11px;">En 2 Años</div>
